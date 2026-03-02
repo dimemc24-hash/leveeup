@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Field Vest with Pockets -->
+  <!-- Main vest body -->
+  <path d="M22 24 L22 88 L44 88 L44 24 Q40 18 36 16 Q30 14 28 16 Q24 18 22 24 Z" fill="#6b8e23"/>
+  <path d="M56 24 L56 88 L78 88 L78 24 Q76 18 72 16 Q70 14 64 16 Q60 18 56 24 Z" fill="#6b8e23"/>
+  <!-- Collar -->
+  <path d="M36 16 Q42 12 50 10 Q58 12 64 16 Q60 20 56 24 L44 24 Q40 20 36 16 Z" fill="#4a7c23"/>
+  <!-- Collar fold lines -->
+  <path d="M40 16 Q44 14 50 12" stroke="#2d5016" stroke-width="0.8" fill="none" opacity="0.5"/>
+  <path d="M60 16 Q56 14 50 12" stroke="#2d5016" stroke-width="0.8" fill="none" opacity="0.5"/>
+  <!-- V-neck opening -->
+  <path d="M44 24 Q46 40 48 60 L50 88 L52 60 Q54 40 56 24" fill="#f5f0e1" opacity="0.3"/>
+  <!-- Left breast pocket -->
+  <rect x="26" y="32" width="14" height="12" rx="1" fill="none" stroke="#2d5016" stroke-width="1.5"/>
+  <path d="M26 32 L40 32" stroke="#2d5016" stroke-width="2"/>
+  <!-- Left pocket flap -->
+  <path d="M26 32 L26 28 L40 28 L40 32" fill="#4a7c23" stroke="#2d5016" stroke-width="1"/>
+  <!-- Button on pocket -->
+  <circle cx="33" cy="30" r="1.5" fill="#d4a843"/>
+  <!-- Right breast pocket -->
+  <rect x="60" y="32" width="14" height="12" rx="1" fill="none" stroke="#2d5016" stroke-width="1.5"/>
+  <path d="M60 32 L74 32" stroke="#2d5016" stroke-width="2"/>
+  <path d="M60 32 L60 28 L74 28 L74 32" fill="#4a7c23" stroke="#2d5016" stroke-width="1"/>
+  <circle cx="67" cy="30" r="1.5" fill="#d4a843"/>
+  <!-- Left lower cargo pocket -->
+  <rect x="24" y="56" width="16" height="18" rx="1" fill="none" stroke="#2d5016" stroke-width="1.5"/>
+  <path d="M24 56 L40 56" stroke="#2d5016" stroke-width="2"/>
+  <path d="M24 56 L24 52 L40 52 L40 56" fill="#4a7c23" stroke="#2d5016" stroke-width="1"/>
+  <circle cx="32" cy="54" r="1.5" fill="#d4a843"/>
+  <!-- Right lower cargo pocket -->
+  <rect x="60" y="56" width="16" height="18" rx="1" fill="none" stroke="#2d5016" stroke-width="1.5"/>
+  <path d="M60 56 L76 56" stroke="#2d5016" stroke-width="2"/>
+  <path d="M60 56 L60 52 L76 52 L76 56" fill="#4a7c23" stroke="#2d5016" stroke-width="1"/>
+  <circle cx="68" cy="54" r="1.5" fill="#d4a843"/>
+  <!-- Zipper line -->
+  <path d="M49 24 L49 88" stroke="#d4a843" stroke-width="1" stroke-dasharray="2,2"/>
+  <path d="M51 24 L51 88" stroke="#d4a843" stroke-width="1" stroke-dasharray="2,2"/>
+</svg>

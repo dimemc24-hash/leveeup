@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Paw print favicon -->
+  <!-- Main pad -->
+  <ellipse cx="50" cy="62" rx="18" ry="16" fill="#3d2b1f"/>
+  <!-- Toe pads -->
+  <circle cx="32" cy="38" r="9" fill="#3d2b1f"/>
+  <circle cx="50" cy="30" r="9" fill="#3d2b1f"/>
+  <circle cx="68" cy="38" r="9" fill="#3d2b1f"/>
+  <!-- Highlight on main pad -->
+  <ellipse cx="48" cy="59" rx="10" ry="8" fill="#8b6914" opacity="0.3"/>
+</svg>

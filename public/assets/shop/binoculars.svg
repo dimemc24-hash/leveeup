@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Binoculars -->
+  <!-- Left barrel -->
+  <rect x="14" y="30" width="28" height="46" rx="14" fill="#3d2b1f"/>
+  <rect x="16" y="32" width="24" height="42" rx="12" fill="#8b6914" opacity="0.3"/>
+  <!-- Right barrel -->
+  <rect x="58" y="30" width="28" height="46" rx="14" fill="#3d2b1f"/>
+  <rect x="60" y="32" width="24" height="42" rx="12" fill="#8b6914" opacity="0.3"/>
+  <!-- Bridge connecting barrels -->
+  <rect x="38" y="42" width="24" height="12" rx="4" fill="#3d2b1f"/>
+  <rect x="40" y="44" width="20" height="8" rx="3" fill="#8b6914" opacity="0.2"/>
+  <!-- Left lens -->
+  <circle cx="28" cy="72" r="13" fill="#3d2b1f"/>
+  <circle cx="28" cy="72" r="10" fill="#2d5016"/>
+  <circle cx="28" cy="72" r="8" fill="#4a7c23" opacity="0.4"/>
+  <!-- Left lens glare -->
+  <path d="M22 66 Q24 64 28 66" stroke="#f5f0e1" stroke-width="1.5" fill="none" opacity="0.5"/>
+  <!-- Right lens -->
+  <circle cx="72" cy="72" r="13" fill="#3d2b1f"/>
+  <circle cx="72" cy="72" r="10" fill="#2d5016"/>
+  <circle cx="72" cy="72" r="8" fill="#4a7c23" opacity="0.4"/>
+  <!-- Right lens glare -->
+  <path d="M66 66 Q68 64 72 66" stroke="#f5f0e1" stroke-width="1.5" fill="none" opacity="0.5"/>
+  <!-- Eye cups on top -->
+  <rect x="18" y="28" width="20" height="6" rx="3" fill="#3d2b1f"/>
+  <rect x="62" y="28" width="20" height="6" rx="3" fill="#3d2b1f"/>
+  <!-- Focus wheel -->
+  <circle cx="50" cy="48" r="4" fill="#d4a843" stroke="#8b6914" stroke-width="1"/>
+  <!-- Strap hints -->
+  <path d="M18 34 Q10 30 6 24" stroke="#8b6914" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M82 34 Q90 30 94 24" stroke="#8b6914" stroke-width="2" fill="none" stroke-linecap="round"/>
+</svg>

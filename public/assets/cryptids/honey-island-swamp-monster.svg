@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Honey Island Swamp Monster - mossy hunched swamp creature -->
+  <!-- Background swamp circle -->
+  <circle cx="50" cy="50" r="46" fill="#2d5016" opacity="0.15"/>
+  <!-- Body - hunched figure -->
+  <path d="M38 85 Q35 70 37 55 Q38 45 42 38 Q45 32 50 28 Q55 32 58 38 Q62 45 63 55 Q65 70 62 85 Z" fill="#3d2b1f"/>
+  <!-- Head -->
+  <ellipse cx="50" cy="26" rx="10" ry="9" fill="#3d2b1f"/>
+  <!-- Arms hanging low -->
+  <path d="M37 55 Q28 60 25 72 Q24 76 27 78 Q30 76 32 72 Q35 65 38 60" fill="#3d2b1f"/>
+  <path d="M63 55 Q72 60 75 72 Q76 76 73 78 Q70 76 68 72 Q65 65 62 60" fill="#3d2b1f"/>
+  <!-- Moss/seaweed hanging off -->
+  <path d="M42 35 Q38 40 36 48" stroke="#6b8e23" stroke-width="1.5" fill="none" opacity="0.7"/>
+  <path d="M58 35 Q62 42 64 48" stroke="#6b8e23" stroke-width="1.5" fill="none" opacity="0.7"/>
+  <path d="M45 30 Q40 35 39 42" stroke="#6b8e23" stroke-width="1.5" fill="none" opacity="0.7"/>
+  <path d="M55 45 Q58 52 60 58" stroke="#6b8e23" stroke-width="1" fill="none" opacity="0.6"/>
+  <path d="M40 50 Q37 56 36 62" stroke="#6b8e23" stroke-width="1" fill="none" opacity="0.6"/>
+  <!-- Eyes - small glowing -->
+  <circle cx="46" cy="24" r="2" fill="#d4a843"/>
+  <circle cx="54" cy="24" r="2" fill="#d4a843"/>
+  <circle cx="46" cy="24" r="1" fill="#f5f0e1"/>
+  <circle cx="54" cy="24" r="1" fill="#f5f0e1"/>
+  <!-- Legs -->
+  <path d="M42 82 Q40 88 38 92 Q42 93 44 90 Q45 87 44 82" fill="#3d2b1f"/>
+  <path d="M56 82 Q58 88 60 92 Q56 93 54 90 Q53 87 54 82" fill="#3d2b1f"/>
+</svg>

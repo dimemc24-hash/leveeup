@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 80">
+  <!-- Thunderbird - Massive bird silhouette, wide wingspan -->
+  <!-- Left wing -->
+  <path d="M60 40 Q45 32 30 24 Q20 18 8 14 Q4 13 2 16 Q4 20 10 24 Q18 30 28 34 Q40 38 50 42 Z" fill="#3d2b1f"/>
+  <!-- Left wing feathers -->
+  <path d="M8 14 Q6 18 4 22" stroke="#2d5016" stroke-width="0.8" fill="none" opacity="0.4"/>
+  <path d="M16 18 Q14 22 12 26" stroke="#2d5016" stroke-width="0.8" fill="none" opacity="0.4"/>
+  <path d="M24 22 Q22 26 20 30" stroke="#2d5016" stroke-width="0.8" fill="none" opacity="0.4"/>
+  <!-- Right wing -->
+  <path d="M60 40 Q75 32 90 24 Q100 18 112 14 Q116 13 118 16 Q116 20 110 24 Q102 30 92 34 Q80 38 70 42 Z" fill="#3d2b1f"/>
+  <!-- Right wing feathers -->
+  <path d="M112 14 Q114 18 116 22" stroke="#2d5016" stroke-width="0.8" fill="none" opacity="0.4"/>
+  <path d="M104 18 Q106 22 108 26" stroke="#2d5016" stroke-width="0.8" fill="none" opacity="0.4"/>
+  <path d="M96 22 Q98 26 100 30" stroke="#2d5016" stroke-width="0.8" fill="none" opacity="0.4"/>
+  <!-- Body -->
+  <ellipse cx="60" cy="42" rx="12" ry="8" fill="#3d2b1f"/>
+  <!-- Head -->
+  <path d="M56 36 Q56 30 58 26 Q60 22 62 26 Q64 30 64 36 Z" fill="#3d2b1f"/>
+  <!-- Beak -->
+  <path d="M58 26 Q60 20 62 26 Q61 28 60 28 Q59 28 58 26 Z" fill="#8b6914"/>
+  <!-- Eye -->
+  <circle cx="60" cy="30" r="1.5" fill="#d4a843"/>
+  <circle cx="60" cy="30" r="0.6" fill="#f5f0e1"/>
+  <!-- Tail feathers -->
+  <path d="M54 48 Q52 56 48 64 Q46 68 50 66 Q54 62 56 54" fill="#3d2b1f"/>
+  <path d="M60 50 Q60 58 60 66 Q60 70 62 68 Q62 62 62 54" fill="#3d2b1f"/>
+  <path d="M66 48 Q68 56 72 64 Q74 68 70 66 Q66 62 64 54" fill="#3d2b1f"/>
+  <!-- Lightning bolt accent (thunderbird motif) -->
+  <path d="M56 52 L52 58 L56 56 L54 62" stroke="#d4a843" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.5"/>
+</svg>

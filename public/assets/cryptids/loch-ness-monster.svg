@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 80">
+  <!-- Loch Ness Monster - Classic plesiosaur neck and humps -->
+  <!-- Water line -->
+  <path d="M0 55 Q10 53 20 55 Q30 57 40 55 Q50 53 60 55 Q70 57 80 55 Q90 53 100 55 Q110 57 120 55 L120 80 L0 80 Z" fill="#2d5016" opacity="0.2"/>
+  <!-- Hump 1 -->
+  <path d="M52 55 Q54 44 60 42 Q66 44 68 55" fill="#3d2b1f"/>
+  <!-- Hump 2 -->
+  <path d="M72 55 Q74 46 78 44 Q82 46 84 55" fill="#3d2b1f"/>
+  <!-- Hump 3 (small) -->
+  <path d="M88 55 Q89 50 92 48 Q95 50 96 55" fill="#3d2b1f"/>
+  <!-- Tail tip -->
+  <path d="M96 52 Q100 48 106 44 Q110 42 112 44" stroke="#3d2b1f" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- Long neck -->
+  <path d="M52 52 Q48 48 44 38 Q40 28 36 20 Q34 14 32 10" stroke="#3d2b1f" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <!-- Head -->
+  <path d="M28 10 Q26 6 28 4 Q32 2 36 4 Q38 6 36 10 Q34 12 32 12 Q30 12 28 10 Z" fill="#3d2b1f"/>
+  <!-- Eye -->
+  <circle cx="31" cy="7" r="1.5" fill="#d4a843"/>
+  <circle cx="31" cy="7" r="0.6" fill="#f5f0e1"/>
+  <!-- Mouth line -->
+  <path d="M28 9 Q26 9 24 8" stroke="#3d2b1f" stroke-width="1" fill="none" stroke-linecap="round"/>
+  <!-- Water ripples around body -->
+  <path d="M46 56 Q48 54 52 56" stroke="#6b8e23" stroke-width="0.8" fill="none" opacity="0.4"/>
+  <path d="M66 56 Q68 54 72 56" stroke="#6b8e23" stroke-width="0.8" fill="none" opacity="0.4"/>
+  <path d="M82 56 Q84 54 88 56" stroke="#6b8e23" stroke-width="0.8" fill="none" opacity="0.4"/>
+  <!-- Water drops near neck -->
+  <circle cx="40" cy="42" r="1" fill="#6b8e23" opacity="0.3"/>
+  <circle cx="38" cy="48" r="0.8" fill="#6b8e23" opacity="0.3"/>
+</svg>

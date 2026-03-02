@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Streak Fire - Flame icon for daily streaks -->
+  <!-- Outer flame -->
+  <path d="M50 6 Q56 20 62 30 Q72 44 74 56 Q76 68 70 78 Q64 88 50 92 Q36 88 30 78 Q24 68 26 56 Q28 44 38 30 Q44 20 50 6 Z" fill="#d4a843"/>
+  <!-- Middle flame -->
+  <path d="M50 18 Q54 28 58 36 Q66 48 66 58 Q66 68 60 76 Q54 82 50 84 Q46 82 40 76 Q34 68 34 58 Q34 48 42 36 Q46 28 50 18 Z" fill="#8b6914"/>
+  <!-- Inner flame (bright core) -->
+  <path d="M50 34 Q52 40 56 48 Q60 56 58 64 Q56 72 50 76 Q44 72 42 64 Q40 56 44 48 Q48 40 50 34 Z" fill="#f5f0e1" opacity="0.7"/>
+  <!-- Flame flicker left -->
+  <path d="M36 50 Q32 42 34 34 Q36 40 38 46 Q40 48 38 50" fill="#d4a843" opacity="0.6"/>
+  <!-- Flame flicker right -->
+  <path d="M64 48 Q68 40 66 32 Q64 38 62 44 Q60 48 62 50" fill="#d4a843" opacity="0.6"/>
+  <!-- Hot spots -->
+  <circle cx="50" cy="60" r="4" fill="#f5f0e1" opacity="0.4"/>
+  <!-- Base glow -->
+  <ellipse cx="50" cy="90" rx="18" ry="4" fill="#d4a843" opacity="0.2"/>
+</svg>

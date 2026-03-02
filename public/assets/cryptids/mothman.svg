@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Mothman - Winged humanoid with glowing red eyes -->
+  <!-- Wings spread wide -->
+  <path d="M50 35 Q38 20 20 10 Q15 8 10 12 Q12 18 18 24 Q25 30 35 38 Q42 42 46 45 Z" fill="#3d2b1f"/>
+  <path d="M50 35 Q62 20 80 10 Q85 8 90 12 Q88 18 82 24 Q75 30 65 38 Q58 42 54 45 Z" fill="#3d2b1f"/>
+  <!-- Wing membrane detail -->
+  <path d="M30 22 Q38 30 44 38" stroke="#2d5016" stroke-width="0.8" fill="none" opacity="0.4"/>
+  <path d="M22 18 Q32 28 40 36" stroke="#2d5016" stroke-width="0.8" fill="none" opacity="0.4"/>
+  <path d="M70 22 Q62 30 56 38" stroke="#2d5016" stroke-width="0.8" fill="none" opacity="0.4"/>
+  <path d="M78 18 Q68 28 60 36" stroke="#2d5016" stroke-width="0.8" fill="none" opacity="0.4"/>
+  <!-- Body -->
+  <path d="M44 40 Q42 50 42 60 Q42 70 44 80 L56 80 Q58 70 58 60 Q58 50 56 40 Z" fill="#3d2b1f"/>
+  <!-- Head -->
+  <ellipse cx="50" cy="32" rx="8" ry="9" fill="#3d2b1f"/>
+  <!-- Glowing eyes - large and red/orange -->
+  <circle cx="45" cy="30" r="4" fill="#d4a843"/>
+  <circle cx="55" cy="30" r="4" fill="#d4a843"/>
+  <!-- Inner glow -->
+  <circle cx="45" cy="30" r="2.5" fill="#f5f0e1"/>
+  <circle cx="55" cy="30" r="2.5" fill="#f5f0e1"/>
+  <!-- Eye glow effect -->
+  <circle cx="45" cy="30" r="6" fill="#d4a843" opacity="0.2"/>
+  <circle cx="55" cy="30" r="6" fill="#d4a843" opacity="0.2"/>
+  <!-- Legs -->
+  <path d="M46 78 L44 90 Q42 94 46 95 Q48 94 47 90 L48 80" fill="#3d2b1f"/>
+  <path d="M54 78 L56 90 Q58 94 54 95 Q52 94 53 90 L52 80" fill="#3d2b1f"/>
+</svg>

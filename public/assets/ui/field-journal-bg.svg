@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <!-- Field Journal Background - Aged paper with faint grid lines -->
+  <defs>
+    <!-- Aged paper pattern -->
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#8b6914" stroke-width="0.3" opacity="0.2"/>
+    </pattern>
+    <!-- Stain/aging effect -->
+    <radialGradient id="stain1" cx="20%" cy="30%" r="30%">
+      <stop offset="0%" stop-color="#8b6914" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#8b6914" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="stain2" cx="80%" cy="70%" r="25%">
+      <stop offset="0%" stop-color="#8b6914" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#8b6914" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="stain3" cx="60%" cy="20%" r="20%">
+      <stop offset="0%" stop-color="#d4a843" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#d4a843" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Edge darkening -->
+    <radialGradient id="vignette" cx="50%" cy="50%" r="50%">
+      <stop offset="60%" stop-color="#f5f0e1" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#8b6914" stop-opacity="0.1"/>
+    </radialGradient>
+  </defs>
+  <!-- Base paper color -->
+  <rect width="400" height="400" fill="#f5f0e1"/>
+  <!-- Grid pattern -->
+  <rect width="400" height="400" fill="url(#grid)"/>
+  <!-- Aging stains -->
+  <rect width="400" height="400" fill="url(#stain1)"/>
+  <rect width="400" height="400" fill="url(#stain2)"/>
+  <rect width="400" height="400" fill="url(#stain3)"/>
+  <!-- Edge vignette -->
+  <rect width="400" height="400" fill="url(#vignette)"/>
+  <!-- Margin line (like notebook paper) -->
+  <line x1="40" y1="0" x2="40" y2="400" stroke="#d4a843" stroke-width="0.5" opacity="0.3"/>
+  <!-- Top margin line -->
+  <line x1="0" y1="30" x2="400" y2="30" stroke="#d4a843" stroke-width="0.5" opacity="0.25"/>
+  <!-- Subtle paper fiber texture -->
+  <path d="M10 50 Q30 48 50 52 Q70 56 90 50" stroke="#8b6914" stroke-width="0.2" fill="none" opacity="0.1"/>
+  <path d="M200 120 Q220 118 240 122 Q260 126 280 120" stroke="#8b6914" stroke-width="0.2" fill="none" opacity="0.1"/>
+  <path d="M100 250 Q120 248 140 252 Q160 256 180 250" stroke="#8b6914" stroke-width="0.2" fill="none" opacity="0.08"/>
+  <path d="M280 340 Q300 338 320 342 Q340 346 360 340" stroke="#8b6914" stroke-width="0.2" fill="none" opacity="0.08"/>
+  <!-- Corner fold hint (bottom-right) -->
+  <path d="M385 385 L400 370 L400 400 Z" fill="#d4a843" opacity="0.1"/>
+  <path d="M385 385 L400 370" stroke="#8b6914" stroke-width="0.5" opacity="0.2"/>
+  <!-- Faint ring stain (like a coffee cup mark) -->
+  <circle cx="320" cy="340" r="25" fill="none" stroke="#8b6914" stroke-width="0.8" opacity="0.06"/>
+  <circle cx="320" cy="340" r="24" fill="none" stroke="#8b6914" stroke-width="0.3" opacity="0.04"/>
+</svg>

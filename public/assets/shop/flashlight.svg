@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Flashlight -->
+  <!-- Light beam -->
+  <path d="M50 8 L30 30 Q28 34 32 36 L68 36 Q72 34 70 30 Z" fill="#d4a843" opacity="0.25"/>
+  <path d="M50 14 L36 30 Q34 33 38 34 L62 34 Q66 33 64 30 Z" fill="#d4a843" opacity="0.2"/>
+  <!-- Flashlight head (wide part) -->
+  <path d="M34 36 L34 48 Q34 50 36 50 L64 50 Q66 50 66 48 L66 36 Z" fill="#8b6914"/>
+  <!-- Head ring -->
+  <rect x="32" y="34" width="36" height="4" rx="1" fill="#d4a843"/>
+  <!-- Lens -->
+  <ellipse cx="50" cy="36" rx="14" ry="2" fill="#f5f0e1" opacity="0.6"/>
+  <!-- Body/barrel -->
+  <rect x="38" y="50" width="24" height="36" rx="3" fill="#3d2b1f"/>
+  <!-- Grip texture lines -->
+  <path d="M40 56 L60 56" stroke="#8b6914" stroke-width="0.8" opacity="0.4"/>
+  <path d="M40 60 L60 60" stroke="#8b6914" stroke-width="0.8" opacity="0.4"/>
+  <path d="M40 64 L60 64" stroke="#8b6914" stroke-width="0.8" opacity="0.4"/>
+  <path d="M40 68 L60 68" stroke="#8b6914" stroke-width="0.8" opacity="0.4"/>
+  <path d="M40 72 L60 72" stroke="#8b6914" stroke-width="0.8" opacity="0.4"/>
+  <path d="M40 76 L60 76" stroke="#8b6914" stroke-width="0.8" opacity="0.4"/>
+  <!-- Switch button -->
+  <rect x="44" y="52" width="12" height="4" rx="2" fill="#d4a843"/>
+  <!-- End cap -->
+  <rect x="38" y="84" width="24" height="5" rx="2" fill="#8b6914"/>
+  <!-- Flashlight body highlight -->
+  <rect x="40" y="50" width="4" height="36" rx="2" fill="#8b6914" opacity="0.15"/>
+</svg>

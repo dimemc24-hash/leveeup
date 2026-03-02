@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Clue Witness - Speech bubble with an eye -->
+  <!-- Speech bubble -->
+  <path d="M15 18 Q15 10 25 10 L75 10 Q85 10 85 18 L85 55 Q85 63 75 63 L40 63 L28 78 L32 63 L25 63 Q15 63 15 55 Z" fill="#f5f0e1" stroke="#8b6914" stroke-width="2.5"/>
+  <!-- Eye shape -->
+  <path d="M32 36 Q50 18 68 36 Q50 54 32 36 Z" fill="none" stroke="#3d2b1f" stroke-width="2.5"/>
+  <!-- Iris -->
+  <circle cx="50" cy="36" r="8" fill="#4a7c23"/>
+  <!-- Pupil -->
+  <circle cx="50" cy="36" r="4" fill="#3d2b1f"/>
+  <!-- Eye highlight -->
+  <circle cx="47" cy="33" r="2" fill="#f5f0e1"/>
+  <!-- Eyelid line -->
+  <path d="M35 32 Q50 24 65 32" stroke="#3d2b1f" stroke-width="1" fill="none" opacity="0.4"/>
+</svg>

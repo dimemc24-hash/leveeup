@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Bigfoot - Classic Patterson-Gimlin walking silhouette -->
+  <!-- Body in mid-stride walking pose -->
+  <path d="
+    M52 12
+    Q56 12 58 16
+    Q60 20 58 24
+    Q56 28 52 28
+    Q48 28 46 24
+    Q44 20 46 16
+    Q48 12 52 12 Z" fill="#3d2b1f"/>
+  <!-- Torso - slight forward lean -->
+  <path d="M46 28 Q44 32 43 38 Q42 48 44 58 Q46 62 48 65
+           L58 65 Q60 62 62 58 Q64 48 62 38 Q61 32 58 28 Z" fill="#3d2b1f"/>
+  <!-- Left arm swinging forward -->
+  <path d="M44 34 Q38 38 34 44 Q32 48 30 52 Q28 54 30 55 Q32 54 34 50 Q36 46 40 40" fill="#3d2b1f"/>
+  <!-- Right arm swinging back -->
+  <path d="M60 34 Q64 40 68 48 Q70 54 72 58 Q74 60 73 62 Q71 61 70 58 Q68 52 64 44" fill="#3d2b1f"/>
+  <!-- Left leg stepping forward -->
+  <path d="M48 62 Q44 70 40 78 Q38 84 36 90 Q34 94 38 95 Q42 94 40 90 Q42 84 44 78 Q46 72 48 66" fill="#3d2b1f"/>
+  <!-- Right leg stepping back -->
+  <path d="M56 62 Q58 70 62 78 Q64 84 66 90 Q68 94 64 95 Q60 94 62 90 Q60 84 58 78 Q56 72 55 66" fill="#3d2b1f"/>
+  <!-- Big feet -->
+  <path d="M34 93 Q30 94 28 93 Q28 96 32 97 Q36 97 40 96 Q38 95 36 93" fill="#3d2b1f"/>
+  <path d="M62 93 Q66 94 68 93 Q68 96 66 97 Q62 97 60 96 Q61 95 62 93" fill="#3d2b1f"/>
+  <!-- Subtle fur texture -->
+  <path d="M44 35 L42 38" stroke="#2d5016" stroke-width="0.8" opacity="0.4"/>
+  <path d="M60 35 L62 38" stroke="#2d5016" stroke-width="0.8" opacity="0.4"/>
+  <path d="M46 50 L44 53" stroke="#2d5016" stroke-width="0.8" opacity="0.4"/>
+  <path d="M58 50 L60 53" stroke="#2d5016" stroke-width="0.8" opacity="0.4"/>
+</svg>

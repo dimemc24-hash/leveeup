@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Evidence Magnifier - Magnifying glass for evidence pieces -->
+  <!-- Handle -->
+  <path d="M64 64 L86 86" stroke="#8b6914" stroke-width="8" stroke-linecap="round"/>
+  <path d="M64 64 L86 86" stroke="#d4a843" stroke-width="5" stroke-linecap="round"/>
+  <!-- Handle grip lines -->
+  <path d="M72 72 L74 74" stroke="#8b6914" stroke-width="1" opacity="0.5"/>
+  <path d="M76 76 L78 78" stroke="#8b6914" stroke-width="1" opacity="0.5"/>
+  <path d="M80 80 L82 82" stroke="#8b6914" stroke-width="1" opacity="0.5"/>
+  <!-- Glass outer ring -->
+  <circle cx="42" cy="42" r="30" fill="none" stroke="#3d2b1f" stroke-width="5"/>
+  <circle cx="42" cy="42" r="30" fill="none" stroke="#8b6914" stroke-width="3"/>
+  <!-- Glass interior -->
+  <circle cx="42" cy="42" r="26" fill="#f5f0e1" opacity="0.3"/>
+  <!-- Glass reflection/glare -->
+  <path d="M26 28 Q30 22 38 20" stroke="#f5f0e1" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.6"/>
+  <!-- Magnified content hint - footprint inside -->
+  <ellipse cx="42" cy="48" rx="8" ry="7" fill="#3d2b1f" opacity="0.2"/>
+  <circle cx="35" cy="36" r="3.5" fill="#3d2b1f" opacity="0.2"/>
+  <circle cx="42" cy="32" r="3.5" fill="#3d2b1f" opacity="0.2"/>
+  <circle cx="49" cy="36" r="3.5" fill="#3d2b1f" opacity="0.2"/>
+  <!-- Decorative ring detail -->
+  <circle cx="42" cy="42" r="28" fill="none" stroke="#d4a843" stroke-width="0.5" opacity="0.4"/>
+</svg>

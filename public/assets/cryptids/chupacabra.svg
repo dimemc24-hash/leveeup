@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Chupacabra - Spiny small creature -->
+  <!-- Body - crouched, lizard-like -->
+  <path d="M30 58 Q28 50 32 44 Q36 38 42 36 Q50 34 58 36 Q64 38 68 44 Q72 50 70 58 Q68 64 62 68 Q54 72 46 72 Q38 70 34 66 Q30 62 30 58 Z" fill="#3d2b1f"/>
+  <!-- Head - angular, alien-like -->
+  <path d="M26 50 Q22 46 20 40 Q18 34 22 30 Q26 28 30 30 Q32 34 32 40 Q32 46 30 50 Z" fill="#3d2b1f"/>
+  <!-- Large eyes -->
+  <circle cx="24" cy="34" r="3" fill="#d4a843"/>
+  <circle cx="24" cy="34" r="1.5" fill="#f5f0e1"/>
+  <circle cx="28" cy="32" r="2.5" fill="#d4a843"/>
+  <circle cx="28" cy="32" r="1.2" fill="#f5f0e1"/>
+  <!-- Spines along back -->
+  <path d="M36 38 L34 28 L40 36" fill="#2d5016"/>
+  <path d="M42 36 L42 24 L46 34" fill="#2d5016"/>
+  <path d="M48 35 L50 22 L53 34" fill="#2d5016"/>
+  <path d="M55 36 L58 26 L60 36" fill="#2d5016"/>
+  <path d="M62 40 L66 30 L66 40" fill="#2d5016"/>
+  <!-- Front legs -->
+  <path d="M34 62 Q30 68 28 74 Q26 78 30 79 Q32 78 32 74 Q33 70 36 66" fill="#3d2b1f"/>
+  <path d="M42 68 Q40 74 38 80 Q36 84 40 84 Q42 82 42 78 Q42 74 43 70" fill="#3d2b1f"/>
+  <!-- Hind legs -->
+  <path d="M56 70 Q56 76 54 82 Q52 86 56 87 Q58 85 58 80 Q58 76 57 72" fill="#3d2b1f"/>
+  <path d="M64 66 Q66 72 68 78 Q70 82 66 83 Q64 80 64 76 Q64 72 63 68" fill="#3d2b1f"/>
+  <!-- Tail -->
+  <path d="M68 54 Q74 52 80 54 Q84 56 86 60" stroke="#3d2b1f" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- Claws -->
+  <path d="M28 78 L26 80 M30 79 L28 82" stroke="#3d2b1f" stroke-width="1" stroke-linecap="round"/>
+  <path d="M66 82 L68 85 M64 83 L65 86" stroke="#3d2b1f" stroke-width="1" stroke-linecap="round"/>
+  <!-- Small fangs -->
+  <path d="M22 38 L21 42" stroke="#f5f0e1" stroke-width="1" stroke-linecap="round"/>
+  <path d="M26 40 L26 43" stroke="#f5f0e1" stroke-width="1" stroke-linecap="round"/>
+</svg>
