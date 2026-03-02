@@ -16,6 +16,7 @@ export function ShopScreen() {
     { id: 'flashlight', label: 'Lights' },
     { id: 'journal', label: 'Journals' },
     { id: 'sticker', label: 'Stickers' },
+    { id: 'accessory', label: 'Badges' },
   ];
 
   const filtered = selectedCategory === 'all'

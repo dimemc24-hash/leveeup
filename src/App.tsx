@@ -11,6 +11,7 @@ import { ClueBoard } from './features/progress/ClueBoard';
 import { FieldGuide } from './features/progress/FieldGuide';
 import { ShopScreen } from './features/shop/ShopScreen';
 import { DashboardScreen } from './features/dashboard/DashboardScreen';
+import { AvatarCustomize } from './features/avatar/AvatarCustomize';
 
 function AppRoutes() {
   const { profile } = useGameStore();
@@ -27,6 +28,7 @@ function AppRoutes() {
         <Route path="/clues" element={<ClueBoard />} />
         <Route path="/guide" element={<FieldGuide />} />
         <Route path="/shop" element={<ShopScreen />} />
+        <Route path="/avatar" element={<AvatarCustomize />} />
         <Route path="/dashboard" element={<DashboardScreen />} />
       </Routes>
     </Layout>

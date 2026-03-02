@@ -13,7 +13,7 @@ export function Layout({ children }: { children: ReactNode }) {
     { path: '/play', label: 'Play', icon: '🎯' },
     { path: '/clues', label: 'Clues', icon: '🔍' },
     { path: '/shop', label: 'Shop', icon: '🏪' },
-    { path: '/guide', label: 'Guide', icon: '📖' },
+    { path: '/avatar', label: 'Avatar', icon: '🧑' },
   ];
 
   if (profile.role === 'PARENT' || profile.role === 'TEACHER') {

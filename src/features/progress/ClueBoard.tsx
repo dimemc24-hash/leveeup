@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useGameStore } from '../../hooks/useGameStore';
 import { cryptidRoster } from '../themes/cryptids/cryptidTheme';
 
@@ -6,6 +7,19 @@ export function ClueBoard() {
   const activeId = progress.activeInvestigation;
   const activeCryptid = activeId ? cryptidRoster.find((c) => c.id === activeId) : null;
   const invProgress = activeId ? progress.investigationProgress[activeId] : null;
+  const [revealPhase, setRevealPhase] = useState<'none' | 'assembling' | 'identifying' | 'discovered'>('none');
+
+  const isCompleted = invProgress?.completed ?? false;
+  const isDiscovered = activeId ? progress.discoveredCryptids.includes(activeId) : false;
+
+  useEffect(() => {
+    if (isCompleted && isDiscovered) {
+      setRevealPhase('assembling');
+      const t1 = setTimeout(() => setRevealPhase('identifying'), 1200);
+      const t2 = setTimeout(() => setRevealPhase('discovered'), 2200);
+      return () => { clearTimeout(t1); clearTimeout(t2); };
+    }
+  }, [isCompleted, isDiscovered]);
 
   return (
     <div className="p-4 max-w-lg mx-auto space-y-4 animate-slide-up">
@@ -69,13 +83,41 @@ export function ClueBoard() {
             </div>
           </div>
 
-          {/* Investigation status */}
-          {invProgress.completed && (
-            <div className="bg-gold/10 border-2 border-gold rounded-2xl p-5 text-center discovery-reveal">
-              <div className="text-4xl mb-2">🎉</div>
-              <h3 className="font-display text-xl font-bold text-gold">Cryptid Discovered!</h3>
-              <p className="text-sm text-bark-light mt-1">You've identified the {activeCryptid.name}!</p>
-              <img src={activeCryptid.svgSilhouette} alt={activeCryptid.name} className="w-24 h-24 mx-auto mt-3" />
+          {/* Multi-step discovery reveal */}
+          {isCompleted && revealPhase === 'assembling' && (
+            <div className="bg-forest/5 border-2 border-forest rounded-2xl p-5 text-center animate-bounce-in">
+              <p className="font-display font-bold text-forest mb-3">Assembling evidence...</p>
+              <div className="flex justify-center gap-2">
+                {activeCryptid.clues.slice(0, invProgress.totalClues).map((clue, i) => (
+                  <div
+                    key={clue.id}
+                    className="w-8 h-8 bg-forest/10 rounded-lg flex items-center justify-center animate-bounce-in"
+                    style={{ animationDelay: `${i * 200}ms` }}
+                  >
+                    <img src={clue.svgIcon} alt="" className="w-5 h-5" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {isCompleted && revealPhase === 'identifying' && (
+            <div className="bg-gold/10 border-2 border-gold rounded-2xl p-6 text-center animate-glow-pulse">
+              <div className="text-4xl mb-2">🔍</div>
+              <p className="font-display text-xl font-bold text-gold">Identifying creature...</p>
+            </div>
+          )}
+
+          {isCompleted && revealPhase === 'discovered' && (
+            <div className="bg-gold/10 border-2 border-gold rounded-2xl p-5 text-center discovery-reveal space-y-3">
+              <div className="text-4xl mb-1">🎉</div>
+              <h3 className="font-display text-2xl font-bold text-gold">Cryptid Discovered!</h3>
+              <p className="text-sm text-bark-light">You've identified the {activeCryptid.name}!</p>
+              <img src={activeCryptid.svgSilhouette} alt={activeCryptid.name} className="w-28 h-28 mx-auto" />
+              <div className="bg-white rounded-xl p-3 text-left">
+                <p className="text-xs text-bark leading-relaxed italic">{activeCryptid.lore.fieldNotes}</p>
+              </div>
+              <p className="text-xs text-bark-light">Visit the Field Guide for the full investigation report!</p>
             </div>
           )}
         </>

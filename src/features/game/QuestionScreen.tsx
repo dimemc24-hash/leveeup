@@ -107,14 +107,9 @@ export function QuestionScreen() {
         </div>
       )}
 
-      {/* Theme hook */}
-      <div className="bg-forest/5 rounded-xl p-3 border border-forest/10">
-        <p className="text-sm text-forest italic">{question.themeHook}</p>
-      </div>
-
-      {/* Question */}
+      {/* Narrative question — themeHook IS the question */}
       <div className="bg-white rounded-2xl p-5 shadow-sm border border-paper-dark">
-        <div className="flex items-center gap-2 mb-1">
+        <div className="flex items-center gap-2 mb-2">
           <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${
             question.tier === 'introductory' ? 'bg-green-100 text-green-700' :
             question.tier === 'developing' ? 'bg-amber-100 text-amber-700' :
@@ -124,7 +119,9 @@ export function QuestionScreen() {
           </span>
           <span className="text-xs text-bark-light capitalize">{question.subject.replace('_', ' ')}</span>
         </div>
-        <h3 className="font-display text-lg font-bold text-bark mt-2">{question.question}</h3>
+        <div className="bg-forest/5 rounded-xl p-4 border border-forest/10">
+          <p className="font-display text-base font-bold text-bark leading-relaxed">{question.themeHook}</p>
+        </div>
       </div>
 
       {/* Answer area */}

@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useGameStore } from '../../hooks/useGameStore';
 import { useTheme } from '../themes/engine/ThemeContext';
 import { cryptidRoster } from '../themes/cryptids/cryptidTheme';
+import { Avatar } from '../avatar/Avatar';
 
 export function HomeScreen() {
   const { profile, progress } = useGameStore();
@@ -18,12 +19,19 @@ export function HomeScreen() {
 
   return (
     <div className="p-4 max-w-lg mx-auto space-y-4 animate-slide-up">
-      {/* Welcome */}
+      {/* Welcome + Avatar */}
       <div className="bg-white rounded-2xl p-5 shadow-sm border border-paper-dark">
-        <h2 className="font-display text-xl font-bold text-forest mb-1">
-          Welcome back, {profile.name}!
-        </h2>
-        <p className="text-sm text-bark-light">{getNarrative('welcome')}</p>
+        <div className="flex items-center gap-4">
+          <Link to="/avatar" aria-label="Customize avatar">
+            <Avatar size={80} />
+          </Link>
+          <div className="flex-1">
+            <h2 className="font-display text-xl font-bold text-forest mb-1">
+              Welcome back, {profile.name}!
+            </h2>
+            <p className="text-sm text-bark-light">{getNarrative('welcome')}</p>
+          </div>
+        </div>
       </div>
 
       {/* Daily login reward */}

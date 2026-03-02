@@ -91,17 +91,29 @@ export interface InvestigationProgress {
 }
 
 // ─── Shop ───
+export type ShopCategory = 'hat' | 'binoculars' | 'vest' | 'flashlight' | 'journal' | 'sticker' | 'accessory';
+export type EquipmentSlot = 'head' | 'eyes' | 'body' | 'hand' | 'accessory';
+
 export interface ShopItem {
   id: string;
   name: string;
   description: string;
-  category: 'hat' | 'binoculars' | 'vest' | 'flashlight' | 'journal' | 'sticker';
+  category: ShopCategory;
+  equipSlot?: EquipmentSlot;
   price: number;
   svgIcon: string;
   rarity: 'common' | 'rare' | 'legendary';
 }
 
 // ─── Cryptid Theme ───
+export interface CryptidLore {
+  originStory: string;
+  famousSightings: string[];
+  louisianaConnection: string;
+  funFacts: string[];
+  fieldNotes: string;
+}
+
 export interface Cryptid {
   id: string;
   name: string;
@@ -115,6 +127,7 @@ export interface Cryptid {
     stealth: number;
     mystery: number;
   };
+  lore: CryptidLore;
 }
 
 export interface CryptidClue {
