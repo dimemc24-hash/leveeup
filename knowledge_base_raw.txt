@@ -1,0 +1,328 @@
+﻿{
+  "metadata": {
+    "grade": "2nd Grade",
+    "state": "Louisiana",
+    "parish": "Ascension Parish",
+    "institution": "Bullion Primary School",
+    "standards_source": [
+      "Louisiana Student Standards for ELA (LSS)",
+      "Louisiana Student Standards for Math (LSSM)",
+      "Louisiana Student Standards for Science (LSSS)",
+      "2022 Louisiana Student Standards for Social Studies"
+    ],
+    "curricula": [
+      "Core Knowledge Language Arts (CKLA)",
+      "Eureka Math┬▓",
+      "Amplify Science",
+      "Bayou Bridges Social Studies"
+    ],
+    "date_generated": "March 2, 2026"
+  },
+  "subjects": {
+    "mathematics": {
+      "framework": "Eureka Math┬▓ - The Story of Units",
+      "instructional_protocol": "Read-Draw-Write (RDW)",
+      "progression": [
+        {
+          "period": "1st 9 Weeks",
+          "module": "Module 1: Sums & Differences to 100",
+          "focus": "Mental strategies for addition and subtraction within 20; word problems within 100"
+        },
+        {
+          "period": "2nd 9 Weeks",
+          "module": "Module 2: Addition and Subtraction of Length Units; Module 3: Place Value, Counting, and Comparison of Numbers to 1,000",
+          "focus": "Standard units of measure; three-digit numbers as bundles of hundreds, tens, and ones"
+        },
+        {
+          "period": "3rd 9 Weeks",
+          "module": "Module 4: Addition and Subtraction Within 200 with Word Problems to 100",
+          "focus": "Vertical form; place value disks; renaming/regrouping units"
+        },
+        {
+          "period": "4th 9 Weeks",
+          "module": "Module 5: Addition and Subtraction Within 1,000 with Word Problems to 100",
+          "focus": "Advanced vertical form; solving multi-step problems"
+        }
+      ],
+      "key_models": [
+        "Tape Diagrams",
+        "Number Bonds",
+        "Place Value Disks",
+        "Hide Zero Cards",
+        "Chip Model"
+      ],
+      "vocabulary": [
+        "Base ten",
+        "Expanded form",
+        "Standard form",
+        "Equation",
+        "Algorithm",
+        "Decompose",
+        "Bundle"
+      ],
+      "misconceptions": [
+        "Treating digits in a multi-digit number as single values rather than place values",
+        "Struggling with renaming units (borrowing/carrying) in vertical form"
+      ],
+      "question_bank_sample": [
+        {
+          "id": "MATH-2-M3-01",
+          "standard": "LSSM.2.NBT.A.1",
+          "tiers": {
+            "tier_1_intro": {
+              "type": "multiple_choice",
+              "question": "How many tens are in the number 40?",
+              "options": ["4 tens", "40 tens", "0 tens", "400 tens"],
+              "answer": "4 tens",
+              "explanation": "The number 40 is 4 bundles of ten!",
+              "distractor_rationale": "Student confuses the digit value with the count of bundles."
+            },
+            "tier_3_proficient": {
+              "type": "drag_and_drop",
+              "question": "Use place value disks to show the number 235.",
+              "task": "Place 2 hundreds, 3 tens, and 5 ones in the chart.",
+              "answer": "2-3-5 configuration",
+              "explanation": "235 has 2 hundreds, 3 tens, and 5 ones.",
+              "distractor_rationale": "Student places 235 ones directly or swaps tens and hundreds places."
+            }
+          }
+        }
+      ]
+    },
+    "english_language_arts": {
+      "framework": "Dual-Pronged: Skills (Phonics/Mechanics) and Knowledge (Comprehension/Themes)",
+      "instructional_model": "Departmentalized Literacy",
+      "knowledge_domains": [
+        "Fairy Tales and Tall Tales",
+        "Early Asian Civilizations",
+        "The Ancient Greek Civilization",
+        "Greek Myths",
+        "The War of 1812",
+        "Cycles in Nature",
+        "Westward Expansion",
+        "Insects",
+        "The U.S. Civil War",
+        "The Human Body",
+        "Immigration",
+        "Fighting for a Cause"
+      ],
+      "progression": [
+        {
+          "period": "1st 9 Weeks",
+          "skills_focus": "Unit 1 Phonics; Review of basic code; Tricky Words (I, You, Your)",
+          "knowledge_focus": "Central lessons and morals in traditional stories; Geography of Indus and Yellow Rivers"
+        },
+        {
+          "period": "2nd 9 Weeks",
+          "skills_focus": "Units 2-3 Phonics; Separated digraphs (a_e, i_e, o_e); Quotation marks",
+          "knowledge_focus": "Foundations of democracy; Character traits of gods and heroes"
+        },
+        {
+          "period": "3rd 9 Weeks",
+          "skills_focus": "Unit 4-5 Phonics; Inflectional endings (-ed, -ing); Irregular plural nouns",
+          "knowledge_focus": "Westward innovations (steamboats, Pony Express); Lifecycle of plants and animals"
+        }
+      ],
+      "vocabulary": [
+        "Moral",
+        "Character motivation",
+        "Antonym",
+        "Digraph",
+        "Primary Source",
+        "Narrative",
+        "Persuasion"
+      ],
+      "misconceptions": [
+        "Mistaking 'Tricky Words' for words that follow standard phonics rules",
+        "Identifying central message based on personal opinion rather than text evidence"
+      ],
+      "question_bank_sample": [
+        {
+          "id": "ELA-2-K1-02",
+          "standard": "LSS.RL.2.1",
+          "tiers": {
+            "tier_2_developing": {
+              "type": "multiple_choice",
+              "question": "In 'The Emperor's New Clothes,' how did the Emperor respond when he didn't see the clothes?",
+              "options": [
+                "He told the truth right away.",
+                "He pretended to see them because he didn't want to look foolish.",
+                "He fired the weavers immediately.",
+                "He gave the clothes to his best friend."
+              ],
+              "answer": "He pretended to see them because he didn't want to look foolish.",
+              "explanation": "Characters sometimes pretend things because of how they want others to see them!",
+              "distractor_rationale": "Student picks an outcome that seems 'logical' but is not what the character did."
+            }
+          }
+        }
+      ]
+    },
+    "science": {
+      "framework": "Amplify Science - Three-Dimensional Learning",
+      "instructional_model": "Phenomena-based Inquiry",
+      "units": [
+        {
+          "title": "Plant and Animal Relationships",
+          "role": "Plant Scientist",
+          "phenomenon": "New chalta trees are no longer growing in the Bengal Tiger Reserve.",
+          "key_concepts": [
+            "Seed dispersal by animals",
+            "Plant needs: light and water",
+            "Habitat diversity"
+          ]
+        },
+        {
+          "title": "Properties of Materials",
+          "role": "Glue Engineer",
+          "phenomenon": "Designing a sticky, strong glue for a school principal.",
+          "key_concepts": [
+            "Observable properties (texture, color, smell)",
+            "Heating and cooling (reversible/irreversible changes)",
+            "Testing substances for specific functions"
+          ]
+        },
+        {
+          "title": "Changing Landforms",
+          "role": "Geologist",
+          "phenomenon": "The erosion of a cliff at a local recreation center.",
+          "key_concepts": [
+            "Erosion by wind and water",
+            "Scale: small changes adding up over long periods",
+            "Composition of landforms (solid rock vs. soil)"
+          ]
+        }
+      ],
+      "vocabulary": [
+        "Metamorphosis",
+        "Seed dispersal",
+        "Erosion",
+        "Geologist",
+        "Irreversible",
+        "Pollination"
+      ],
+      "question_bank_sample": [
+        {
+          "id": "SCI-2-U1-05",
+          "standard": "LSSS.2.LS2.2",
+          "tiers": {
+            "tier_3_mastery": {
+              "type": "sequencing",
+              "question": "How does a seed from a chalta tree become a new tree?",
+              "steps": [
+                "An elephant eats the chalta fruit.",
+                "The elephant walks to a new part of the forest.",
+                "The elephant drops the seed in its waste.",
+                "The seed gets light and water and starts to grow."
+              ],
+              "answer": "1-2-3-4 order",
+              "explanation": "Animals help move seeds to new spots where they have room to grow!",
+              "distractor_rationale": "Student omits the animal's role or the need for light/water."
+            }
+          }
+        }
+      ]
+    },
+    "social_studies": {
+      "framework": "Bayou Bridges",
+      "instructional_model": "Disciplinary Literacy & Evidence-Based Claims",
+      "units": [
+        {
+          "title": "North America: Geography and the Environment",
+          "focus": "Using map keys, scale, and compass roses; identifying continents and hemispheres"
+        },
+        {
+          "title": "The Beginnings of America",
+          "focus": "Thirteen English colonies; winning independence from Britain"
+        },
+        {
+          "title": "Making the United States of America",
+          "focus": "The Constitution; three branches of government; civic virtues"
+        },
+        {
+          "title": "Choices and Costs",
+          "focus": "Basic economic principles; producers and consumers; major U.S. industries"
+        }
+      ],
+      "vocabulary": [
+        "Primary source",
+        "Secondary source",
+        "Democracy",
+        "Executive branch",
+        "Legislative branch",
+        "Judicial branch",
+        "Consumer"
+      ],
+      "misconceptions": [
+        "Thinking all historical stories are primary sources",
+        "Confusing the roles of the three branches of government"
+      ],
+      "question_bank_sample": [
+        {
+          "id": "SS-2-U3-04",
+          "standard": "SS.2.2.SP2",
+          "tiers": {
+            "tier_2_developing": {
+              "type": "multiple_choice",
+              "question": "Which of these is a primary source from the time of the Civil War?",
+              "options": [
+                "A diary written by a soldier in 1863.",
+                "A history book written in 2024.",
+                "A story a teacher tells from memory.",
+                "An encyclopedia entry about Abraham Lincoln."
+              ],
+              "answer": "A diary written by a soldier in 1863.",
+              "explanation": "A primary source is a record created at the actual time of the event!",
+              "distractor_rationale": "Student picks high-quality but secondary information (history book/encyclopedia)."
+            }
+          }
+        }
+      ]
+    }
+  },
+  "progression_architecture": {
+    "calendar_alignment": "180-day school year divided into four nine-week grading periods.",
+    "adaptive_rules": {
+      "level_up_trigger": "3 consecutive correct answers in Tier 3 difficulty.",
+      "remediation_trigger": "2 incorrect answers on the same standard triggers a 'Scaffold Clue' (e.g., a visual tape diagram for Math or a word-bank for ELA).",
+      "frustration_pivot": "After 3 failed attempts at a Math mission, the app offers a Science 'Field Mission' to restore XP and confidence."
+    },
+    "point_economy": {
+      "tier_1": "10 XP",
+      "tier_2": "25 XP",
+      "tier_3": "50 XP",
+      "streak_bonus": "1.5x multiplier for 5+ correct answers",
+      "milestone_bonus": "Completing a Knowledge Domain unlocks a 'Legendary' cryptid card."
+    },
+    "cryptid_hunt_mechanic": {
+      "structure": "10 curriculum problems = 1 'Evidence Piece'. 5 Evidence Pieces = 1 Cryptid Location unlocked.",
+      "investigation_cycle": "Target 14 days per cryptid (e.g., Bigfoot investigation spans 'Fairy Tales' ELA domain and 'Sums to 100' Math module)."
+    }
+  },
+  "theme_integration": {
+    "flavor_hooks": [
+      "Help the Rougarou decode this map using your compass rose knowledge!",
+      "The Mothman left a code in this three-digit number. Use expanded form to crack it!",
+      "Be a 'Glue Engineer' to fix the swamp monster's broken trap!"
+    ],
+    "narrative_beats": [
+      "Establishing Routines (1st 9 Weeks) = Setting up the 'Cryptid Research Lab'.",
+      "Westward Expansion (3rd 9 Weeks) = Tracking the creature across the Oregon Trail.",
+      "Civil War (4th 9 Weeks) = Finding 'Historical Evidence' of sightings in primary source documents."
+    ],
+    "cross_subject_chains": [
+      {
+        "chain_id": "CHAIN-01",
+        "step_1": "Math: Solve 3-digit subtraction to find the 'year' of a sighting.",
+        "step_2": "Social Studies: Identify if the year's record is a 'Primary Source'.",
+        "step_3": "ELA: Read a short 'Knowledge' passage about the 1812 era to find the location clue."
+      }
+    ]
+  },
+  "dashboard_metrics": {
+    "accuracy_tracking": "Per-standard mastery (Red/Yellow/Green status).",
+    "time_metrics": "Average time spent in 'Skills' vs. 'Knowledge' ELA strands.",
+    "struggle_flags": "Automatically flags standards where the 'frustration pivot' was triggered more than twice.",
+    "benchmarks": "Monthly comparison to the APSB 180-day pacing guide."
+  }
+}
