@@ -23,7 +23,7 @@ export function ClueBoard() {
 
   return (
     <div className="p-4 max-w-lg mx-auto space-y-4 animate-slide-up">
-      <div className="bg-white rounded-2xl p-5 shadow-sm border border-paper-dark">
+      <div className="journal-card bg-white/90 rounded-2xl p-5 shadow-sm">
         <h2 className="font-display text-xl font-bold text-forest">Field Journal</h2>
         <p className="text-sm text-bark-light mt-1">Your investigation clue board</p>
       </div>
@@ -31,7 +31,7 @@ export function ClueBoard() {
       {activeCryptid && invProgress ? (
         <>
           {/* Active investigation */}
-          <div className="bg-white rounded-2xl p-5 shadow-sm border border-paper-dark">
+          <div className="journal-card bg-white/90 rounded-2xl p-5 shadow-sm">
             <div className="flex items-center gap-4 mb-4">
               <div className="w-16 h-16 bg-paper rounded-xl flex items-center justify-center p-2">
                 <img src={activeCryptid.svgSilhouette} alt="" className="w-full h-full opacity-50" />
@@ -63,7 +63,7 @@ export function ClueBoard() {
                     key={clue.id}
                     className={`aspect-square rounded-xl flex flex-col items-center justify-center p-1 transition-all ${
                       revealed
-                        ? 'bg-forest/10 border-2 border-forest-light animate-bounce-in'
+                        ? 'bg-forest/10 border-2 border-forest-light animate-card-flip'
                         : 'bg-paper-dark border-2 border-paper-dark'
                     }`}
                     title={revealed ? clue.description : '???'}
@@ -122,13 +122,13 @@ export function ClueBoard() {
           )}
         </>
       ) : (
-        <div className="bg-white rounded-2xl p-8 shadow-sm border border-paper-dark text-center">
+        <div className="journal-card bg-white/90 rounded-2xl p-8 shadow-sm text-center">
           <p className="text-bark-light">No active investigation. Start playing to begin!</p>
         </div>
       )}
 
       {/* All investigations */}
-      <div className="bg-white rounded-2xl p-4 shadow-sm border border-paper-dark">
+      <div className="journal-card bg-white/90 rounded-2xl p-4 shadow-sm">
         <h3 className="font-display font-bold text-forest mb-3">All Investigations</h3>
         <div className="space-y-2">
           {cryptidRoster.map((cryptid) => {

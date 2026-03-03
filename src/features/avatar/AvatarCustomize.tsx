@@ -39,13 +39,13 @@ export function AvatarCustomize() {
 
   return (
     <div className="p-4 max-w-lg mx-auto space-y-4 animate-slide-up">
-      <div className="bg-white rounded-2xl p-5 shadow-sm border border-paper-dark">
+      <div className="journal-card bg-white/90 rounded-2xl p-5 shadow-sm">
         <h2 className="font-display text-xl font-bold text-forest">Customize Your Investigator</h2>
         <p className="text-sm text-bark-light mt-1">Equip gear from your inventory!</p>
       </div>
 
       {/* Avatar preview */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-paper-dark flex justify-center">
+      <div className="journal-card bg-white/90 rounded-2xl p-6 shadow-sm flex justify-center">
         <Avatar size={200} showName />
       </div>
 
@@ -55,7 +55,7 @@ export function AvatarCustomize() {
           <button
             key={slot}
             onClick={() => setActiveSlot(slot)}
-            className={`flex items-center gap-1 px-3 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-colors ${
+            className={`flex items-center gap-1 px-3 py-2 min-h-[44px] rounded-full text-xs font-bold whitespace-nowrap transition-colors ${
               activeSlot === slot
                 ? 'bg-forest text-white'
                 : 'bg-white text-bark-light border border-paper-dark hover:bg-paper'
@@ -70,7 +70,7 @@ export function AvatarCustomize() {
       </div>
 
       {/* Items for selected slot */}
-      <div className="bg-white rounded-2xl p-4 shadow-sm border border-paper-dark">
+      <div className="journal-card bg-white/90 rounded-2xl p-4 shadow-sm">
         <h3 className="font-display font-bold text-forest mb-3">
           {SLOTS.find((s) => s.slot === activeSlot)?.label} Gear
         </h3>
@@ -86,7 +86,7 @@ export function AvatarCustomize() {
                 <button
                   key={item.id}
                   onClick={() => handleEquip(item.id)}
-                  className={`rounded-xl p-3 border-2 transition-all text-left ${
+                  className={`rounded-xl p-3 min-h-[48px] border-2 transition-all text-left ${
                     isEquipped
                       ? 'border-gold bg-gold/10'
                       : 'border-paper-dark bg-white hover:border-forest/40'

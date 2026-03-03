@@ -93,7 +93,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   createProfile(name: string, role: UserProfile['role']) {
-    const id = 'user_' + Date.now().toString(36);
+    const id = crypto.randomUUID();
     const p: UserProfile = { id, name, role, equippedItems: [], createdAt: Date.now() };
     storage.setProfile(p);
     storage.setProgress(id, defaultProgress);

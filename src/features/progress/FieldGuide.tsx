@@ -40,7 +40,7 @@ export function FieldGuide() {
 
   return (
     <div className="p-4 max-w-lg mx-auto space-y-4 animate-slide-up">
-      <div className="bg-white rounded-2xl p-5 shadow-sm border border-paper-dark">
+      <div className="journal-card bg-white/90 rounded-2xl p-5 shadow-sm">
         <h2 className="font-display text-xl font-bold text-forest">Field Guide</h2>
         <p className="text-sm text-bark-light mt-1">
           {progress.discoveredCryptids.length} / {cryptidRoster.length} cryptids discovered
@@ -80,7 +80,7 @@ export function FieldGuide() {
           {revealStage === 'reveal' && (
             <>
               <div className="bg-white rounded-2xl p-5 shadow-lg border-2 border-gold discovery-reveal">
-                <button onClick={handleBack} className="text-bark-light text-sm mb-3" aria-label="Back to list">
+                <button onClick={handleBack} className="text-bark-light text-sm mb-3 min-h-[44px]" aria-label="Back to list">
                   ← Back to Field Guide
                 </button>
 
@@ -124,7 +124,7 @@ export function FieldGuide() {
                   <button
                     key={id}
                     onClick={() => setLoreTab(id)}
-                    className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-colors ${
+                    className={`px-4 py-2 rounded-full text-sm min-h-[40px] font-bold whitespace-nowrap transition-colors ${
                       loreTab === id
                         ? 'bg-forest text-white'
                         : 'bg-white text-bark-light border border-paper-dark hover:bg-paper'
@@ -138,7 +138,7 @@ export function FieldGuide() {
               </div>
 
               {/* Lore content */}
-              <div className="bg-white rounded-2xl p-5 shadow-sm border border-paper-dark animate-slide-up">
+              <div className="journal-card bg-white/90 rounded-2xl p-5 shadow-sm animate-slide-up">
                 {loreTab === 'overview' && (
                   <div className="space-y-3">
                     <h4 className="font-display font-bold text-forest">Origin Story</h4>
@@ -203,7 +203,7 @@ export function FieldGuide() {
                 key={cryptid.id}
                 onClick={() => discovered ? handleCryptidClick(cryptid.id) : undefined}
                 disabled={!discovered}
-                className={`bg-white rounded-xl p-4 shadow-sm border text-center transition-all ${
+                className={`bg-white rounded-xl p-4 shadow-sm border text-center transition-all min-h-[48px] ${
                   discovered
                     ? 'border-gold hover:shadow-md cursor-pointer'
                     : unlocked

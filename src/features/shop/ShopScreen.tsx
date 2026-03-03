@@ -36,7 +36,7 @@ export function ShopScreen() {
   return (
     <div className="p-4 max-w-lg mx-auto space-y-4 animate-slide-up">
       {/* Header */}
-      <div className="bg-white rounded-2xl p-5 shadow-sm border border-paper-dark">
+      <div className="journal-card bg-white/90 rounded-2xl p-5 shadow-sm">
         <h2 className="font-display text-xl font-bold text-forest">Field Supply Shop</h2>
         <p className="text-sm text-bark-light mt-1">Spend your hard-earned XP on gear!</p>
         <div className="flex items-center gap-1 mt-2">
@@ -51,7 +51,7 @@ export function ShopScreen() {
           <button
             key={id}
             onClick={() => setSelectedCategory(id)}
-            className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-colors ${
+            className={`px-4 py-2 rounded-full text-sm min-h-[40px] font-bold whitespace-nowrap transition-colors ${
               selectedCategory === id ? 'bg-forest text-white' : 'bg-white text-bark-light border border-paper-dark hover:bg-paper'
             }`}
             role="tab"
@@ -73,7 +73,7 @@ export function ShopScreen() {
           return (
             <div
               key={item.id}
-              className={`bg-white rounded-xl p-3 shadow-sm border transition-all ${
+              className={`journal-card bg-white/90 rounded-xl p-3 shadow-sm transition-all ${
                 wasBought ? 'border-forest-light animate-bounce-in' :
                 equipped ? 'border-gold border-2' :
                 'border-paper-dark'
@@ -95,7 +95,7 @@ export function ShopScreen() {
                 {owned ? (
                   <button
                     onClick={() => equipped ? unequipItem(item.id) : equipItem(item.id)}
-                    className={`w-full text-xs font-bold rounded-lg py-2 transition-colors ${
+                    className={`w-full text-sm font-bold rounded-lg py-2.5 min-h-[40px] transition-colors ${
                       equipped ? 'bg-gold text-white' : 'bg-paper text-forest hover:bg-forest/10'
                     }`}
                     aria-label={equipped ? `Unequip ${item.name}` : `Equip ${item.name}`}
@@ -106,7 +106,7 @@ export function ShopScreen() {
                   <button
                     onClick={() => handleBuy(item)}
                     disabled={!canAfford}
-                    className="w-full text-xs font-bold rounded-lg py-2 bg-forest text-white hover:bg-forest-light transition-colors disabled:opacity-40"
+                    className="w-full text-sm font-bold rounded-lg py-2.5 min-h-[40px] bg-forest text-white hover:bg-forest-light transition-colors disabled:opacity-40"
                     aria-label={`Buy ${item.name} for ${item.price} XP`}
                   >
                     {item.price} XP

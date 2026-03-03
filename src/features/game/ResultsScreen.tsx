@@ -27,29 +27,29 @@ export function ResultsScreen() {
 
   return (
     <div className="p-4 max-w-lg mx-auto space-y-4 animate-slide-up">
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-paper-dark text-center">
+      <div className="journal-card bg-white/90 rounded-2xl p-6 shadow-sm text-center">
         <div className="text-5xl mb-3 animate-bounce-in">{getEmoji()}</div>
         <h2 className="font-display text-2xl font-bold text-forest mb-2">Mission Complete!</h2>
         <p className="text-bark-light">{getMessage()}</p>
       </div>
 
       <div className="grid grid-cols-3 gap-2">
-        <div className="bg-white rounded-xl p-4 text-center shadow-sm border border-paper-dark">
+        <div className="journal-card bg-white/90 rounded-xl p-4 text-center shadow-sm">
           <div className="text-2xl font-bold text-forest">{correct}/{total}</div>
           <div className="text-xs text-bark-light">Correct</div>
         </div>
-        <div className="bg-white rounded-xl p-4 text-center shadow-sm border border-paper-dark">
+        <div className="journal-card bg-white/90 rounded-xl p-4 text-center shadow-sm">
           <div className="text-2xl font-bold text-gold">{accuracy}%</div>
           <div className="text-xs text-bark-light">Accuracy</div>
         </div>
-        <div className="bg-white rounded-xl p-4 text-center shadow-sm border border-paper-dark">
+        <div className="journal-card bg-white/90 rounded-xl p-4 text-center shadow-sm">
           <div className="text-2xl font-bold text-forest-light">+{xpEarned}</div>
           <div className="text-xs text-bark-light">XP Earned</div>
         </div>
       </div>
 
       {/* Answer summary */}
-      <div className="bg-white rounded-2xl p-4 shadow-sm border border-paper-dark">
+      <div className="journal-card bg-white/90 rounded-2xl p-4 shadow-sm">
         <h3 className="font-display font-bold text-forest mb-3">Investigation Log</h3>
         <div className="space-y-2">
           {answers.map((a, i) => (
@@ -68,7 +68,7 @@ export function ResultsScreen() {
         <Link
           to="/play"
           onClick={() => endSession()}
-          className="flex-1 bg-forest text-white rounded-xl p-4 text-center font-bold hover:bg-forest-light transition-colors shadow-md"
+          className="flex-1 bg-forest text-white rounded-xl p-4 text-center font-bold text-lg min-h-[56px] flex items-center justify-center hover:bg-forest-light transition-colors shadow-md"
           aria-label="Play again"
         >
           New Mission
@@ -76,7 +76,7 @@ export function ResultsScreen() {
         <Link
           to="/"
           onClick={() => endSession()}
-          className="flex-1 border-2 border-forest text-forest rounded-xl p-4 text-center font-bold hover:bg-forest/5 transition-colors"
+          className="flex-1 border-2 border-forest text-forest rounded-xl p-4 text-center font-bold text-lg min-h-[56px] flex items-center justify-center hover:bg-forest/5 transition-colors"
           aria-label="Go to home"
         >
           Home

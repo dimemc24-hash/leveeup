@@ -28,7 +28,7 @@ export function DashboardScreen() {
   if (profile.role === 'STUDENT') {
     return (
       <div className="p-4 max-w-lg mx-auto animate-slide-up">
-        <div className="bg-white rounded-2xl p-5 shadow-sm border border-paper-dark text-center">
+        <div className="journal-card bg-white/90 rounded-2xl p-5 shadow-sm text-center">
           <p className="text-bark-light">The dashboard is for parents and teachers.</p>
         </div>
       </div>
@@ -37,7 +37,7 @@ export function DashboardScreen() {
 
   return (
     <div className="p-4 max-w-2xl mx-auto space-y-4 animate-slide-up">
-      <div className="bg-white rounded-2xl p-5 shadow-sm border border-paper-dark">
+      <div className="journal-card bg-white/90 rounded-2xl p-5 shadow-sm">
         <h2 className="font-display text-xl font-bold text-forest">
           {profile.role === 'TEACHER' ? 'Teacher' : 'Parent'} Dashboard
         </h2>
@@ -45,7 +45,7 @@ export function DashboardScreen() {
       </div>
 
       {students.length === 0 ? (
-        <div className="bg-white rounded-2xl p-8 shadow-sm border border-paper-dark text-center">
+        <div className="journal-card bg-white/90 rounded-2xl p-8 shadow-sm text-center">
           <p className="text-bark-light">No student profiles found. Create a student profile to see analytics here.</p>
         </div>
       ) : (
@@ -102,7 +102,7 @@ function StudentCard({ studentId, studentName }: { studentId: string; studentNam
   if (!studentProgress) return null;
 
   return (
-    <div className="bg-white rounded-2xl p-5 shadow-sm border border-paper-dark space-y-4">
+    <div className="journal-card bg-white/90 rounded-2xl p-5 shadow-sm space-y-4">
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-full bg-forest/10 flex items-center justify-center text-xl font-bold text-forest">
           {studentName[0].toUpperCase()}

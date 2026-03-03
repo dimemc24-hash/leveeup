@@ -28,7 +28,7 @@ export function SubjectSelect() {
 
   return (
     <div className="p-4 max-w-lg mx-auto space-y-4 animate-slide-up">
-      <div className="bg-white rounded-2xl p-5 shadow-sm border border-paper-dark">
+      <div className="journal-card bg-white/90 rounded-2xl p-5 shadow-sm">
         <h2 className="font-display text-xl font-bold text-forest mb-1">Choose Your Mission</h2>
         <p className="text-sm text-bark-light">{getNarrative('session_start')}</p>
       </div>
@@ -40,10 +40,10 @@ export function SubjectSelect() {
             <button
               key={id}
               onClick={() => handleSelect(id)}
-              className={`w-full rounded-xl p-4 text-left border-2 transition-all hover:shadow-md flex items-center gap-3 ${color}`}
+              className={`w-full rounded-xl p-4 md:p-5 text-left border-2 min-h-[64px] text-base md:text-lg transition-all hover:shadow-md flex items-center gap-3 ${color}`}
               aria-label={`Play ${label}${isRecommended ? ' (recommended)' : ''}`}
             >
-              <span className="text-2xl">{icon}</span>
+              <span className="text-3xl">{icon}</span>
               <div className="flex-1">
                 <div className="font-bold">{label}</div>
                 {isRecommended && (

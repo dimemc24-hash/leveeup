@@ -89,7 +89,7 @@ export function QuestionScreen() {
     <div className="p-4 max-w-lg mx-auto space-y-4">
       {/* Progress bar */}
       <div className="flex items-center gap-3">
-        <button onClick={handleQuit} className="text-bark-light text-sm hover:text-bark" aria-label="Quit session">
+        <button onClick={handleQuit} className="text-bark-light text-lg hover:text-bark min-w-[44px] min-h-[44px] flex items-center justify-center" aria-label="Quit session">
           ✕
         </button>
         <div className="flex-1 bg-paper-dark rounded-full h-2 overflow-hidden" role="progressbar" aria-valuenow={session.currentQuestionIndex + 1} aria-valuemax={session.questions.length}>
@@ -108,7 +108,7 @@ export function QuestionScreen() {
       )}
 
       {/* Narrative question — themeHook IS the question */}
-      <div className="bg-white rounded-2xl p-5 shadow-sm border border-paper-dark">
+      <div className="journal-card bg-white/90 rounded-2xl p-5 shadow-sm">
         <div className="flex items-center gap-2 mb-2">
           <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${
             question.tier === 'introductory' ? 'bg-green-100 text-green-700' :
@@ -120,7 +120,7 @@ export function QuestionScreen() {
           <span className="text-xs text-bark-light capitalize">{question.subject.replace('_', ' ')}</span>
         </div>
         <div className="bg-forest/5 rounded-xl p-4 border border-forest/10">
-          <p className="font-display text-base font-bold text-bark leading-relaxed">{question.themeHook}</p>
+          <p className="font-display text-lg md:text-xl font-bold text-bark leading-relaxed">{question.themeHook}</p>
         </div>
       </div>
 
@@ -136,7 +136,7 @@ export function QuestionScreen() {
               key={opt}
               onClick={() => !feedback && setSelected(opt)}
               disabled={!!feedback}
-              className={`w-full rounded-xl p-4 text-left border-2 transition-all ${
+              className={`w-full rounded-xl p-4 md:p-5 min-h-[52px] text-base md:text-lg text-left border-2 transition-all ${
                 isCorrect ? 'border-forest-light bg-green-50 text-forest' :
                 isWrong ? 'border-danger bg-red-50 text-danger animate-shake' :
                 isSelected ? 'border-forest bg-forest/5' :
@@ -157,7 +157,7 @@ export function QuestionScreen() {
             onChange={(e) => setFillAnswer(e.target.value)}
             disabled={!!feedback}
             placeholder="Type your answer..."
-            className="w-full rounded-xl p-4 border-2 border-paper-dark bg-white focus:border-forest focus:outline-none disabled:opacity-60"
+            className="w-full rounded-xl p-4 md:p-5 border-2 text-base md:text-lg min-h-[52px] border-paper-dark bg-white focus:border-forest focus:outline-none disabled:opacity-60"
             aria-label="Your answer"
           />
         )}
@@ -185,7 +185,7 @@ export function QuestionScreen() {
                 key={item}
                 onClick={() => toggleSequenceItem(item)}
                 disabled={!!feedback}
-                className="w-full rounded-xl p-3 text-left border-2 border-paper-dark bg-white hover:border-forest/40 text-sm transition-all disabled:opacity-60"
+                className="w-full rounded-xl p-3 md:p-4 text-left text-base min-h-[48px] border-2 border-paper-dark bg-white hover:border-forest/40 transition-all disabled:opacity-60"
                 aria-label={`Select: ${item}`}
               >
                 {item}
@@ -220,7 +220,7 @@ export function QuestionScreen() {
             (question.questionType === 'fill_in' && !fillAnswer.trim()) ||
             (question.questionType === 'sequencing' && sequenceOrder.length !== (question.sequenceItems?.length ?? 0))
           }
-          className="w-full bg-forest text-white rounded-xl p-4 font-bold hover:bg-forest-light transition-colors disabled:opacity-40 shadow-md"
+          className="w-full bg-forest text-white rounded-xl p-4 md:p-5 font-bold text-lg min-h-[56px] hover:bg-forest-light transition-colors disabled:opacity-40 shadow-md"
           aria-label="Submit answer"
         >
           Submit Answer
@@ -244,7 +244,7 @@ export function QuestionScreen() {
 
           <button
             onClick={handleNext}
-            className="w-full bg-forest text-white rounded-xl p-4 font-bold hover:bg-forest-light transition-colors shadow-md"
+            className="w-full bg-forest text-white rounded-xl p-4 md:p-5 font-bold text-lg min-h-[56px] hover:bg-forest-light transition-colors shadow-md"
             aria-label="Continue to next question"
           >
             {session.currentQuestionIndex + 1 >= session.questions.length ? 'See Results' : 'Next Clue →'}
