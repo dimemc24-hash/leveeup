@@ -12,7 +12,7 @@ const SUBJECT_LABELS: Record<Subject, string> = {
 };
 
 export function DashboardScreen() {
-  const { profile, progress, profiles } = useGameStore();
+  const { profile, profiles } = useGameStore();
 
   // For teachers, show all student profiles
   const students = profile?.role === 'TEACHER'
@@ -20,8 +20,6 @@ export function DashboardScreen() {
     : profile?.role === 'PARENT'
     ? profiles.filter((p) => p.role === 'STUDENT')
     : [];
-
-  const isStudent = profile?.role === 'STUDENT';
 
   if (!profile) return null;
 

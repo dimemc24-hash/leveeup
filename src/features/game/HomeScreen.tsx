@@ -16,6 +16,7 @@ export function HomeScreen() {
 
   const today = new Date().toISOString().slice(0, 10);
   const isNewDay = progress.lastPlayDate !== today;
+  const allDiscovered = progress.discoveredCryptids.length === cryptidRoster.length;
 
   return (
     <div className="p-4 max-w-lg mx-auto space-y-4 animate-slide-up">
@@ -62,7 +63,7 @@ export function HomeScreen() {
       </div>
 
       {/* Current investigation (prominent) */}
-      {activeCryptid && invProgress && (
+      {activeCryptid && invProgress && !invProgress.completed && (
         <div className="journal-card bg-white/90 rounded-2xl p-5 shadow-sm">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-14 h-14 bg-paper rounded-xl p-1.5 flex items-center justify-center flex-shrink-0">
@@ -73,8 +74,27 @@ export function HomeScreen() {
               <p className="text-xs text-bark-light">{activeCryptid.region}</p>
             </div>
           </div>
+          {/* Evidence progress */}
+          <div className="mb-3">
+            <div className="flex justify-between text-xs text-bark-light mb-1">
+              <span>Evidence</span>
+              <span className="font-bold">{invProgress.evidenceCollected} / {activeCryptid.evidenceRequired}</span>
+            </div>
+            <div
+              className="w-full bg-paper-dark rounded-full h-3 overflow-hidden"
+              role="progressbar"
+              aria-valuenow={invProgress.evidenceCollected}
+              aria-valuemax={activeCryptid.evidenceRequired}
+              aria-label="Evidence progress"
+            >
+              <div
+                className="bg-gold h-full rounded-full transition-all duration-700 animate-progress"
+                style={{ width: `${(invProgress.evidenceCollected / activeCryptid.evidenceRequired) * 100}%` }}
+              />
+            </div>
+          </div>
           {/* Clue dots */}
-          <div className="flex gap-2 mb-3 justify-center" aria-label={`${invProgress.cluesFound} of ${invProgress.totalClues} clues found`}>
+          <div className="flex gap-2 mb-2 justify-center" aria-label={`${invProgress.cluesFound} of ${invProgress.totalClues} clues found`}>
             {Array.from({ length: invProgress.totalClues }).map((_, i) => (
               <div
                 key={i}
@@ -90,22 +110,18 @@ export function HomeScreen() {
               </div>
             ))}
           </div>
-          {/* Progress bar */}
-          <div
-            className="w-full bg-paper-dark rounded-full h-3 overflow-hidden"
-            role="progressbar"
-            aria-valuenow={invProgress.cluesFound}
-            aria-valuemax={invProgress.totalClues}
-            aria-label="Investigation progress"
-          >
-            <div
-              className="bg-forest-light h-full rounded-full transition-all duration-700 animate-progress"
-              style={{ width: `${(invProgress.cluesFound / invProgress.totalClues) * 100}%` }}
-            />
-          </div>
-          <p className="text-xs text-bark-light mt-2 text-center font-bold">
+          <p className="text-xs text-bark-light mt-1 text-center">
             {invProgress.cluesFound} / {invProgress.totalClues} clues found
           </p>
+        </div>
+      )}
+
+      {/* All cryptids discovered celebration */}
+      {allDiscovered && (
+        <div className="journal-card bg-gold/10 border-2 border-gold rounded-2xl p-5 shadow-sm text-center">
+          <div className="text-4xl mb-2">🏆</div>
+          <h3 className="font-display text-xl font-bold text-gold">Master Investigator!</h3>
+          <p className="text-xs text-bark-light mt-1">All {cryptidRoster.length} cryptids discovered!</p>
         </div>
       )}
 

@@ -72,16 +72,14 @@ export function getStreakLabel(streak: number): string | null {
 /** How many answered questions produce one evidence piece. */
 const QUESTIONS_PER_EVIDENCE = 10;
 
-/** How many evidence pieces unlock a new cryptid location. */
-const EVIDENCE_PER_CRYPTID = 5;
-
 /**
  * Check whether answering additional questions triggers any milestones.
  *
- * This is intended to be called *after* updating `totalQuestionsAnswered`
- * but *before* persisting, so we can compare old and new counts.
+ * With the scaled progression system, milestone events are emitted for
+ * evidence gains but cryptid unlocking is handled by the game store
+ * based on per-cryptid evidence thresholds.
  *
- * @param progress - The player's progress **before** the current batch of answers.
+ * @param progress - The player's progress with updated evidence count.
  * @param newEvidence - Number of newly earned evidence pieces this batch.
  * @returns An array of milestone events that just triggered (may be empty).
  */
@@ -91,30 +89,11 @@ export function checkMilestones(
 ): MilestoneEvent[] {
   const events: MilestoneEvent[] = [];
 
-  // --- Evidence milestones ---
-  // Every QUESTIONS_PER_EVIDENCE questions answered earns an evidence piece.
-  const prevEvidence = progress.evidencePieces;
-  const totalEvidence = prevEvidence + newEvidence;
-
   if (newEvidence > 0) {
     events.push({
       type: 'evidence_found',
       message: `You found ${newEvidence} new evidence piece${newEvidence > 1 ? 's' : ''}!`,
-      data: { newEvidence, totalEvidence },
-    });
-  }
-
-  // --- Cryptid-location unlock ---
-  // Every EVIDENCE_PER_CRYPTID evidence pieces unlocks a new cryptid.
-  const prevUnlocks = Math.floor(prevEvidence / EVIDENCE_PER_CRYPTID);
-  const newUnlocks = Math.floor(totalEvidence / EVIDENCE_PER_CRYPTID);
-
-  if (newUnlocks > prevUnlocks) {
-    const count = newUnlocks - prevUnlocks;
-    events.push({
-      type: 'cryptid_unlocked',
-      message: `You unlocked ${count} new cryptid location${count > 1 ? 's' : ''}!`,
-      data: { unlocksTriggered: count },
+      data: { newEvidence, totalEvidence: progress.evidencePieces },
     });
   }
 
@@ -127,6 +106,7 @@ export function checkMilestones(
  *
  * @param prevTotal - totalQuestionsAnswered before this batch
  * @param answeredThisBatch - number of questions answered in the current session / batch
+ * @returns Number of new evidence pieces earned
  */
 export function computeNewEvidence(prevTotal: number, answeredThisBatch: number): number {
   const newTotal = prevTotal + answeredThisBatch;

@@ -1,7 +1,8 @@
 import { create } from 'zustand';
 import type { UserProfile, PlayerProgress, Subject, Tier, GameSession, AnswerRecord, Question, StandardProgress, InvestigationProgress } from '../types';
 import { storage } from '../lib/storage';
-import { calculateXP, getStreakMultiplier, checkMilestones, type MilestoneEvent } from '../lib/scoring';
+import { calculateXP, checkMilestones, type MilestoneEvent } from '../lib/scoring';
+import { cryptidRoster } from '../features/themes/cryptids/cryptidTheme';
 
 interface GameStore {
   // Auth
@@ -66,6 +67,16 @@ const defaultProgress: PlayerProgress = {
   },
   fieldSupplies: 1,
 };
+
+/**
+ * Find the next cryptid in the roster after the given cryptid ID.
+ * Returns null if the given cryptid is the last one.
+ */
+function getNextCryptid(currentId: string): typeof cryptidRoster[0] | null {
+  const idx = cryptidRoster.findIndex((c) => c.id === currentId);
+  if (idx < 0 || idx >= cryptidRoster.length - 1) return null;
+  return cryptidRoster[idx + 1];
+}
 
 export const useGameStore = create<GameStore>((set, get) => ({
   // Auth
@@ -178,7 +189,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const newEvidenceThreshold = Math.floor(newTotalAnswered / 10);
     const newEvidence = newEvidenceThreshold - oldEvidenceThreshold;
 
-    let newProgress = {
+    let newProgress: PlayerProgress = {
       ...progress,
       xp: progress.xp + xp,
       totalXp: progress.totalXp + xp,
@@ -190,16 +201,27 @@ export const useGameStore = create<GameStore>((set, get) => ({
       evidencePieces: progress.evidencePieces + newEvidence,
     };
 
-    // Update investigation progress
+    const milestones: MilestoneEvent[] = [];
+
+    // Update investigation progress with scaled evidence requirements
     if (newEvidence > 0 && newProgress.activeInvestigation) {
-      const inv = newProgress.investigationProgress[newProgress.activeInvestigation];
-      if (inv && !inv.completed) {
-        const newEvidenceCollected = Math.min(inv.evidenceCollected + newEvidence, inv.evidenceNeeded);
-        const newClues = Math.min(Math.floor(newEvidenceCollected), inv.totalClues);
-        const completed = newClues >= inv.totalClues;
+      const activeId = newProgress.activeInvestigation;
+      const inv = newProgress.investigationProgress[activeId];
+      const cryptid = cryptidRoster.find((c) => c.id === activeId);
+
+      if (inv && !inv.completed && cryptid) {
+        const evidenceNeeded = cryptid.evidenceRequired;
+        const newEvidenceCollected = Math.min(inv.evidenceCollected + newEvidence, evidenceNeeded);
+        // Reveal clues proportionally: cluesFound = floor(evidenceCollected / evidenceNeeded * totalClues)
+        const newClues = Math.min(
+          Math.floor((newEvidenceCollected / evidenceNeeded) * inv.totalClues),
+          inv.totalClues,
+        );
+        const completed = newEvidenceCollected >= evidenceNeeded;
         const updatedInv: InvestigationProgress = {
           ...inv,
           evidenceCollected: newEvidenceCollected,
+          evidenceNeeded,
           cluesFound: newClues,
           completed,
         };
@@ -207,19 +229,64 @@ export const useGameStore = create<GameStore>((set, get) => ({
           ...newProgress,
           investigationProgress: {
             ...newProgress.investigationProgress,
-            [newProgress.activeInvestigation]: updatedInv,
+            [activeId]: updatedInv,
           },
         };
-        if (completed && newProgress.activeInvestigation && !newProgress.discoveredCryptids.includes(newProgress.activeInvestigation)) {
-          newProgress.discoveredCryptids = [...newProgress.discoveredCryptids, newProgress.activeInvestigation];
+
+        // Cryptid discovered
+        if (completed && !newProgress.discoveredCryptids.includes(activeId)) {
+          newProgress.discoveredCryptids = [...newProgress.discoveredCryptids, activeId];
+
+          milestones.push({
+            type: 'cryptid_discovered',
+            message: activeId === 'loch-ness-monster'
+              ? `LEGENDARY DISCOVERY! You've proven the existence of the ${cryptid.name}! You are a TRUE Master Investigator!`
+              : `AMAZING DISCOVERY! You've identified the ${cryptid.name}!`,
+            data: { cryptidId: activeId, cryptidName: cryptid.name },
+          });
+
+          // Auto-advance to next cryptid
+          const nextCryptid = getNextCryptid(activeId);
+          if (nextCryptid) {
+            const nextInv: InvestigationProgress = {
+              cryptidId: nextCryptid.id,
+              cluesFound: 0,
+              totalClues: nextCryptid.clues.length,
+              evidenceCollected: 0,
+              evidenceNeeded: nextCryptid.evidenceRequired,
+              completed: false,
+            };
+            newProgress = {
+              ...newProgress,
+              activeInvestigation: nextCryptid.id,
+              unlockedCryptids: newProgress.unlockedCryptids.includes(nextCryptid.id)
+                ? newProgress.unlockedCryptids
+                : [...newProgress.unlockedCryptids, nextCryptid.id],
+              investigationProgress: {
+                ...newProgress.investigationProgress,
+                [nextCryptid.id]: nextInv,
+              },
+            };
+
+            milestones.push({
+              type: 'cryptid_unlocked',
+              message: `New investigation unlocked: ${nextCryptid.name}! (${nextCryptid.evidenceRequired} evidence needed)`,
+              data: { cryptidId: nextCryptid.id, evidenceRequired: nextCryptid.evidenceRequired },
+            });
+          } else {
+            // All cryptids discovered - no more active investigation
+            newProgress = { ...newProgress, activeInvestigation: null };
+          }
         }
       }
     }
 
+    // Add evidence milestone events
+    const evidenceMilestones = checkMilestones(newProgress, newEvidence);
+    milestones.push(...evidenceMilestones);
+
     // Update standard progress
     get().updateStandardProgress(question.standardId, question.subject, correct);
-
-    const milestones = checkMilestones(newProgress, newEvidence);
 
     // Log activity
     storage.addActivity(profile.id, {

@@ -30,4 +30,16 @@ export default defineConfig({
       },
     }),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-state': ['zustand'],
+          'vendor-supabase': ['@supabase/supabase-js'],
+          'data-cryptids': ['./src/features/themes/cryptids/cryptidTheme.ts'],
+        },
+      },
+    },
+  },
 })

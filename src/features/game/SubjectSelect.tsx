@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '../../hooks/useGameStore';
 import { useTheme } from '../themes/engine/ThemeContext';
@@ -16,14 +17,24 @@ export function SubjectSelect() {
   const navigate = useNavigate();
   const { progress, startSession } = useGameStore();
   const { getNarrative } = useTheme();
+  const [loading, setLoading] = useState(false);
 
   const recommended = getRecommendedSubject(progress.standardProgress);
 
-  const handleSelect = (subject: Subject | 'mixed') => {
-    const questions = getQuestionsForSession(subject, progress.standardProgress, 10);
-    if (questions.length === 0) return;
-    startSession(questions, subject);
-    navigate('/play/session');
+  const handleSelect = async (subject: Subject | 'mixed') => {
+    if (loading) return;
+    setLoading(true);
+    try {
+      const questions = await getQuestionsForSession(subject, progress.standardProgress, 10);
+      if (questions.length === 0) {
+        setLoading(false);
+        return;
+      }
+      startSession(questions, subject);
+      navigate('/play/session');
+    } catch {
+      setLoading(false);
+    }
   };
 
   return (
@@ -40,7 +51,8 @@ export function SubjectSelect() {
             <button
               key={id}
               onClick={() => handleSelect(id)}
-              className={`w-full rounded-xl p-4 md:p-5 text-left border-2 min-h-[64px] text-base md:text-lg transition-all hover:shadow-md flex items-center gap-3 ${color}`}
+              disabled={loading}
+              className={`w-full rounded-xl p-4 md:p-5 text-left border-2 min-h-[64px] text-base md:text-lg transition-all hover:shadow-md flex items-center gap-3 disabled:opacity-60 ${color}`}
               aria-label={`Play ${label}${isRecommended ? ' (recommended)' : ''}`}
             >
               <span className="text-3xl">{icon}</span>
@@ -59,6 +71,12 @@ export function SubjectSelect() {
           );
         })}
       </div>
+
+      {loading && (
+        <div className="flex items-center justify-center py-4">
+          <div className="w-8 h-8 border-4 border-forest/20 border-t-forest rounded-full animate-spin" />
+        </div>
+      )}
     </div>
   );
 }

@@ -21,14 +21,18 @@ export function ClueBoard() {
     }
   }, [isCompleted, isDiscovered]);
 
+  // For display: whether all cryptids are done
+  const allDiscovered = progress.discoveredCryptids.length === cryptidRoster.length;
+
   return (
     <div className="p-4 max-w-lg mx-auto space-y-4 animate-slide-up">
       <div className="journal-card bg-white/90 rounded-2xl p-5 shadow-sm">
         <h2 className="font-display text-xl font-bold text-forest">Field Journal</h2>
         <p className="text-sm text-bark-light mt-1">Your investigation clue board</p>
+        <p className="text-xs text-bark-light mt-1">Total evidence collected: <span className="font-bold text-gold">{progress.evidencePieces}</span></p>
       </div>
 
-      {activeCryptid && invProgress ? (
+      {activeCryptid && invProgress && !isCompleted ? (
         <>
           {/* Active investigation */}
           <div className="journal-card bg-white/90 rounded-2xl p-5 shadow-sm">
@@ -43,15 +47,18 @@ export function ClueBoard() {
               </div>
             </div>
 
-            {/* Progress bar */}
+            {/* Evidence progress bar */}
             <div className="mb-4">
               <div className="flex justify-between text-xs text-bark-light mb-1">
                 <span>Evidence collected</span>
-                <span>{invProgress.evidenceCollected} / {invProgress.evidenceNeeded}</span>
+                <span className="font-bold">{invProgress.evidenceCollected} / {activeCryptid.evidenceRequired}</span>
               </div>
-              <div className="w-full bg-paper-dark rounded-full h-3 overflow-hidden" role="progressbar" aria-valuenow={invProgress.evidenceCollected} aria-valuemax={invProgress.evidenceNeeded}>
-                <div className="bg-gold h-full rounded-full transition-all duration-500" style={{ width: `${(invProgress.evidenceCollected / invProgress.evidenceNeeded) * 100}%` }} />
+              <div className="w-full bg-paper-dark rounded-full h-3 overflow-hidden" role="progressbar" aria-valuenow={invProgress.evidenceCollected} aria-valuemax={activeCryptid.evidenceRequired}>
+                <div className="bg-gold h-full rounded-full transition-all duration-500" style={{ width: `${(invProgress.evidenceCollected / activeCryptid.evidenceRequired) * 100}%` }} />
               </div>
+              <p className="text-[10px] text-bark-light mt-1 text-center">
+                Answer 10 questions to earn 1 evidence piece
+              </p>
             </div>
 
             {/* Clue slots */}
@@ -82,45 +89,13 @@ export function ClueBoard() {
               })}
             </div>
           </div>
-
-          {/* Multi-step discovery reveal */}
-          {isCompleted && revealPhase === 'assembling' && (
-            <div className="bg-forest/5 border-2 border-forest rounded-2xl p-5 text-center animate-bounce-in">
-              <p className="font-display font-bold text-forest mb-3">Assembling evidence...</p>
-              <div className="flex justify-center gap-2">
-                {activeCryptid.clues.slice(0, invProgress.totalClues).map((clue, i) => (
-                  <div
-                    key={clue.id}
-                    className="w-8 h-8 bg-forest/10 rounded-lg flex items-center justify-center animate-bounce-in"
-                    style={{ animationDelay: `${i * 200}ms` }}
-                  >
-                    <img src={clue.svgIcon} alt="" className="w-5 h-5" />
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {isCompleted && revealPhase === 'identifying' && (
-            <div className="bg-gold/10 border-2 border-gold rounded-2xl p-6 text-center animate-glow-pulse">
-              <div className="text-4xl mb-2">🔍</div>
-              <p className="font-display text-xl font-bold text-gold">Identifying creature...</p>
-            </div>
-          )}
-
-          {isCompleted && revealPhase === 'discovered' && (
-            <div className="bg-gold/10 border-2 border-gold rounded-2xl p-5 text-center discovery-reveal space-y-3">
-              <div className="text-4xl mb-1">🎉</div>
-              <h3 className="font-display text-2xl font-bold text-gold">Cryptid Discovered!</h3>
-              <p className="text-sm text-bark-light">You've identified the {activeCryptid.name}!</p>
-              <img src={activeCryptid.svgSilhouette} alt={activeCryptid.name} className="w-28 h-28 mx-auto" />
-              <div className="bg-white rounded-xl p-3 text-left">
-                <p className="text-xs text-bark leading-relaxed italic">{activeCryptid.lore.fieldNotes}</p>
-              </div>
-              <p className="text-xs text-bark-light">Visit the Field Guide for the full investigation report!</p>
-            </div>
-          )}
         </>
+      ) : allDiscovered ? (
+        <div className="journal-card bg-gold/10 border-2 border-gold rounded-2xl p-8 shadow-sm text-center space-y-3">
+          <div className="text-5xl">🏆</div>
+          <h3 className="font-display text-2xl font-bold text-gold">Master Investigator!</h3>
+          <p className="text-sm text-bark-light">You've discovered ALL {cryptidRoster.length} cryptids! You are a legend!</p>
+        </div>
       ) : (
         <div className="journal-card bg-white/90 rounded-2xl p-8 shadow-sm text-center">
           <p className="text-bark-light">No active investigation. Start playing to begin!</p>
@@ -135,12 +110,13 @@ export function ClueBoard() {
             const unlocked = progress.unlockedCryptids.includes(cryptid.id);
             const discovered = progress.discoveredCryptids.includes(cryptid.id);
             const inv = progress.investigationProgress[cryptid.id];
+            const isActive = cryptid.id === activeId;
 
             return (
               <div
                 key={cryptid.id}
                 className={`flex items-center gap-3 p-2 rounded-lg ${
-                  discovered ? 'bg-gold/10' : unlocked ? 'bg-paper' : 'opacity-40'
+                  discovered ? 'bg-gold/10' : isActive ? 'bg-forest/5 border border-forest/20' : unlocked ? 'bg-paper' : 'opacity-40'
                 }`}
               >
                 <div className="w-8 h-8">
@@ -150,15 +126,22 @@ export function ClueBoard() {
                     className={`w-full h-full ${unlocked ? '' : 'blur-sm'}`}
                   />
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <div className="text-sm font-bold text-bark">
                     {unlocked ? cryptid.name : '???'}
                   </div>
                   <div className="text-xs text-bark-light">
-                    {discovered ? 'Discovered!' : inv ? `${inv.cluesFound}/${inv.totalClues} clues` : 'Locked'}
+                    {discovered
+                      ? 'Discovered!'
+                      : inv
+                        ? `${inv.evidenceCollected}/${cryptid.evidenceRequired} evidence`
+                        : unlocked
+                          ? `${cryptid.evidenceRequired} evidence needed`
+                          : 'Locked'}
                   </div>
                 </div>
                 {discovered && <span className="text-gold">⭐</span>}
+                {isActive && !discovered && <span className="text-forest text-xs font-bold">Active</span>}
               </div>
             );
           })}

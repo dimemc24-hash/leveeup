@@ -38,6 +38,7 @@ export const cryptidTheme: ThemeConfig = {
     five_evidence: "Five clues collected — you're a natural investigator!",
     first_cryptid: "You've discovered your first cryptid! Check your Field Guide!",
     all_cryptids: "You've found ALL the cryptids! You're a Master Investigator!",
+    legendary_nessie: "THE LEGEND IS REAL! After 80 evidence pieces, you've proven the existence of the Loch Ness Monster — the greatest cryptid discovery in history! You are a TRUE Master Investigator!",
     level_5: "Level 5! You've earned your Junior Investigator badge!",
     level_10: "Level 10! Senior Investigator status unlocked!",
     streak_10: "10 in a row! Your tracking instincts are legendary!",
@@ -51,6 +52,7 @@ export const cryptidRoster: Cryptid[] = [
     description: 'A mysterious creature lurking in the swamps of Louisiana. Locals say it smells like rotten eggs!',
     region: 'Louisiana Bayou',
     difficulty: 1,
+    evidenceRequired: 5,
     svgSilhouette: '/assets/cryptids/honey-island-swamp-monster.svg',
     clues: [
       { id: 'hism-1', type: 'footprint', description: 'Three-toed footprint in the mud', svgIcon: '/assets/ui/clue-footprint.svg', revealed: false },
@@ -88,6 +90,7 @@ Local legend says the creature may be the result of chimpanzees escaping from a 
     description: 'A werewolf-like beast from Cajun legend that prowls the sugar cane fields at night.',
     region: 'Cajun Country',
     difficulty: 2,
+    evidenceRequired: 10,
     svgSilhouette: '/assets/cryptids/rougarou.svg',
     clues: [
       { id: 'rou-1', type: 'footprint', description: 'Wolf-like tracks that suddenly turn into human footprints', svgIcon: '/assets/ui/clue-footprint.svg', revealed: false },
@@ -125,6 +128,7 @@ The most chilling detail? The Rougarou is said to be someone you know — a neig
     description: 'The legendary ape-like creature spotted in forests across North America.',
     region: 'Pacific Northwest',
     difficulty: 3,
+    evidenceRequired: 20,
     svgSilhouette: '/assets/cryptids/bigfoot.svg',
     clues: [
       { id: 'bf-1', type: 'footprint', description: 'Enormous footprint — 16 inches long!', svgIcon: '/assets/ui/clue-footprint.svg', revealed: false },
@@ -163,6 +167,7 @@ What would Bigfoot look like? Witnesses consistently describe a creature standin
     description: 'A winged creature with glowing red eyes, first spotted in West Virginia.',
     region: 'Point Pleasant, WV',
     difficulty: 4,
+    evidenceRequired: 30,
     svgSilhouette: '/assets/cryptids/mothman.svg',
     clues: [
       { id: 'mm-1', type: 'witness', description: 'Two couples saw glowing red eyes near an old factory', svgIcon: '/assets/ui/clue-witness.svg', revealed: false },
@@ -200,6 +205,7 @@ Over the next 13 months, over 100 residents reported seeing the Mothman. Then, o
     description: 'The "goat sucker" — a spiny creature reported across the Americas.',
     region: 'Puerto Rico & Texas',
     difficulty: 5,
+    evidenceRequired: 40,
     svgSilhouette: '/assets/cryptids/chupacabra.svg',
     clues: [
       { id: 'ch-1', type: 'footprint', description: 'Small clawed tracks near a farm', svgIcon: '/assets/ui/clue-footprint.svg', revealed: false },
@@ -237,6 +243,7 @@ Within months, reports exploded across Latin America and the southern United Sta
     description: 'A flying creature with hooves and a forked tail from the Pine Barrens of New Jersey.',
     region: 'Pine Barrens, NJ',
     difficulty: 6,
+    evidenceRequired: 50,
     svgSilhouette: '/assets/cryptids/jersey-devil.svg',
     clues: [
       { id: 'jd-1', type: 'footprint', description: 'Hoof prints on a rooftop — how did it get up there?', svgIcon: '/assets/ui/clue-footprint.svg', revealed: false },
@@ -274,6 +281,7 @@ The most dramatic chapter came during January 1909, when hundreds of people acro
     description: 'A massive bird from Native American legend with a wingspan wider than an airplane.',
     region: 'Great Plains',
     difficulty: 7,
+    evidenceRequired: 65,
     svgSilhouette: '/assets/cryptids/thunderbird.svg',
     clues: [
       { id: 'tb-1', type: 'witness', description: 'A pilot saw a bird larger than his small plane', svgIcon: '/assets/ui/clue-witness.svg', revealed: false },
@@ -311,6 +319,7 @@ While most scientists consider Thunderbirds mythological, sightings continue. In
     description: 'Nessie — the legendary lake creature of Scotland. Could it be a surviving dinosaur?',
     region: 'Loch Ness, Scotland',
     difficulty: 8,
+    evidenceRequired: 80,
     svgSilhouette: '/assets/cryptids/loch-ness-monster.svg',
     clues: [
       { id: 'ln-1', type: 'photo', description: 'The famous "Surgeon\'s Photo" — real or fake?', svgIcon: '/assets/ui/clue-photo.svg', revealed: false },

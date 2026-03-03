@@ -134,7 +134,7 @@ export function LoginScreen() {
       loadProfiles();
       setStudentName('');
       setScreen('profiles');
-    } catch (e) {
+    } catch {
       setError('Something went wrong. Please try again.');
     }
     setLoading(false);

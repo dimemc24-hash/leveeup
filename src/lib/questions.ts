@@ -4,12 +4,26 @@
  * Selects questions based on the student's per-standard tier, mixes
  * across standards within a subject, and adapts difficulty up or down
  * based on recent performance.
+ *
+ * The question bank is loaded via dynamic import for code-splitting.
  */
 
 import type { Question, Subject, Tier, StandardProgress } from '../types';
-// The questions data module is expected to default-export (or named-export)
-// an array of Question objects. Adjust the import if the shape changes.
-import { questions as questionBank } from '../data/questions';
+
+// ─── Lazy question bank ───
+
+let _questionBank: Question[] | null = null;
+
+/**
+ * Load the question bank on first use. Subsequent calls return the cached array.
+ * This enables Vite to split the question data into its own chunk.
+ */
+async function loadQuestionBank(): Promise<Question[]> {
+  if (_questionBank) return _questionBank;
+  const { questions } = await import('../data/questions');
+  _questionBank = questions;
+  return _questionBank;
+}
 
 // ─── Tier helpers ───
 
@@ -80,20 +94,23 @@ function shuffle<T>(arr: T[]): T[] {
 
 /**
  * Build a session of questions tailored to the student's current ability.
+ * Loads the question bank lazily on first call (code-split chunk).
  *
  * @param subject - The subject to draw from, or `'mixed'` to pull from
  *   all subjects weighted by weakness.
  * @param standardProgress - The student's per-standard progress map.
  * @param count - Number of questions to return (default 10).
  * @param recentQuestionIds - Question IDs to avoid if alternatives exist.
- * @returns An array of up to `count` questions.
+ * @returns A promise resolving to an array of up to `count` questions.
  */
-export function getQuestionsForSession(
+export async function getQuestionsForSession(
   subject: Subject | 'mixed',
   standardProgress: Record<string, StandardProgress>,
   count: number = 10,
   recentQuestionIds: string[] = [],
-): Question[] {
+): Promise<Question[]> {
+  const questionBank = await loadQuestionBank();
+
   // 1. Filter the bank to the requested subject(s).
   let pool: Question[];
 

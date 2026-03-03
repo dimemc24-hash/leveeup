@@ -120,6 +120,7 @@ export interface Cryptid {
   description: string;
   region: string;
   difficulty: number;
+  evidenceRequired: number;
   svgSilhouette: string;
   clues: CryptidClue[];
   cardStats: {

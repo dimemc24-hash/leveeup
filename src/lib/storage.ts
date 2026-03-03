@@ -25,6 +25,7 @@ const DEFAULT_INVESTIGATION: InvestigationProgress = {
   completed: false,
 };
 
+/** Default player progress used when no saved data exists. */
 export const DEFAULT_PROGRESS: PlayerProgress = {
   xp: 0,
   totalXp: 0,
@@ -57,6 +58,16 @@ let _authUserId: string | null = null;
 let _authUserRole: string | null = null;
 let _supabaseReady = false;
 
+// ─── Supabase error logger ───
+
+/**
+ * Log a Supabase write error without crashing the app.
+ * The app continues to function via localStorage fallback.
+ */
+function logSupabaseError(operation: string, err: unknown): void {
+  console.warn(`[storage] Supabase ${operation} failed (offline fallback active):`, err);
+}
+
 // ─── localStorage fallback helpers ───
 
 const PREFIX = 'leveeup_';
@@ -69,6 +80,9 @@ const LS_KEYS = {
   activityLog: (id: string) => `${PREFIX}activity_${id}`,
 } as const;
 
+/**
+ * Read a JSON value from localStorage, returning `fallback` on any error.
+ */
 function lsRead<T>(key: string, fallback: T): T {
   try {
     const raw = localStorage.getItem(key);
@@ -79,11 +93,14 @@ function lsRead<T>(key: string, fallback: T): T {
   }
 }
 
+/**
+ * Write a JSON value to localStorage, silently failing if storage is full.
+ */
 function lsWrite<T>(key: string, value: T): void {
   try {
     localStorage.setItem(key, JSON.stringify(value));
   } catch {
-    // localStorage may be full or unavailable
+    // localStorage may be full or unavailable in some browsers
   }
 }
 
@@ -91,7 +108,10 @@ function lsWrite<T>(key: string, value: T): void {
 
 /**
  * Load data from Supabase for the current authenticated user.
- * Call this after successful auth.  Returns true on success.
+ * Call this after successful auth. Populates the in-memory cache
+ * and marks Supabase as the primary data source.
+ *
+ * @returns `true` if initialization succeeded, `false` otherwise.
  */
 export async function initializeFromSupabase(): Promise<boolean> {
   try {
@@ -166,12 +186,15 @@ export async function initializeFromSupabase(): Promise<boolean> {
 
     _supabaseReady = true;
     return true;
-  } catch {
+  } catch (err) {
+    logSupabaseError('initializeFromSupabase', err);
     return false;
   }
 }
 
-/** Reset all caches (used on logout). */
+/**
+ * Reset all in-memory caches. Called on logout.
+ */
 export function resetCache(): void {
   _profiles = [];
   _activeProfileId = null;
@@ -185,16 +208,26 @@ export function resetCache(): void {
 
 // ─── Profile operations ───
 
+/**
+ * Return all known user profiles from the cache or localStorage fallback.
+ */
 export function getAllProfiles(): UserProfile[] {
   if (_supabaseReady) return [..._profiles];
   return lsRead<UserProfile[]>(LS_KEYS.profiles, []);
 }
 
+/**
+ * Retrieve a single profile by ID, or `null` if not found.
+ */
 export function getProfile(profileId: string): UserProfile | null {
   const profiles = getAllProfiles();
   return profiles.find((p) => p.id === profileId) ?? null;
 }
 
+/**
+ * Persist a profile to the cache, Supabase, and localStorage.
+ * Creates a new student record in Supabase if the profile is new.
+ */
 export function setProfile(profile: UserProfile): void {
   // Update cache
   const idx = _profiles.findIndex((p) => p.id === profile.id);
@@ -206,7 +239,6 @@ export function setProfile(profile: UserProfile): void {
 
   if (_supabaseReady && profile.role === 'STUDENT' && _authUserId) {
     if (idx >= 0) {
-      // Update existing
       supabase
         .from('students')
         .update({
@@ -214,9 +246,8 @@ export function setProfile(profile: UserProfile): void {
           avatar_config: { equippedItems: profile.equippedItems },
         })
         .eq('id', profile.id)
-        .then(null, () => {});
+        .then(null, (err) => logSupabaseError('setProfile.update', err));
     } else {
-      // Insert new student
       supabase
         .from('students')
         .insert({
@@ -226,7 +257,7 @@ export function setProfile(profile: UserProfile): void {
           display_name: profile.name,
           avatar_config: { equippedItems: profile.equippedItems },
         })
-        .then(null, () => {});
+        .then(null, (err) => logSupabaseError('setProfile.insert', err));
     }
   }
 
@@ -238,10 +269,16 @@ export function setProfile(profile: UserProfile): void {
   lsWrite(LS_KEYS.profiles, all);
 }
 
+/**
+ * Return the currently active profile ID from cache or localStorage.
+ */
 export function getActiveProfileId(): string | null {
   return _activeProfileId ?? lsRead<string | null>(LS_KEYS.activeProfileId, null);
 }
 
+/**
+ * Set the active profile ID in cache and localStorage.
+ */
 export function setActiveProfileId(profileId: string): void {
   _activeProfileId = profileId;
   lsWrite(LS_KEYS.activeProfileId, profileId);
@@ -249,6 +286,9 @@ export function setActiveProfileId(profileId: string): void {
 
 // ─── Progress operations ───
 
+/**
+ * Retrieve a player's progress from the cache or localStorage fallback.
+ */
 export function getProgress(profileId: string): PlayerProgress {
   if (_supabaseReady && _progress[profileId]) {
     return _progress[profileId];
@@ -256,6 +296,9 @@ export function getProgress(profileId: string): PlayerProgress {
   return lsRead<PlayerProgress>(LS_KEYS.progress(profileId), { ...DEFAULT_PROGRESS });
 }
 
+/**
+ * Persist player progress to the cache, Supabase, and localStorage.
+ */
 export function setProgress(profileId: string, progress: PlayerProgress): void {
   _progress[profileId] = progress;
 
@@ -267,7 +310,7 @@ export function setProgress(profileId: string, progress: PlayerProgress): void {
         total_xp: progress.totalXp,
       })
       .eq('id', profileId)
-      .then(null, () => {});
+      .then(null, (err) => logSupabaseError('setProgress', err));
   }
 
   lsWrite(LS_KEYS.progress(profileId), progress);
@@ -275,6 +318,9 @@ export function setProgress(profileId: string, progress: PlayerProgress): void {
 
 // ─── Inventory operations ───
 
+/**
+ * Retrieve a player's owned item IDs from the cache or localStorage fallback.
+ */
 export function getInventory(profileId: string): string[] {
   if (_supabaseReady && _inventory[profileId]) {
     return _inventory[profileId];
@@ -282,6 +328,9 @@ export function getInventory(profileId: string): string[] {
   return lsRead<string[]>(LS_KEYS.inventory(profileId), []);
 }
 
+/**
+ * Add an item to a player's inventory in cache, Supabase, and localStorage.
+ */
 export function addToInventory(profileId: string, itemId: string): void {
   const inv = getInventory(profileId);
   if (!inv.includes(itemId)) {
@@ -294,7 +343,7 @@ export function addToInventory(profileId: string, itemId: string): void {
       .from('students')
       .update({ owned_items: inv })
       .eq('id', profileId)
-      .then(null, () => {});
+      .then(null, (err) => logSupabaseError('addToInventory', err));
   }
 
   lsWrite(LS_KEYS.inventory(profileId), inv);
@@ -302,6 +351,9 @@ export function addToInventory(profileId: string, itemId: string): void {
 
 // ─── Activity log operations ───
 
+/**
+ * Retrieve a player's activity log from the cache or localStorage fallback.
+ */
 export function getActivityLog(profileId: string): ActivityEntry[] {
   if (_supabaseReady && _activityLog[profileId]) {
     return _activityLog[profileId];
@@ -309,6 +361,10 @@ export function getActivityLog(profileId: string): ActivityEntry[] {
   return lsRead<ActivityEntry[]>(LS_KEYS.activityLog(profileId), []);
 }
 
+/**
+ * Append an activity entry to the player's log in cache, Supabase, and localStorage.
+ * Also upserts to the `daily_activity` table for analytics.
+ */
 export function addActivity(profileId: string, entry: ActivityEntry): void {
   const log = getActivityLog(profileId);
   log.push(entry);
@@ -319,7 +375,7 @@ export function addActivity(profileId: string, entry: ActivityEntry): void {
       .from('students')
       .update({ activity_log: log })
       .eq('id', profileId)
-      .then(null, () => {});
+      .then(null, (err) => logSupabaseError('addActivity.log', err));
 
     // Also write to daily_activity for analytics
     supabase
@@ -335,7 +391,7 @@ export function addActivity(profileId: string, entry: ActivityEntry): void {
         },
         { onConflict: 'student_id,date' },
       )
-      .then(null, () => {});
+      .then(null, (err) => logSupabaseError('addActivity.daily', err));
   }
 
   lsWrite(LS_KEYS.activityLog(profileId), log);
@@ -343,6 +399,9 @@ export function addActivity(profileId: string, entry: ActivityEntry): void {
 
 // ─── Utility ───
 
+/**
+ * Clear all LeveeUp data from both the in-memory cache and localStorage.
+ */
 export function clear(): void {
   resetCache();
   const keysToRemove: string[] = [];
@@ -357,6 +416,7 @@ export function clear(): void {
 
 // ─── Convenience namespace ───
 
+/** Bundled storage API for convenient single-import usage. */
 export const storage = {
   getAllProfiles,
   getProfile,
