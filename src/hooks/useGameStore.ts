@@ -153,9 +153,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const question = session.questions[session.currentQuestionIndex];
     if (!question) return { correct: false, xp: 0, milestones: [] };
 
+    const normalize = (s: string) => s.trim().toLowerCase();
     const correct = Array.isArray(question.correctAnswer)
-      ? Array.isArray(answer) && JSON.stringify(answer) === JSON.stringify(question.correctAnswer)
-      : answer === question.correctAnswer;
+      ? Array.isArray(answer) && JSON.stringify(answer.map(normalize)) === JSON.stringify(question.correctAnswer.map(normalize))
+      : normalize(String(answer)) === normalize(String(question.correctAnswer));
 
     const newStreak = correct ? session.streak + 1 : 0;
     const xp = calculateXP(question.tier, newStreak, correct);
