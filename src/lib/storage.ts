@@ -100,14 +100,30 @@ export async function initializeFromSupabase(): Promise<boolean> {
 
     _authUserId = user.id;
 
-    // Fetch user record for role
-    const { data: userRecord } = await supabase
+    // Fetch user record for role (auto-create if missing)
+    let { data: userRecord } = await supabase
       .from('users')
       .select('*')
       .eq('id', user.id)
       .single();
 
-    if (!userRecord) return false;
+    if (!userRecord) {
+      // Auto-create the users row from auth metadata
+      const { data: inserted, error: insertErr } = await supabase
+        .from('users')
+        .insert({
+          id: user.id,
+          email: user.email ?? '',
+          role: (user.user_metadata as Record<string, string>)?.role ?? 'parent',
+          display_name:
+            (user.user_metadata as Record<string, string>)?.display_name ??
+            (user.email?.split('@')[0] ?? 'User'),
+        })
+        .select()
+        .single();
+      if (insertErr || !inserted) return false;
+      userRecord = inserted;
+    }
 
     _authUserRole = userRecord.role;
     _profiles = [];
