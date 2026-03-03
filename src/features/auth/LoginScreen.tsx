@@ -109,10 +109,35 @@ export function LoginScreen() {
   const handleCreateStudent = async () => {
     if (!studentName.trim()) return;
     setLoading(true);
-    createProfile(studentName.trim(), 'STUDENT');
-    setStudentName('');
+    setError('');
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { setError('Not authenticated.'); setLoading(false); return; }
+
+      const studentId = crypto.randomUUID();
+      const { error: insertErr } = await supabase.from('students').insert({
+        id: studentId,
+        user_id: user.id,
+        parent_id: user.id,
+        display_name: studentName.trim(),
+      });
+
+      if (insertErr) {
+        setError(`Could not create profile: ${insertErr.message}`);
+        setLoading(false);
+        return;
+      }
+
+      // Re-initialize from Supabase to pick up the new student
+      await storage.initializeFromSupabase();
+      loadProfiles();
+      setStudentName('');
+      setScreen('profiles');
+    } catch (e) {
+      setError('Something went wrong. Please try again.');
+    }
     setLoading(false);
-    setScreen('profiles');
   };
 
   const handleLogout = async () => {
