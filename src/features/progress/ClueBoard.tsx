@@ -32,7 +32,51 @@ export function ClueBoard() {
         <p className="text-xs text-bark-light mt-1">Total evidence collected: <span className="font-bold text-gold">{progress.evidencePieces}</span></p>
       </div>
 
-      {activeCryptid && invProgress && !isCompleted ? (
+      {activeCryptid && isCompleted && isDiscovered ? (
+        <div className="space-y-3">
+          {revealPhase === 'assembling' && (
+            <div className="bg-white rounded-2xl p-5 shadow-lg border-2 border-gold text-center animate-bounce-in">
+              <p className="text-sm text-bark-light font-bold mb-3">Assembling evidence...</p>
+              <div className="flex justify-center gap-2 flex-wrap">
+                {activeCryptid.clues.map((clue, i) => (
+                  <div
+                    key={clue.id}
+                    className="w-10 h-10 bg-forest/10 rounded-lg flex items-center justify-center animate-bounce-in"
+                    style={{ animationDelay: `${i * 150}ms` }}
+                  >
+                    <img src={clue.svgIcon} alt="" className="w-6 h-6" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {revealPhase === 'identifying' && (
+            <div className="bg-gold/10 rounded-2xl p-6 border-2 border-gold text-center animate-glow-pulse">
+              <div className="relative w-32 h-32 mx-auto mb-3">
+                <img src={activeCryptid.svgSilhouette} alt="" className="w-full h-full opacity-30" />
+              </div>
+              <p className="font-display text-lg font-bold text-gold">Identifying creature...</p>
+            </div>
+          )}
+
+          {revealPhase === 'discovered' && (
+            <div className="bg-white rounded-2xl p-5 shadow-lg border-2 border-gold text-center discovery-reveal">
+              <p className="font-display text-sm font-bold text-gold mb-3">CRYPTID DISCOVERED!</p>
+              <div className="relative mx-auto mb-4 rounded-xl overflow-hidden" style={{ boxShadow: '0 0 30px rgba(212, 168, 67, 0.5)' }}>
+                <img
+                  src={activeCryptid.revealImage}
+                  alt={activeCryptid.name}
+                  className="w-full max-h-64 object-cover"
+                />
+              </div>
+              <h3 className="font-display text-2xl font-bold text-forest">{activeCryptid.name}</h3>
+              <p className="text-xs text-bark-light">{activeCryptid.region}</p>
+              <p className="text-sm text-bark mt-2">{activeCryptid.description}</p>
+            </div>
+          )}
+        </div>
+      ) : activeCryptid && invProgress && !isCompleted ? (
         <>
           {/* Active investigation */}
           <div className="journal-card bg-white/90 rounded-2xl p-5 shadow-sm">
@@ -120,11 +164,19 @@ export function ClueBoard() {
                 }`}
               >
                 <div className="w-8 h-8">
-                  <img
-                    src={cryptid.svgSilhouette}
-                    alt=""
-                    className={`w-full h-full ${unlocked ? '' : 'blur-sm'}`}
-                  />
+                  {discovered ? (
+                    <img
+                      src={cryptid.revealImage}
+                      alt=""
+                      className="w-full h-full rounded object-cover"
+                    />
+                  ) : (
+                    <img
+                      src={cryptid.svgSilhouette}
+                      alt=""
+                      className={`w-full h-full ${unlocked ? '' : 'blur-sm'}`}
+                    />
+                  )}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-bold text-bark">

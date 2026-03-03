@@ -85,7 +85,13 @@ export function FieldGuide() {
                 </button>
 
                 <div className="text-center mb-4">
-                  <img src={selected.svgSilhouette} alt={selected.name} className="w-32 h-32 mx-auto mb-3" />
+                  <div className="relative mx-auto mb-4 rounded-xl overflow-hidden" style={{ boxShadow: '0 0 30px rgba(212, 168, 67, 0.5)' }}>
+                    <img
+                      src={selected.revealImage}
+                      alt={selected.name}
+                      className="w-full max-h-72 object-cover"
+                    />
+                  </div>
                   <h3 className="font-display text-2xl font-bold text-forest">{selected.name}</h3>
                   <p className="text-xs text-bark-light">{selected.region}</p>
                   <p className="text-sm text-bark mt-2">{selected.description}</p>
@@ -212,11 +218,20 @@ export function FieldGuide() {
                 }`}
                 aria-label={discovered ? `View ${cryptid.name}` : unlocked ? `${cryptid.name} - not yet discovered` : 'Locked cryptid'}
               >
-                <img
-                  src={cryptid.svgSilhouette}
-                  alt=""
-                  className={`w-16 h-16 mx-auto mb-2 ${discovered ? '' : 'blur-sm grayscale'}`}
-                />
+                {discovered ? (
+                  <img
+                    src={cryptid.revealImage}
+                    alt=""
+                    className="w-16 h-16 mx-auto mb-2 rounded-lg object-cover"
+                    style={{ boxShadow: '0 0 12px rgba(212, 168, 67, 0.4)' }}
+                  />
+                ) : (
+                  <img
+                    src={cryptid.svgSilhouette}
+                    alt=""
+                    className="w-16 h-16 mx-auto mb-2 blur-sm grayscale"
+                  />
+                )}
                 <div className="font-bold text-sm text-bark">
                   {unlocked ? cryptid.name : '???'}
                 </div>

@@ -122,6 +122,7 @@ export interface Cryptid {
   difficulty: number;
   evidenceRequired: number;
   svgSilhouette: string;
+  revealImage: string;
   clues: CryptidClue[];
   cardStats: {
     danger: number;

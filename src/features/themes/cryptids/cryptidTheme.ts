@@ -54,6 +54,7 @@ export const cryptidRoster: Cryptid[] = [
     difficulty: 1,
     evidenceRequired: 5,
     svgSilhouette: '/assets/cryptids/honey-island-swamp-monster.svg',
+    revealImage: '/assets/cryptids/reveals/honey-island-swamp-monster.jpg',
     clues: [
       { id: 'hism-1', type: 'footprint', description: 'Three-toed footprint in the mud', svgIcon: '/assets/ui/clue-footprint.svg', revealed: false },
       { id: 'hism-2', type: 'witness', description: 'A fisherman saw something large moving through the reeds', svgIcon: '/assets/ui/clue-witness.svg', revealed: false },
@@ -92,6 +93,7 @@ Local legend says the creature may be the result of chimpanzees escaping from a 
     difficulty: 2,
     evidenceRequired: 10,
     svgSilhouette: '/assets/cryptids/rougarou.svg',
+    revealImage: '/assets/cryptids/reveals/rougarou.jpg',
     clues: [
       { id: 'rou-1', type: 'footprint', description: 'Wolf-like tracks that suddenly turn into human footprints', svgIcon: '/assets/ui/clue-footprint.svg', revealed: false },
       { id: 'rou-2', type: 'witness', description: 'A farmer heard howling during a full moon', svgIcon: '/assets/ui/clue-witness.svg', revealed: false },
@@ -130,6 +132,7 @@ The most chilling detail? The Rougarou is said to be someone you know — a neig
     difficulty: 3,
     evidenceRequired: 20,
     svgSilhouette: '/assets/cryptids/bigfoot.svg',
+    revealImage: '/assets/cryptids/reveals/bigfoot.jpg',
     clues: [
       { id: 'bf-1', type: 'footprint', description: 'Enormous footprint — 16 inches long!', svgIcon: '/assets/ui/clue-footprint.svg', revealed: false },
       { id: 'bf-2', type: 'witness', description: 'A hiker reported seeing a tall, hairy figure', svgIcon: '/assets/ui/clue-witness.svg', revealed: false },
@@ -169,6 +172,7 @@ What would Bigfoot look like? Witnesses consistently describe a creature standin
     difficulty: 4,
     evidenceRequired: 30,
     svgSilhouette: '/assets/cryptids/mothman.svg',
+    revealImage: '/assets/cryptids/reveals/mothman.jpg',
     clues: [
       { id: 'mm-1', type: 'witness', description: 'Two couples saw glowing red eyes near an old factory', svgIcon: '/assets/ui/clue-witness.svg', revealed: false },
       { id: 'mm-2', type: 'sketch', description: 'Drawing of a man-sized creature with 10-foot wingspan', svgIcon: '/assets/ui/clue-sketch.svg', revealed: false },
@@ -207,6 +211,7 @@ Over the next 13 months, over 100 residents reported seeing the Mothman. Then, o
     difficulty: 5,
     evidenceRequired: 40,
     svgSilhouette: '/assets/cryptids/chupacabra.svg',
+    revealImage: '/assets/cryptids/reveals/chupacabra.jpg',
     clues: [
       { id: 'ch-1', type: 'footprint', description: 'Small clawed tracks near a farm', svgIcon: '/assets/ui/clue-footprint.svg', revealed: false },
       { id: 'ch-2', type: 'witness', description: 'A farmer found strange marks on livestock', svgIcon: '/assets/ui/clue-witness.svg', revealed: false },
@@ -245,6 +250,7 @@ Within months, reports exploded across Latin America and the southern United Sta
     difficulty: 6,
     evidenceRequired: 50,
     svgSilhouette: '/assets/cryptids/jersey-devil.svg',
+    revealImage: '/assets/cryptids/reveals/jersey-devil.jpg',
     clues: [
       { id: 'jd-1', type: 'footprint', description: 'Hoof prints on a rooftop — how did it get up there?', svgIcon: '/assets/ui/clue-footprint.svg', revealed: false },
       { id: 'jd-2', type: 'witness', description: 'A police officer reported a screaming, winged creature', svgIcon: '/assets/ui/clue-witness.svg', revealed: false },
@@ -283,6 +289,7 @@ The most dramatic chapter came during January 1909, when hundreds of people acro
     difficulty: 7,
     evidenceRequired: 65,
     svgSilhouette: '/assets/cryptids/thunderbird.svg',
+    revealImage: '/assets/cryptids/reveals/thunderbird.jpg',
     clues: [
       { id: 'tb-1', type: 'witness', description: 'A pilot saw a bird larger than his small plane', svgIcon: '/assets/ui/clue-witness.svg', revealed: false },
       { id: 'tb-2', type: 'sketch', description: 'Ancient cave painting of a giant bird', svgIcon: '/assets/ui/clue-sketch.svg', revealed: false },
@@ -321,6 +328,7 @@ While most scientists consider Thunderbirds mythological, sightings continue. In
     difficulty: 8,
     evidenceRequired: 80,
     svgSilhouette: '/assets/cryptids/loch-ness-monster.svg',
+    revealImage: '/assets/cryptids/reveals/loch-ness-monster.jpg',
     clues: [
       { id: 'ln-1', type: 'photo', description: 'The famous "Surgeon\'s Photo" — real or fake?', svgIcon: '/assets/ui/clue-photo.svg', revealed: false },
       { id: 'ln-2', type: 'witness', description: 'A boat captain saw humps moving through the water', svgIcon: '/assets/ui/clue-witness.svg', revealed: false },
