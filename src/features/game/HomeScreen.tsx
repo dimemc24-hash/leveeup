@@ -134,6 +134,36 @@ export function HomeScreen() {
         Start Investigation!
       </Link>
 
+      {/* Practice modes: Spell Caster & Field Guide (Math) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <Link
+          to="/spell"
+          className="block journal-card bg-white/90 rounded-2xl p-4 shadow-sm border-2 border-gold/40 hover:border-gold transition-colors"
+          aria-label="Cryptid Spell Caster — hear a word and write it"
+        >
+          <div className="flex items-center gap-3">
+            <span className="text-3xl" aria-hidden="true">🔮</span>
+            <div>
+              <h3 className="font-display font-bold text-forest">Spell Caster</h3>
+              <p className="text-xs text-bark-light">Listen & write</p>
+            </div>
+          </div>
+        </Link>
+        <Link
+          to="/field-guide"
+          className="block journal-card bg-white/90 rounded-2xl p-4 shadow-sm border-2 border-gold/40 hover:border-gold transition-colors"
+          aria-label="Field Guide — Math: solve and show your work"
+        >
+          <div className="flex items-center gap-3">
+            <span className="text-3xl" aria-hidden="true">📓</span>
+            <div>
+              <h3 className="font-display font-bold text-forest">Field Guide</h3>
+              <p className="text-xs text-bark-light">Solve & document</p>
+            </div>
+          </div>
+        </Link>
+      </div>
+
       {/* Cryptids discovered */}
       {progress.discoveredCryptids.length > 0 && (
         <div className="journal-card bg-white/90 rounded-2xl p-4 shadow-sm">

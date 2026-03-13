@@ -22,6 +22,8 @@ Open http://localhost:5173 in your browser.
 - **Parent/Teacher Dashboard**: Monitor student progress, accuracy by subject, struggle alerts
 - **PWA**: Installable, works offline on phones, tablets, and Chromebooks
 - **Accessible**: ARIA labels, keyboard navigation, WCAG AA contrast
+- **Cryptid Spell Caster**: Hear a word → write it with a stylus → AI reads handwriting → cryptid reveal or spelling tip. Uses Supabase Edge Functions for handwriting (Claude) and TTS (ElevenLabs); fallback to Web Speech API if TTS is not configured.
+- **Field Guide — Math**: Multi-step math problems (equation, model, statement, check, strategy). Same handwriting canvas; each step is evaluated by `evaluate-math` (Claude). Correct answer + all steps = full cryptid reveal; correct + skipped steps = silhouette (escaped); wrong answer = lost trail with strategy tips.
 
 ## Tech Stack
 
@@ -57,3 +59,18 @@ public/assets/       — SVG assets (cryptids, UI, shop items)
 ## Data Persistence
 
 All data is stored in localStorage via `src/lib/storage.ts`. The abstraction layer is designed so Supabase can be wired in later without touching the rest of the app.
+
+## Spell Caster (Edge Functions)
+
+The **Cryptid Spell Caster** module uses two Supabase Edge Functions:
+
+1. **`recognize-handwriting`** — Sends canvas PNG to Anthropic (Claude vision) and returns the word as written (no auto-correction).  
+   - Set secret: `supabase secrets set ANTHROPIC_API_KEY=sk-ant-...`
+
+2. **`speak`** — Converts text to speech via ElevenLabs (friendly monster-style voice). Falls back to browser Web Speech API if the key is missing or the request fails.  
+   - Set secrets: `supabase secrets set ELEVENLABS_API_KEY=...` and optionally `ELEVENLABS_VOICE_ID=...` (default voice is used if not set).
+
+3. **`evaluate-math`** — Field Guide (Math) mode: evaluates handwritten math work (equation, model, statement, strategy, true/false work, check equation). Uses the same `ANTHROPIC_API_KEY`.
+
+Deploy: `supabase functions deploy recognize-handwriting`, `supabase functions deploy speak`, and `supabase functions deploy evaluate-math`.  
+See `docs/plans/2025-03-12-cryptid-spell-caster-design.md` for full design and cost notes.

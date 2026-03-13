@@ -14,6 +14,17 @@
   --color-danger: #c0392b;
   --color-danger-light: #e74c3c;
 
+  /* Spell Caster (dark theme) */
+  --color-spell-bg: #0f172a;
+  --color-spell-card: #1e293b;
+  --color-spell-border: #475569;
+  --color-spell-cream: #f1f5f9;
+  --color-spell-muted: #94a3b8;
+  --color-spell-accent: #818cf8;
+  --color-spell-success: #22c55e;
+  --color-spell-wrong: #f87171;
+  --color-spell-tip: #fbbf24;
+
   --font-display: 'Georgia', serif;
   --font-body: system-ui, -apple-system, sans-serif;
 }
@@ -202,3 +213,35 @@ body {
 @media (min-width: 1024px) {
   html { font-size: 18px; }
 }
+
+/* ─── Cryptid Spell Caster (dark theme) ─── */
+.spell-caster-page {
+  background: linear-gradient(180deg, var(--color-spell-bg) 0%, var(--color-spell-card) 50%, var(--color-spell-bg) 100%);
+  min-height: 100%;
+}
+
+.spell-caster .font-display {
+  font-family: 'Fredoka', 'Georgia', serif;
+}
+
+.spell-caster .font-hand {
+  font-family: 'Patrick Hand', 'Comic Sans MS', cursive;
+}
+
+.spell-caster .text-spell-cream { color: var(--color-spell-cream); }
+.spell-caster .text-spell-muted { color: var(--color-spell-muted); }
+.spell-caster .text-spell-accent { color: var(--color-spell-accent); }
+.spell-caster .text-spell-success { color: var(--color-spell-success); }
+.spell-caster .text-spell-wrong { color: var(--color-spell-wrong); }
+.spell-caster .text-spell-tip { color: var(--color-spell-tip); }
+.spell-caster .bg-spell-card { background-color: var(--color-spell-card); }
+.spell-caster .bg-spell-card-hover:hover { background-color: #334155; }
+.spell-caster .border-spell-border { border-color: var(--color-spell-border); }
+.spell-caster .border-spell-accent { border-color: var(--color-spell-accent); }
+.spell-caster .bg-spell-accent { background-color: var(--color-spell-accent); }
+.spell-caster .bg-spell-success { background-color: var(--color-spell-success); }
+.spell-caster .text-spell-dark { color: var(--color-spell-bg); }
+.spell-caster .bg-spell-success\/20 { background-color: rgba(34, 197, 94, 0.2); }
+.spell-caster .border-spell-success { border-color: var(--color-spell-success); }
+.spell-caster .bg-spell-wrong\/15 { background-color: rgba(248, 113, 113, 0.15); }
+.spell-caster .border-spell-wrong { border-color: var(--color-spell-wrong); }

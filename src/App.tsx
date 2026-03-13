@@ -14,6 +14,10 @@ import { ClueBoard } from './features/progress/ClueBoard';
 const FieldGuide = lazy(() => import('./features/progress/FieldGuide').then((m) => ({ default: m.FieldGuide })));
 const ShopScreen = lazy(() => import('./features/shop/ShopScreen').then((m) => ({ default: m.ShopScreen })));
 const DashboardScreen = lazy(() => import('./features/dashboard/DashboardScreen').then((m) => ({ default: m.DashboardScreen })));
+const SpellCasterMenu = lazy(() => import('./features/spell-caster/SpellCasterMenu').then((m) => ({ default: m.SpellCasterMenu })));
+const SpellCasterPlay = lazy(() => import('./features/spell-caster/SpellCasterPlay').then((m) => ({ default: m.SpellCasterPlay })));
+const FieldGuideMenu = lazy(() => import('./features/field-guide/FieldGuideMenu').then((m) => ({ default: m.FieldGuideMenu })));
+const FieldGuidePlay = lazy(() => import('./features/field-guide/FieldGuidePlay').then((m) => ({ default: m.FieldGuidePlay })));
 const AvatarCustomize = lazy(() => import('./features/avatar/AvatarCustomize').then((m) => ({ default: m.AvatarCustomize })));
 
 function LoadingFallback() {
@@ -42,6 +46,10 @@ function AppRoutes() {
           <Route path="/shop" element={<ShopScreen />} />
           <Route path="/avatar" element={<AvatarCustomize />} />
           <Route path="/dashboard" element={<DashboardScreen />} />
+          <Route path="/spell" element={<SpellCasterMenu />} />
+          <Route path="/spell/play/:packId" element={<SpellCasterPlay />} />
+          <Route path="/field-guide" element={<FieldGuideMenu />} />
+          <Route path="/field-guide/play/:packId" element={<FieldGuidePlay />} />
         </Routes>
       </Suspense>
     </Layout>
