@@ -1,18 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --color-paper: #f5f0e1;
-  --color-paper-dark: #e8dcc8;
-  --color-forest: #2d5016;
-  --color-forest-light: #4a7c23;
-  --color-bark: #3d2b1f;
-  --color-bark-light: #5a4a3e;
-  --color-gold: #d4a843;
-  --color-gold-light: #e8c96a;
-  --color-gold-dark: #b8922e;
+  --color-paper: #0d1b2a;
+  --color-paper-dark: #162032;
+  --color-forest: #00c896;
+  --color-forest-light: #00e6ac;
+  --color-bark: #e8edf4;
+  --color-bark-light: #94a3b8;
+  --color-gold: #FFB800;
+  --color-gold-light: #FFCF4A;
+  --color-gold-dark: #E0A200;
   --color-olive: #6b8e23;
-  --color-danger: #c0392b;
-  --color-danger-light: #e74c3c;
+  --color-danger: #ff4757;
+  --color-danger-light: #ff6b81;
 
   /* Spell Caster (dark theme) */
   --color-spell-bg: #0f172a;
@@ -25,8 +26,8 @@
   --color-spell-wrong: #f87171;
   --color-spell-tip: #fbbf24;
 
-  --font-display: 'Georgia', serif;
-  --font-body: system-ui, -apple-system, sans-serif;
+  --font-display: 'Fredoka', 'Georgia', serif;
+  --font-body: 'Nunito', system-ui, -apple-system, sans-serif;
 }
 
 * {
@@ -36,7 +37,7 @@
 body {
   margin: 0;
   font-family: var(--font-body);
-  background-color: var(--color-paper);
+  background: linear-gradient(165deg, #0d1b2a 0%, #132e1f 40%, #0d1b2a 100%);
   color: var(--color-bark);
   min-width: 320px;
   font-size: 16px;
@@ -46,26 +47,22 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* ─── Aged paper texture ─── */
+/* ─── Swamp atmosphere background ─── */
 .paper-texture {
-  background-color: var(--color-paper);
-  background-image:
-    radial-gradient(ellipse at 15% 45%, rgba(139, 105, 20, 0.06) 0%, transparent 50%),
-    radial-gradient(ellipse at 85% 15%, rgba(139, 105, 20, 0.04) 0%, transparent 40%),
-    radial-gradient(ellipse at 55% 85%, rgba(160, 120, 40, 0.05) 0%, transparent 45%),
-    radial-gradient(ellipse at 95% 50%, rgba(160, 130, 60, 0.03) 0%, transparent 30%),
-    linear-gradient(rgba(139, 105, 20, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(139, 105, 20, 0.03) 1px, transparent 1px);
-  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 28px 28px, 28px 28px;
+  background: linear-gradient(165deg, #0d1b2a 0%, #132e1f 40%, #0d1b2a 100%);
+  background-attachment: fixed;
 }
 
-/* ─── Journal card (hand-drawn feel) ─── */
+/* ─── Game panel card (replaces journal-card) ─── */
 .journal-card {
-  border: 2px solid var(--color-paper-dark);
-  border-radius: 12px 8px 14px 6px;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1.5px solid rgba(0, 200, 150, 0.18);
+  border-radius: 16px;
   box-shadow:
-    3px 3px 0 rgba(61, 43, 31, 0.06),
-    inset 0 0 30px rgba(139, 105, 20, 0.04);
+    0 4px 24px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
   position: relative;
 }
 
@@ -77,22 +74,34 @@ body {
   right: -1px;
   bottom: -1px;
   border-radius: inherit;
-  border: 1px solid rgba(139, 105, 20, 0.08);
+  border: 1px solid rgba(0, 200, 150, 0.08);
   pointer-events: none;
 }
 
 /* ─── Sketch-style divider ─── */
 .sketch-divider {
   border: none;
-  height: 2px;
-  background: repeating-linear-gradient(
-    90deg,
-    var(--color-bark-light) 0px,
-    var(--color-bark-light) 4px,
-    transparent 4px,
-    transparent 8px
-  );
-  opacity: 0.3;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 200, 150, 0.3), transparent);
+}
+
+/* ─── Chunky game button ─── */
+.btn-chunky {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  border-radius: 16px;
+  border: 3px solid transparent;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.3);
+  transition: all 0.1s ease;
+  cursor: pointer;
+}
+
+.btn-chunky:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
 }
 
 /* ─── Animations ─── */
@@ -115,8 +124,8 @@ body {
 }
 
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 5px rgba(212, 168, 67, 0.3); }
-  50% { box-shadow: 0 0 20px rgba(212, 168, 67, 0.6); }
+  0%, 100% { box-shadow: 0 0 8px rgba(255, 184, 0, 0.3), 0 0 20px rgba(255, 184, 0, 0.1); }
+  50% { box-shadow: 0 0 20px rgba(255, 184, 0, 0.6), 0 0 40px rgba(255, 184, 0, 0.2); }
 }
 
 @keyframes page-enter {
@@ -143,7 +152,7 @@ body {
 
 @keyframes float {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
+  50% { transform: translateY(-6px); }
 }
 
 @keyframes progress-fill {
@@ -154,17 +163,38 @@ body {
   to { transform: rotate(360deg); }
 }
 
+@keyframes hero-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(0, 200, 150, 0.3), 0 0 60px rgba(0, 200, 150, 0.1); }
+  50% { box-shadow: 0 0 30px rgba(0, 200, 150, 0.5), 0 0 80px rgba(0, 200, 150, 0.2); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes glow-border {
+  0%, 100% { border-color: rgba(0, 200, 150, 0.2); }
+  50% { border-color: rgba(0, 200, 150, 0.5); }
+}
+
 .animate-shake { animation: shake 0.5s ease-in-out; }
 .animate-bounce-in { animation: bounce-in 0.5s ease-out; }
 .animate-slide-up { animation: slide-up 0.4s ease-out; }
 .animate-glow-pulse { animation: glow-pulse 2s ease-in-out infinite; }
 .animate-page-enter { animation: page-enter 0.3s ease-out; }
-.animate-fire { animation: flicker 0.5s ease-in-out infinite; filter: drop-shadow(0 0 6px rgba(212, 168, 67, 0.5)); }
+.animate-fire { animation: flicker 0.5s ease-in-out infinite; filter: drop-shadow(0 0 8px rgba(255, 184, 0, 0.6)); }
 .animate-count-up { animation: count-up 0.3s ease-out; }
 .animate-card-flip { animation: card-flip-in 0.5s ease-out; }
 .animate-float { animation: float 3s ease-in-out infinite; }
 .animate-progress { animation: progress-fill 0.8s ease-out; }
 .animate-spin { animation: spin 1s linear infinite; }
+.animate-hero-pulse { animation: hero-pulse 2.5s ease-in-out infinite; }
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent 30%, rgba(255,255,255,0.08) 50%, transparent 70%);
+  background-size: 200% 100%;
+  animation: shimmer 3s linear infinite;
+}
 
 .discovery-reveal { animation: bounce-in 0.8s ease-out; }
 .streak-fire { animation: glow-pulse 1s ease-in-out infinite; }

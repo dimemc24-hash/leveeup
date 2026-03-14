@@ -20,14 +20,21 @@ export function HomeScreen() {
 
   return (
     <div className="p-4 max-w-lg mx-auto space-y-4 animate-slide-up">
-      {/* Welcome + Avatar (front and center) */}
-      <div className="journal-card bg-white/90 rounded-2xl p-5 shadow-sm">
+      {/* Hero welcome banner */}
+      <div
+        className="rounded-2xl p-5 relative overflow-hidden"
+        style={{
+          background: 'linear-gradient(135deg, rgba(0,200,150,0.15) 0%, rgba(0,100,80,0.2) 100%)',
+          border: '1.5px solid rgba(0,200,150,0.2)',
+          boxShadow: '0 4px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05)',
+        }}
+      >
         <div className="flex items-center gap-4">
           <Link to="/avatar" aria-label="Customize avatar" className="flex-shrink-0 animate-float">
             <Avatar size={90} />
           </Link>
           <div className="flex-1 min-w-0">
-            <h2 className="font-display text-xl font-bold text-forest mb-1">
+            <h2 className="font-display text-2xl font-bold text-white mb-1" style={{ textShadow: '0 0 20px rgba(0,200,150,0.3)' }}>
               Welcome back, {profile.name}!
             </h2>
             <p className="text-sm text-bark-light">{getNarrative('welcome')}</p>
@@ -37,37 +44,62 @@ export function HomeScreen() {
 
       {/* Daily login reward */}
       {isNewDay && (
-        <div className="bg-gold/10 border-2 border-gold rounded-2xl p-4 text-center animate-bounce-in journal-card">
-          <p className="font-bold text-gold-dark text-lg">Daily Field Supply!</p>
+        <div
+          className="rounded-2xl p-4 text-center animate-bounce-in"
+          style={{
+            background: 'rgba(255,184,0,0.1)',
+            border: '2px solid rgba(255,184,0,0.4)',
+            boxShadow: '0 0 24px rgba(255,184,0,0.1)',
+          }}
+        >
+          <p className="font-bold text-gold text-lg font-display">Daily Field Supply!</p>
           <p className="text-sm text-bark-light mt-1">{getNarrative('daily_login')}</p>
         </div>
       )}
 
-      {/* Daily streak (prominent, with fire animation) */}
+      {/* Daily streak */}
       {progress.dailyStreak > 0 && (
-        <div className="flex items-center justify-center gap-3 py-2">
-          <span className="animate-fire text-3xl" aria-hidden="true">🔥</span>
-          <div className="text-center">
-            <div className="font-display font-bold text-2xl text-forest">{progress.dailyStreak}</div>
-            <div className="text-xs text-bark-light font-bold uppercase tracking-wider">Day Streak</div>
+        <div className="flex items-center justify-center gap-3 py-3">
+          <span className="animate-fire text-4xl" aria-hidden="true">🔥</span>
+          <div
+            className="text-center px-5 py-2 rounded-2xl"
+            style={{
+              background: 'rgba(255,184,0,0.1)',
+              border: '1px solid rgba(255,184,0,0.2)',
+              boxShadow: '0 0 20px rgba(255,184,0,0.1)',
+            }}
+          >
+            <div className="font-display font-bold text-3xl text-gold" style={{ textShadow: '0 0 16px rgba(255,184,0,0.4)' }}>{progress.dailyStreak}</div>
+            <div className="text-xs text-gold-light font-bold uppercase tracking-wider">Day Streak</div>
           </div>
-          <span className="animate-fire text-3xl" aria-hidden="true">🔥</span>
+          <span className="animate-fire text-4xl" aria-hidden="true">🔥</span>
         </div>
       )}
 
       {/* Stats row */}
       <div className="grid grid-cols-3 gap-2" role="group" aria-label="Player statistics">
-        <StatCard label="XP" value={progress.xp.toLocaleString()} icon="/assets/ui/xp-star.svg" />
-        <StatCard label="Level" value={String(progress.level)} icon="/assets/ui/streak-fire.svg" />
-        <StatCard label="Evidence" value={String(progress.evidencePieces)} icon="/assets/ui/evidence-magnifier.svg" />
+        <StatCard label="XP" value={progress.xp.toLocaleString()} icon="/assets/ui/xp-star.svg" color="0, 200, 150" />
+        <StatCard label="Level" value={String(progress.level)} icon="/assets/ui/streak-fire.svg" color="255, 184, 0" />
+        <StatCard label="Evidence" value={String(progress.evidencePieces)} icon="/assets/ui/evidence-magnifier.svg" color="129, 140, 248" />
       </div>
 
-      {/* Current investigation (prominent) */}
+      {/* Current investigation */}
       {activeCryptid && invProgress && !invProgress.completed && (
-        <div className="journal-card bg-white/90 rounded-2xl p-5 shadow-sm">
+        <div
+          className="rounded-2xl p-5 relative overflow-hidden"
+          style={{
+            background: 'rgba(255,255,255,0.05)',
+            backdropFilter: 'blur(8px)',
+            border: '1.5px solid rgba(0,200,150,0.15)',
+            boxShadow: '0 4px 24px rgba(0,0,0,0.2)',
+          }}
+        >
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-14 h-14 bg-paper rounded-xl p-1.5 flex items-center justify-center flex-shrink-0">
-              <img src={activeCryptid.svgSilhouette} alt="" className="w-full h-full opacity-60" />
+            <div
+              className="w-14 h-14 rounded-xl p-1.5 flex items-center justify-center flex-shrink-0"
+              style={{ background: 'rgba(0,200,150,0.1)', border: '1px solid rgba(0,200,150,0.2)' }}
+            >
+              <img src={activeCryptid.svgSilhouette} alt="" className="w-full h-full opacity-80" />
             </div>
             <div className="flex-1 min-w-0">
               <h3 className="font-display font-bold text-forest text-lg">Investigating: {activeCryptid.name}</h3>
@@ -78,18 +110,23 @@ export function HomeScreen() {
           <div className="mb-3">
             <div className="flex justify-between text-xs text-bark-light mb-1">
               <span>Evidence</span>
-              <span className="font-bold">{invProgress.evidenceCollected} / {activeCryptid.evidenceRequired}</span>
+              <span className="font-bold text-gold">{invProgress.evidenceCollected} / {activeCryptid.evidenceRequired}</span>
             </div>
             <div
-              className="w-full bg-paper-dark rounded-full h-3 overflow-hidden"
+              className="w-full rounded-full h-3.5 overflow-hidden"
+              style={{ background: 'rgba(255,255,255,0.08)' }}
               role="progressbar"
               aria-valuenow={invProgress.evidenceCollected}
               aria-valuemax={activeCryptid.evidenceRequired}
               aria-label="Evidence progress"
             >
               <div
-                className="bg-gold h-full rounded-full transition-all duration-700 animate-progress"
-                style={{ width: `${(invProgress.evidenceCollected / activeCryptid.evidenceRequired) * 100}%` }}
+                className="h-full rounded-full transition-all duration-700 animate-progress"
+                style={{
+                  width: `${(invProgress.evidenceCollected / activeCryptid.evidenceRequired) * 100}%`,
+                  background: 'linear-gradient(90deg, #FFB800, #FFCF4A)',
+                  boxShadow: '0 0 12px rgba(255,184,0,0.4)',
+                }}
               />
             </div>
           </div>
@@ -100,10 +137,13 @@ export function HomeScreen() {
                 key={i}
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
                   i < invProgress.cluesFound
-                    ? 'bg-forest-light text-white animate-bounce-in'
-                    : 'bg-paper-dark text-bark-light'
+                    ? 'text-white animate-bounce-in'
+                    : 'text-bark-light'
                 }`}
-                style={i < invProgress.cluesFound ? { animationDelay: `${i * 100}ms` } : undefined}
+                style={i < invProgress.cluesFound
+                  ? { background: 'linear-gradient(135deg, #00c896, #00a67a)', boxShadow: '0 0 10px rgba(0,200,150,0.3)', animationDelay: `${i * 100}ms` }
+                  : { background: 'rgba(255,255,255,0.08)' }
+                }
                 aria-hidden="true"
               >
                 {i < invProgress.cluesFound ? '✓' : '?'}
@@ -118,17 +158,29 @@ export function HomeScreen() {
 
       {/* All cryptids discovered celebration */}
       {allDiscovered && (
-        <div className="journal-card bg-gold/10 border-2 border-gold rounded-2xl p-5 shadow-sm text-center">
+        <div
+          className="rounded-2xl p-5 text-center animate-glow-pulse"
+          style={{
+            background: 'rgba(255,184,0,0.1)',
+            border: '2px solid rgba(255,184,0,0.4)',
+            boxShadow: '0 0 30px rgba(255,184,0,0.15)',
+          }}
+        >
           <div className="text-4xl mb-2">🏆</div>
           <h3 className="font-display text-xl font-bold text-gold">Master Investigator!</h3>
           <p className="text-xs text-bark-light mt-1">All {cryptidRoster.length} cryptids discovered!</p>
         </div>
       )}
 
-      {/* Quick play CTA */}
+      {/* Quick play CTA — hero button */}
       <Link
         to="/play"
-        className="block bg-forest text-white rounded-2xl p-5 text-center font-bold text-xl shadow-lg hover:bg-forest-light transition-all hover:scale-[1.02] active:scale-[0.98] min-h-[56px] flex items-center justify-center"
+        className="block rounded-2xl p-5 text-center font-display font-bold text-xl text-white min-h-[56px] flex items-center justify-center transition-all hover:scale-[1.02] active:scale-[0.98] animate-hero-pulse"
+        style={{
+          background: 'linear-gradient(135deg, #00c896 0%, #00a67a 100%)',
+          boxShadow: '0 4px 0 #008060, 0 0 30px rgba(0,200,150,0.3)',
+          border: '2px solid rgba(255,255,255,0.15)',
+        }}
         aria-label="Start an investigation mission"
       >
         Start Investigation!
@@ -138,26 +190,36 @@ export function HomeScreen() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <Link
           to="/spell"
-          className="block journal-card bg-white/90 rounded-2xl p-4 shadow-sm border-2 border-gold/40 hover:border-gold transition-colors"
+          className="block rounded-2xl p-4 transition-all hover:scale-[1.02] active:scale-[0.98]"
+          style={{
+            background: 'rgba(129, 140, 248, 0.1)',
+            border: '2px solid rgba(129, 140, 248, 0.3)',
+            boxShadow: '0 4px 16px rgba(129, 140, 248, 0.1)',
+          }}
           aria-label="Cryptid Spell Caster — hear a word and write it"
         >
           <div className="flex items-center gap-3">
             <span className="text-3xl" aria-hidden="true">🔮</span>
             <div>
-              <h3 className="font-display font-bold text-forest">Spell Caster</h3>
+              <h3 className="font-display font-bold text-spell-accent">Spell Caster</h3>
               <p className="text-xs text-bark-light">Listen & write</p>
             </div>
           </div>
         </Link>
         <Link
           to="/field-guide"
-          className="block journal-card bg-white/90 rounded-2xl p-4 shadow-sm border-2 border-gold/40 hover:border-gold transition-colors"
+          className="block rounded-2xl p-4 transition-all hover:scale-[1.02] active:scale-[0.98]"
+          style={{
+            background: 'rgba(56, 189, 248, 0.1)',
+            border: '2px solid rgba(56, 189, 248, 0.3)',
+            boxShadow: '0 4px 16px rgba(56, 189, 248, 0.1)',
+          }}
           aria-label="Field Guide — Math: solve and show your work"
         >
           <div className="flex items-center gap-3">
             <span className="text-3xl" aria-hidden="true">📓</span>
             <div>
-              <h3 className="font-display font-bold text-forest">Field Guide</h3>
+              <h3 className="font-display font-bold" style={{ color: '#38bdf8' }}>Field Guide</h3>
               <p className="text-xs text-bark-light">Solve & document</p>
             </div>
           </div>
@@ -166,7 +228,14 @@ export function HomeScreen() {
 
       {/* Cryptids discovered */}
       {progress.discoveredCryptids.length > 0 && (
-        <div className="journal-card bg-white/90 rounded-2xl p-4 shadow-sm">
+        <div
+          className="rounded-2xl p-4"
+          style={{
+            background: 'rgba(255,255,255,0.05)',
+            border: '1.5px solid rgba(0,200,150,0.15)',
+            boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
+          }}
+        >
           <h3 className="font-display font-bold text-forest mb-3">Field Guide</h3>
           <div className="flex gap-3 flex-wrap">
             {progress.discoveredCryptids.map((id) => {
@@ -174,7 +243,11 @@ export function HomeScreen() {
               return c ? (
                 <div
                   key={id}
-                  className="w-14 h-14 bg-paper rounded-xl p-1.5 border-2 border-gold/40 hover:border-gold transition-colors"
+                  className="w-14 h-14 rounded-xl p-1.5 transition-colors hover:scale-105"
+                  style={{
+                    background: 'rgba(255,184,0,0.1)',
+                    border: '2px solid rgba(255,184,0,0.3)',
+                  }}
                   title={c.name}
                 >
                   <img src={c.svgSilhouette} alt={c.name} className="w-full h-full" />
@@ -188,14 +261,19 @@ export function HomeScreen() {
   );
 }
 
-function StatCard({ label, value, icon }: { label: string; value: string; icon: string }) {
+function StatCard({ label, value, icon, color }: { label: string; value: string; icon: string; color: string }) {
   return (
     <div
-      className="journal-card bg-white/90 rounded-xl p-3 text-center shadow-sm"
+      className="rounded-xl p-3 text-center"
+      style={{
+        background: `rgba(${color}, 0.08)`,
+        border: `1.5px solid rgba(${color}, 0.2)`,
+        boxShadow: `0 4px 16px rgba(${color}, 0.08)`,
+      }}
       aria-label={`${label}: ${value}`}
     >
       <img src={icon} alt="" className="w-7 h-7 mx-auto mb-1" aria-hidden="true" />
-      <div className="font-bold text-forest text-xl animate-count-up">{value}</div>
+      <div className="font-bold text-white text-xl animate-count-up">{value}</div>
       <div className="text-xs text-bark-light font-bold">{label}</div>
     </div>
   );

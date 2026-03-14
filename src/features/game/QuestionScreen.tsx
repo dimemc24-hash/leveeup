@@ -89,38 +89,80 @@ export function QuestionScreen() {
     <div className="p-4 max-w-lg mx-auto space-y-4">
       {/* Progress bar */}
       <div className="flex items-center gap-3">
-        <button onClick={handleQuit} className="text-bark-light text-lg hover:text-bark min-w-[44px] min-h-[44px] flex items-center justify-center" aria-label="Quit session">
+        <button
+          onClick={handleQuit}
+          className="text-bark-light text-lg hover:text-white min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full transition-colors"
+          style={{ background: 'rgba(255,255,255,0.06)' }}
+          aria-label="Quit session"
+        >
           ✕
         </button>
-        <div className="flex-1 bg-paper-dark rounded-full h-2 overflow-hidden" role="progressbar" aria-valuenow={session.currentQuestionIndex + 1} aria-valuemax={session.questions.length}>
-          <div className="bg-forest-light h-full rounded-full transition-all duration-300" style={{ width: `${progress}%` }} />
+        <div
+          className="flex-1 rounded-full h-4 overflow-hidden"
+          style={{ background: 'rgba(255,255,255,0.08)' }}
+          role="progressbar"
+          aria-valuenow={session.currentQuestionIndex + 1}
+          aria-valuemax={session.questions.length}
+        >
+          <div
+            className="h-full rounded-full transition-all duration-300"
+            style={{
+              width: `${progress}%`,
+              background: 'linear-gradient(90deg, #00c896, #00e6ac)',
+              boxShadow: '0 0 10px rgba(0,200,150,0.4)',
+            }}
+          />
         </div>
-        <span className="text-xs text-bark-light">{session.currentQuestionIndex + 1}/{session.questions.length}</span>
+        <span className="text-xs text-bark-light font-bold">{session.currentQuestionIndex + 1}/{session.questions.length}</span>
       </div>
 
       {/* Streak indicator */}
       {streakLabel && (
         <div className="text-center streak-fire">
-          <span className="inline-block bg-gold text-white text-sm font-bold px-3 py-1 rounded-full animate-bounce-in">
+          <span
+            className="inline-block text-sm font-bold font-display px-4 py-1.5 rounded-full animate-bounce-in text-white"
+            style={{
+              background: 'linear-gradient(135deg, #FFB800, #FF8C00)',
+              boxShadow: '0 2px 0 #cc7700, 0 0 16px rgba(255,184,0,0.3)',
+            }}
+          >
             {streakLabel}
           </span>
         </div>
       )}
 
-      {/* Narrative question — themeHook IS the question */}
-      <div className="journal-card bg-white/90 rounded-2xl p-5 shadow-sm">
-        <div className="flex items-center gap-2 mb-2">
-          <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${
-            question.tier === 'introductory' ? 'bg-green-100 text-green-700' :
-            question.tier === 'developing' ? 'bg-amber-100 text-amber-700' :
-            'bg-red-100 text-red-700'
-          }`}>
+      {/* Question card */}
+      <div
+        className="rounded-2xl p-5 relative overflow-hidden"
+        style={{
+          background: 'rgba(255,255,255,0.06)',
+          backdropFilter: 'blur(8px)',
+          border: '1.5px solid rgba(0,200,150,0.18)',
+          boxShadow: '0 4px 24px rgba(0,0,0,0.25)',
+        }}
+      >
+        <div className="flex items-center gap-2 mb-3">
+          <span className={`text-xs px-2.5 py-1 rounded-full font-bold ${
+            question.tier === 'introductory' ? 'text-green-300' :
+            question.tier === 'developing' ? 'text-amber-300' :
+            'text-red-300'
+          }`} style={{
+            background: question.tier === 'introductory' ? 'rgba(34,197,94,0.15)' :
+            question.tier === 'developing' ? 'rgba(255,184,0,0.15)' :
+            'rgba(255,71,87,0.15)',
+          }}>
             {question.tier}
           </span>
           <span className="text-xs text-bark-light capitalize">{question.subject.replace('_', ' ')}</span>
         </div>
-        <div className="bg-forest/5 rounded-xl p-4 border border-forest/10">
-          <p className="font-display text-lg md:text-xl font-bold text-bark leading-relaxed">{question.themeHook}</p>
+        <div
+          className="rounded-xl p-4"
+          style={{
+            background: 'rgba(0,200,150,0.06)',
+            border: '1px solid rgba(0,200,150,0.1)',
+          }}
+        >
+          <p className="font-display text-lg md:text-xl font-bold text-white leading-relaxed">{question.themeHook}</p>
         </div>
       </div>
 
@@ -136,12 +178,32 @@ export function QuestionScreen() {
               key={opt}
               onClick={() => !feedback && setSelected(opt)}
               disabled={!!feedback}
-              className={`w-full rounded-xl p-4 md:p-5 min-h-[52px] text-base md:text-lg text-left border-2 transition-all ${
-                isCorrect ? 'border-forest-light bg-green-50 text-forest' :
-                isWrong ? 'border-danger bg-red-50 text-danger animate-shake' :
-                isSelected ? 'border-forest bg-forest/5' :
-                'border-paper-dark bg-white hover:border-forest/40'
+              className={`w-full rounded-xl p-4 md:p-5 min-h-[52px] text-base md:text-lg text-left font-semibold transition-all ${
+                isCorrect ? 'text-white animate-bounce-in' :
+                isWrong ? 'text-white animate-shake' :
+                isSelected ? 'text-white' :
+                'text-bark hover:scale-[1.01]'
               }`}
+              style={
+                isCorrect ? {
+                  background: 'rgba(34,197,94,0.2)',
+                  border: '2px solid #22c55e',
+                  boxShadow: '0 0 16px rgba(34,197,94,0.3)',
+                } :
+                isWrong ? {
+                  background: 'rgba(255,71,87,0.2)',
+                  border: '2px solid #ff4757',
+                  boxShadow: '0 0 16px rgba(255,71,87,0.3)',
+                } :
+                isSelected ? {
+                  background: 'rgba(0,200,150,0.15)',
+                  border: '2px solid rgba(0,200,150,0.6)',
+                  boxShadow: '0 0 12px rgba(0,200,150,0.2)',
+                } : {
+                  background: 'rgba(255,255,255,0.06)',
+                  border: '2px solid rgba(255,255,255,0.1)',
+                }
+              }
               aria-label={opt}
               aria-pressed={isSelected}
             >
@@ -157,7 +219,11 @@ export function QuestionScreen() {
             onChange={(e) => setFillAnswer(e.target.value)}
             disabled={!!feedback}
             placeholder="Type your answer..."
-            className="w-full rounded-xl p-4 md:p-5 border-2 text-base md:text-lg min-h-[52px] border-paper-dark bg-white focus:border-forest focus:outline-none disabled:opacity-60"
+            className="w-full rounded-xl p-4 md:p-5 text-base md:text-lg min-h-[52px] text-white placeholder-bark-light/50 focus:outline-none disabled:opacity-60"
+            style={{
+              background: 'rgba(255,255,255,0.06)',
+              border: '2px solid rgba(255,255,255,0.1)',
+            }}
             aria-label="Your answer"
           />
         )}
@@ -169,8 +235,15 @@ export function QuestionScreen() {
             {sequenceOrder.length > 0 && (
               <div className="space-y-1 mb-2">
                 {sequenceOrder.map((item, i) => (
-                  <div key={item} className="flex items-center gap-2 bg-forest/10 rounded-lg p-2 text-sm">
-                    <span className="w-6 h-6 rounded-full bg-forest text-white flex items-center justify-center text-xs font-bold">{i + 1}</span>
+                  <div
+                    key={item}
+                    className="flex items-center gap-2 rounded-lg p-2 text-sm text-white"
+                    style={{ background: 'rgba(0,200,150,0.12)', border: '1px solid rgba(0,200,150,0.2)' }}
+                  >
+                    <span
+                      className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white"
+                      style={{ background: 'linear-gradient(135deg, #00c896, #00a67a)' }}
+                    >{i + 1}</span>
                     <span className="flex-1">{item}</span>
                     {!feedback && (
                       <button onClick={() => toggleSequenceItem(item)} className="text-bark-light hover:text-danger text-xs" aria-label={`Remove ${item}`}>✕</button>
@@ -185,7 +258,11 @@ export function QuestionScreen() {
                 key={item}
                 onClick={() => toggleSequenceItem(item)}
                 disabled={!!feedback}
-                className="w-full rounded-xl p-3 md:p-4 text-left text-base min-h-[48px] border-2 border-paper-dark bg-white hover:border-forest/40 transition-all disabled:opacity-60"
+                className="w-full rounded-xl p-3 md:p-4 text-left text-base min-h-[48px] text-bark transition-all disabled:opacity-60 hover:scale-[1.01]"
+                style={{
+                  background: 'rgba(255,255,255,0.06)',
+                  border: '2px solid rgba(255,255,255,0.1)',
+                }}
                 aria-label={`Select: ${item}`}
               >
                 {item}
@@ -199,14 +276,17 @@ export function QuestionScreen() {
       {!feedback && question.hint && !showHint && (
         <button
           onClick={() => setShowHint(true)}
-          className="text-sm text-gold hover:text-gold-light transition-colors"
+          className="text-sm text-gold hover:text-gold-light transition-colors font-bold"
           aria-label="Show hint"
         >
           Need a hint?
         </button>
       )}
       {showHint && question.hint && (
-        <div className="bg-gold/10 border border-gold/30 rounded-xl p-3 text-sm text-bark animate-slide-up">
+        <div
+          className="rounded-xl p-3 text-sm text-bark animate-slide-up"
+          style={{ background: 'rgba(255,184,0,0.1)', border: '1px solid rgba(255,184,0,0.25)' }}
+        >
           {question.hint}
         </div>
       )}
@@ -220,31 +300,53 @@ export function QuestionScreen() {
             (question.questionType === 'fill_in' && !fillAnswer.trim()) ||
             (question.questionType === 'sequencing' && sequenceOrder.length !== (question.sequenceItems?.length ?? 0))
           }
-          className="w-full bg-forest text-white rounded-xl p-4 md:p-5 font-bold text-lg min-h-[56px] hover:bg-forest-light transition-colors disabled:opacity-40 shadow-md"
+          className="w-full rounded-xl p-4 md:p-5 font-display font-bold text-lg min-h-[56px] text-white transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-40"
+          style={{
+            background: 'linear-gradient(135deg, #00c896 0%, #00a67a 100%)',
+            boxShadow: '0 4px 0 #008060, 0 0 20px rgba(0,200,150,0.2)',
+          }}
           aria-label="Submit answer"
         >
           Submit Answer
         </button>
       ) : (
         <div className="space-y-3 animate-slide-up">
-          <div className={`rounded-xl p-4 ${feedback.correct ? 'bg-green-50 border-2 border-forest-light' : 'bg-red-50 border-2 border-danger'}`}>
+          <div
+            className="rounded-xl p-4"
+            style={feedback.correct ? {
+              background: 'rgba(34,197,94,0.12)',
+              border: '2px solid rgba(34,197,94,0.4)',
+              boxShadow: '0 0 20px rgba(34,197,94,0.15)',
+            } : {
+              background: 'rgba(255,71,87,0.12)',
+              border: '2px solid rgba(255,71,87,0.4)',
+              boxShadow: '0 0 20px rgba(255,71,87,0.15)',
+            }}
+          >
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-lg">{feedback.correct ? '✅' : '❌'}</span>
-              <span className="font-bold">{feedback.correct ? getNarrative('correct_answer') : getNarrative('wrong_answer')}</span>
+              <span className="text-2xl">{feedback.correct ? '✅' : '❌'}</span>
+              <span className="font-bold font-display text-white text-lg">{feedback.correct ? getNarrative('correct_answer') : getNarrative('wrong_answer')}</span>
             </div>
             <p className="text-sm text-bark-light">{feedback.explanation}</p>
-            <p className="text-sm font-bold mt-1 text-gold">+{feedback.xp} XP</p>
+            <p className="text-sm font-bold mt-1 text-gold" style={{ textShadow: '0 0 10px rgba(255,184,0,0.3)' }}>+{feedback.xp} XP</p>
           </div>
 
           {shouldShowFrustrationPivot && (
-            <div className="bg-gold/10 border border-gold/30 rounded-xl p-3 text-sm text-bark animate-slide-up">
+            <div
+              className="rounded-xl p-3 text-sm text-bark animate-slide-up"
+              style={{ background: 'rgba(255,184,0,0.1)', border: '1px solid rgba(255,184,0,0.25)' }}
+            >
               {getNarrative('frustration_pivot')}
             </div>
           )}
 
           <button
             onClick={handleNext}
-            className="w-full bg-forest text-white rounded-xl p-4 md:p-5 font-bold text-lg min-h-[56px] hover:bg-forest-light transition-colors shadow-md"
+            className="w-full rounded-xl p-4 md:p-5 font-display font-bold text-lg min-h-[56px] text-white transition-all hover:scale-[1.02] active:scale-[0.98]"
+            style={{
+              background: 'linear-gradient(135deg, #00c896 0%, #00a67a 100%)',
+              boxShadow: '0 4px 0 #008060, 0 0 20px rgba(0,200,150,0.2)',
+            }}
             aria-label="Continue to next question"
           >
             {session.currentQuestionIndex + 1 >= session.questions.length ? 'See Results' : 'Next Clue →'}
@@ -254,14 +356,25 @@ export function QuestionScreen() {
 
       {/* Milestone popup */}
       {showMilestone && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6" role="dialog" aria-label="Milestone reached">
-          <div className="bg-white rounded-2xl p-6 max-w-sm w-full text-center discovery-reveal shadow-xl">
-            <div className="text-4xl mb-2">🎉</div>
-            <h3 className="font-display text-xl font-bold text-forest mb-2">Milestone!</h3>
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-6" role="dialog" aria-label="Milestone reached">
+          <div
+            className="rounded-2xl p-6 max-w-sm w-full text-center discovery-reveal"
+            style={{
+              background: 'linear-gradient(165deg, #162032, #1a3a2a)',
+              border: '2px solid rgba(255,184,0,0.4)',
+              boxShadow: '0 0 40px rgba(255,184,0,0.2), 0 8px 32px rgba(0,0,0,0.5)',
+            }}
+          >
+            <div className="text-5xl mb-2">🎉</div>
+            <h3 className="font-display text-xl font-bold text-gold mb-2">Milestone!</h3>
             <p className="text-bark-light">{showMilestone}</p>
             <button
               onClick={() => setShowMilestone(null)}
-              className="mt-4 bg-forest text-white rounded-xl px-6 py-2 font-bold hover:bg-forest-light"
+              className="mt-4 rounded-xl px-6 py-2 font-bold font-display text-white transition-all hover:scale-[1.05] active:scale-[0.98]"
+              style={{
+                background: 'linear-gradient(135deg, #FFB800, #FF8C00)',
+                boxShadow: '0 3px 0 #cc7700',
+              }}
               aria-label="Dismiss milestone"
             >
               Awesome!
