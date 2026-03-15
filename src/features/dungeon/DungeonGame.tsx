@@ -85,11 +85,13 @@ export function DungeonGame() {
 
   const dungeonData = useRef(generateMap(pendingId ?? 'default'));
   const { map, cluePositions } = dungeonData.current;
+  // Preserve cryptid ref so victory screen still renders after pendingCapture is cleared
+  const capturedCryptid = useRef(cryptid);
 
-  // Redirect if no pending capture
+  // Redirect if no pending capture (but not while showing victory screen)
   useEffect(() => {
-    if (!pendingId) navigate('/dungeon');
-  }, [pendingId, navigate]);
+    if (!pendingId && !won) navigate('/dungeon');
+  }, [pendingId, won, navigate]);
 
   const tryMove = useCallback((dir: Dir) => {
     if (won) return;
@@ -144,7 +146,9 @@ export function DungeonGame() {
   // Touch controls
   const touchStart = useRef<{ x: number; y: number } | null>(null);
 
-  if (!cryptid || !pendingId) return null;
+  // Update ref while we still have cryptid
+  if (cryptid) capturedCryptid.current = cryptid;
+  if (!capturedCryptid.current && !pendingId) return null;
 
   const dist = (a: Pos, b: Pos) => Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
 
@@ -162,10 +166,10 @@ export function DungeonGame() {
         >
           <div className="text-6xl mb-4 animate-bounce-in">🏆</div>
           <h1 className="font-display text-3xl font-bold text-gold mb-2">CAPTURED!</h1>
-          <p className="text-white text-lg mb-1">{cryptid.name}</p>
-          <p className="text-bark-light text-sm">{cryptid.region}</p>
+          <p className="text-white text-lg mb-1">{capturedCryptid.current?.name}</p>
+          <p className="text-bark-light text-sm">{capturedCryptid.current?.region}</p>
           <p className="text-gold-light text-sm mt-4">
-            The {cryptid.name} has been added to your Field Guide!
+            The {capturedCryptid.current?.name} has been added to your Field Guide!
           </p>
         </div>
         <button
@@ -193,7 +197,7 @@ export function DungeonGame() {
         <button onClick={() => navigate('/dungeon')} className="text-bark-light hover:text-white transition-colors text-sm">
           &larr; Exit
         </button>
-        <h2 className="font-display font-bold text-gold text-sm">Capture: {cryptid.name}</h2>
+        <h2 className="font-display font-bold text-gold text-sm">Capture: {capturedCryptid.current?.name}</h2>
         <div className="text-sm text-bark-light">{collectedClues.size}/{TOTAL_CLUES}</div>
       </div>
 
