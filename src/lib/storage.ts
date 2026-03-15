@@ -158,6 +158,8 @@ export async function initializeFromSupabase(): Promise<boolean> {
         name: userRecord.display_name,
         role: userRecord.role.toUpperCase() as 'PARENT' | 'TEACHER',
         equippedItems: [],
+        skinTone: 'medium',
+        hairColor: 'brown',
         createdAt: new Date(userRecord.created_at).getTime(),
       });
     }
@@ -176,6 +178,8 @@ export async function initializeFromSupabase(): Promise<boolean> {
           name: s.display_name,
           role: 'STUDENT',
           equippedItems: avatarConfig.equippedItems ?? [],
+          skinTone: (avatarConfig as Record<string, string>).skinTone as UserProfile['skinTone'] ?? 'medium',
+          hairColor: (avatarConfig as Record<string, string>).hairColor as UserProfile['hairColor'] ?? 'brown',
           createdAt: new Date(s.created_at).getTime(),
         });
         _progress[s.id] = (s.game_state as PlayerProgress | null) ?? { ...DEFAULT_PROGRESS };

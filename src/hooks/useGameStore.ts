@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { UserProfile, PlayerProgress, Subject, Tier, GameSession, AnswerRecord, Question, StandardProgress, InvestigationProgress } from '../types';
+import type { UserProfile, PlayerProgress, Subject, Tier, GameSession, AnswerRecord, Question, StandardProgress, InvestigationProgress, SkinTone, HairColor } from '../types';
 import { storage } from '../lib/storage';
 import { calculateXP, checkMilestones, type MilestoneEvent } from '../lib/scoring';
 import { cryptidRoster } from '../features/themes/cryptids/cryptidTheme';
@@ -24,6 +24,10 @@ interface GameStore {
   answerQuestion: (answer: string | string[]) => { correct: boolean; xp: number; milestones: MilestoneEvent[] };
   nextQuestion: () => boolean;
   endSession: () => void;
+
+  // Avatar customization
+  setSkinTone: (tone: SkinTone) => void;
+  setHairColor: (color: HairColor) => void;
 
   // Inventory
   ownedItems: string[];
@@ -89,6 +93,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   setProfile(p: UserProfile) {
+    // Migrate older profiles missing avatar fields
+    if (!p.skinTone) p.skinTone = 'medium';
+    if (!p.hairColor) p.hairColor = 'brown';
     storage.setProfile(p);
     const progress = storage.getProgress(p.id) ?? defaultProgress;
     const ownedItems = storage.getInventory(p.id);
@@ -105,7 +112,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   createProfile(name: string, role: UserProfile['role']) {
     const id = crypto.randomUUID();
-    const p: UserProfile = { id, name, role, equippedItems: [], createdAt: Date.now() };
+    const p: UserProfile = { id, name, role, equippedItems: [], skinTone: 'medium', hairColor: 'brown', createdAt: Date.now() };
     storage.setProfile(p);
     storage.setProgress(id, defaultProgress);
     get().loadProfiles();
@@ -321,6 +328,23 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   endSession() {
     set({ session: null, consecutiveFailures: 0 });
+  },
+
+  // Avatar customization
+  setSkinTone(tone: SkinTone) {
+    const { profile } = get();
+    if (!profile) return;
+    const updated = { ...profile, skinTone: tone };
+    storage.setProfile(updated);
+    set({ profile: updated });
+  },
+
+  setHairColor(color: HairColor) {
+    const { profile } = get();
+    if (!profile) return;
+    const updated = { ...profile, hairColor: color };
+    storage.setProfile(updated);
+    set({ profile: updated });
   },
 
   // Inventory

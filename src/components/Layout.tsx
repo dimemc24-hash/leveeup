@@ -10,9 +10,7 @@ export function Layout({ children }: { children: ReactNode }) {
 
   const nav = [
     { path: '/', label: 'Home', icon: '🏠' },
-    { path: '/play', label: 'Play', icon: '🎯' },
-    { path: '/spell', label: 'Spell', icon: '✏️' },
-    { path: '/field-guide', label: 'Math', icon: '📓' },
+    { path: '/play', label: 'Hunt', icon: '🎯' },
     { path: '/clues', label: 'Clues', icon: '🔍' },
     { path: '/shop', label: 'Shop', icon: '🏪' },
     { path: '/avatar', label: 'Avatar', icon: '🧑' },

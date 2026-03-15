@@ -264,6 +264,11 @@ export function LoginScreen() {
                 autoFocus
               />
             </label>
+            {error && (
+              <div className="bg-danger/10 border border-danger/30 rounded-lg p-3 text-sm text-danger mb-3" role="alert">
+                {error}
+              </div>
+            )}
             <div className="flex gap-2">
               <button
                 onClick={() => setScreen('profiles')}

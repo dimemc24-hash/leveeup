@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useGameStore } from '../../hooks/useGameStore';
 import { cryptidRoster } from '../themes/cryptids/cryptidTheme';
+import { CryptidRevealModal } from './CryptidRevealModal';
+import type { Cryptid } from '../../types';
 
 export function ClueBoard() {
   const { progress } = useGameStore();
@@ -8,6 +10,7 @@ export function ClueBoard() {
   const activeCryptid = activeId ? cryptidRoster.find((c) => c.id === activeId) : null;
   const invProgress = activeId ? progress.investigationProgress[activeId] : null;
   const [revealPhase, setRevealPhase] = useState<'none' | 'assembling' | 'identifying' | 'discovered'>('none');
+  const [modalCryptid, setModalCryptid] = useState<Cryptid | null>(null);
 
   const isCompleted = invProgress?.completed ?? false;
   const isDiscovered = activeId ? progress.discoveredCryptids.includes(activeId) : false;
@@ -146,6 +149,8 @@ export function ClueBoard() {
         </div>
       )}
 
+      <CryptidRevealModal cryptid={modalCryptid} onClose={() => setModalCryptid(null)} />
+
       {/* All investigations */}
       <div className="journal-card bg-white/90 rounded-2xl p-4 shadow-sm">
         <h3 className="font-display font-bold text-forest mb-3">All Investigations</h3>
@@ -160,8 +165,11 @@ export function ClueBoard() {
               <div
                 key={cryptid.id}
                 className={`flex items-center gap-3 p-2 rounded-lg ${
-                  discovered ? 'bg-gold/10' : isActive ? 'bg-forest/5 border border-forest/20' : unlocked ? 'bg-paper' : 'opacity-40'
+                  discovered ? 'bg-gold/10 cursor-pointer hover:bg-gold/20 transition-colors' : isActive ? 'bg-forest/5 border border-forest/20' : unlocked ? 'bg-paper' : 'opacity-40'
                 }`}
+                onClick={() => discovered ? setModalCryptid(cryptid) : undefined}
+                role={discovered ? 'button' : undefined}
+                aria-label={discovered ? `View ${cryptid.name}` : undefined}
               >
                 <div className="w-8 h-8">
                   {discovered ? (

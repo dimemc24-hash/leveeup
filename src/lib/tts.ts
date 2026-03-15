@@ -27,7 +27,11 @@ export async function speakViaEdge(text: string): Promise<boolean> {
       body: JSON.stringify({ text }),
     });
 
-    if (!response.ok) return false;
+    if (!response.ok) {
+      const errBody = await response.text().catch(() => '');
+      console.warn('[TTS] Edge function failed:', response.status, errBody);
+      return false;
+    }
 
     const blob = await response.blob();
     if (!blob.size) return false;

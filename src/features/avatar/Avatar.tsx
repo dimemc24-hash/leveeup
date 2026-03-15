@@ -1,6 +1,20 @@
 import { useGameStore } from '../../hooks/useGameStore';
 import { shopItems } from '../../data/shopItems';
-import type { EquipmentSlot } from '../../types';
+import type { EquipmentSlot, SkinTone, HairColor } from '../../types';
+
+const SKIN_COLORS: Record<SkinTone, string> = {
+  light: '#FDDBB4',
+  medium: '#D4956A',
+  brown: '#A0522D',
+  dark: '#5C3317',
+};
+
+const HAIR_COLORS: Record<HairColor, string> = {
+  blonde: '#F5D569',
+  brown: '#6B3A2A',
+  black: '#1C1C1C',
+  red: '#C0392B',
+};
 
 interface AvatarProps {
   size?: number;
@@ -32,6 +46,8 @@ export function Avatar({ size = 160, showName = false }: AvatarProps) {
 
   const equipped = getEquippedBySlot(profile.equippedItems);
   const scale = size / 160;
+  const skinColor = SKIN_COLORS[profile.skinTone] ?? SKIN_COLORS.medium;
+  const hairColor = HAIR_COLORS[profile.hairColor] ?? HAIR_COLORS.brown;
 
   return (
     <div className="flex flex-col items-center gap-2">
@@ -54,9 +70,11 @@ export function Avatar({ size = 160, showName = false }: AvatarProps) {
           {/* Body */}
           <rect x="52" y="85" width="56" height="50" rx="8" fill="#4a7c23" />
           {/* Neck */}
-          <rect x="68" y="78" width="24" height="14" rx="4" fill="#f0d0a0" />
+          <rect x="68" y="78" width="24" height="14" rx="4" fill={skinColor} />
           {/* Head */}
-          <circle cx="80" cy="58" r="24" fill="#f0d0a0" />
+          <circle cx="80" cy="58" r="24" fill={skinColor} />
+          {/* Hair — rounded cap on top 40% of head */}
+          <path d="M56 58 Q56 34 80 34 Q104 34 104 58" fill={hairColor} />
           {/* Eyes */}
           <circle cx="72" cy="54" r="3" fill="#3d2b1f" />
           <circle cx="88" cy="54" r="3" fill="#3d2b1f" />
@@ -66,8 +84,8 @@ export function Avatar({ size = 160, showName = false }: AvatarProps) {
           {/* Mouth */}
           <path d="M73 66 Q80 72 87 66" fill="none" stroke="#3d2b1f" strokeWidth="1.5" strokeLinecap="round" />
           {/* Arms */}
-          <rect x="38" y="90" width="14" height="36" rx="7" fill="#f0d0a0" />
-          <rect x="108" y="90" width="14" height="36" rx="7" fill="#f0d0a0" />
+          <rect x="38" y="90" width="14" height="36" rx="7" fill={skinColor} />
+          <rect x="108" y="90" width="14" height="36" rx="7" fill={skinColor} />
           {/* Legs */}
           <rect x="58" y="130" width="16" height="20" rx="5" fill="#6b5a4e" />
           <rect x="86" y="130" width="16" height="20" rx="5" fill="#6b5a4e" />

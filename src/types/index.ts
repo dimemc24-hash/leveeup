@@ -1,12 +1,17 @@
 // ─── User & Auth ───
 export type UserRole = 'STUDENT' | 'PARENT' | 'TEACHER';
 
+export type SkinTone = 'light' | 'medium' | 'brown' | 'dark';
+export type HairColor = 'blonde' | 'brown' | 'black' | 'red';
+
 export interface UserProfile {
   id: string;
   name: string;
   role: UserRole;
   avatarUrl?: string;
   equippedItems: string[];
+  skinTone: SkinTone;
+  hairColor: HairColor;
   createdAt: number;
 }
 

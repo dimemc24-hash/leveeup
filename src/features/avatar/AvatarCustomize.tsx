@@ -2,7 +2,21 @@ import { useState } from 'react';
 import { useGameStore } from '../../hooks/useGameStore';
 import { shopItems } from '../../data/shopItems';
 import { Avatar } from './Avatar';
-import type { EquipmentSlot } from '../../types';
+import type { EquipmentSlot, SkinTone, HairColor } from '../../types';
+
+const SKIN_TONES: { id: SkinTone; label: string; hex: string }[] = [
+  { id: 'light', label: 'Light', hex: '#FDDBB4' },
+  { id: 'medium', label: 'Medium', hex: '#D4956A' },
+  { id: 'brown', label: 'Brown', hex: '#A0522D' },
+  { id: 'dark', label: 'Dark', hex: '#5C3317' },
+];
+
+const HAIR_COLORS: { id: HairColor; label: string; hex: string }[] = [
+  { id: 'blonde', label: 'Blonde', hex: '#F5D569' },
+  { id: 'brown', label: 'Brown', hex: '#6B3A2A' },
+  { id: 'black', label: 'Black', hex: '#1C1C1C' },
+  { id: 'red', label: 'Red', hex: '#C0392B' },
+];
 
 const SLOTS: { slot: EquipmentSlot; label: string; icon: string }[] = [
   { slot: 'head', label: 'Head', icon: '🎩' },
@@ -13,7 +27,7 @@ const SLOTS: { slot: EquipmentSlot; label: string; icon: string }[] = [
 ];
 
 export function AvatarCustomize() {
-  const { profile, ownedItems, equipItem, unequipItem } = useGameStore();
+  const { profile, ownedItems, equipItem, unequipItem, setSkinTone, setHairColor } = useGameStore();
   const [activeSlot, setActiveSlot] = useState<EquipmentSlot>('head');
 
   if (!profile) return null;
@@ -47,6 +61,60 @@ export function AvatarCustomize() {
       {/* Avatar preview */}
       <div className="journal-card bg-white/90 rounded-2xl p-6 shadow-sm flex justify-center">
         <Avatar size={200} showName />
+      </div>
+
+      {/* Skin tone picker */}
+      <div className="journal-card bg-white/90 rounded-2xl p-4 shadow-sm">
+        <h3 className="font-display font-bold text-forest mb-3">Choose Skin Tone</h3>
+        <div className="flex gap-3 justify-center">
+          {SKIN_TONES.map(({ id, label, hex }) => {
+            const active = profile.skinTone === id;
+            return (
+              <button
+                key={id}
+                onClick={() => setSkinTone(id)}
+                className={`w-12 h-12 rounded-full transition-all duration-200 flex items-center justify-center ${
+                  active ? 'ring-3 ring-forest scale-110' : 'ring-2 ring-paper-dark hover:scale-105'
+                }`}
+                style={{ backgroundColor: hex }}
+                aria-label={`${label} skin tone${active ? ' (selected)' : ''}`}
+              >
+                {active && (
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                    <path d="M4 9l3.5 3.5L14 5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Hair color picker */}
+      <div className="journal-card bg-white/90 rounded-2xl p-4 shadow-sm">
+        <h3 className="font-display font-bold text-forest mb-3">Choose Hair Color</h3>
+        <div className="flex gap-3 justify-center">
+          {HAIR_COLORS.map(({ id, label, hex }) => {
+            const active = profile.hairColor === id;
+            return (
+              <button
+                key={id}
+                onClick={() => setHairColor(id)}
+                className={`w-12 h-12 rounded-full transition-all duration-200 flex items-center justify-center ${
+                  active ? 'ring-3 ring-forest scale-110' : 'ring-2 ring-paper-dark hover:scale-105'
+                }`}
+                style={{ backgroundColor: hex }}
+                aria-label={`${label} hair color${active ? ' (selected)' : ''}`}
+              >
+                {active && (
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                    <path d="M4 9l3.5 3.5L14 5" stroke={id === 'black' ? '#ccc' : 'white'} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                )}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Slot tabs */}

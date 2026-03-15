@@ -6,8 +6,8 @@ export function SpellCasterMenu() {
   return (
     <div className="spell-caster spell-caster-page p-4 max-w-lg mx-auto space-y-6">
       <div className="text-center">
-        <h1 className="font-display text-2xl font-bold text-spell-cream mb-1">Cryptid Spell Caster</h1>
-        <p className="text-spell-muted text-sm">Hear the word. Write it. Catch the cryptid.</p>
+        <h1 className="font-display text-2xl font-bold text-spell-cream mb-1">Cryptid Whispers</h1>
+        <p className="text-spell-muted text-sm">A cryptid calls from the shadows... can you write what it says?</p>
       </div>
 
       <div className="space-y-3">

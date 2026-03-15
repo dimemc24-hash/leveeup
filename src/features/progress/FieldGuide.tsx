@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useGameStore } from '../../hooks/useGameStore';
 import { cryptidRoster } from '../themes/cryptids/cryptidTheme';
+import { CryptidRevealModal } from './CryptidRevealModal';
+import type { Cryptid } from '../../types';
 
 type LoreTab = 'overview' | 'sightings' | 'facts' | 'fieldnotes';
 
@@ -9,6 +11,7 @@ export function FieldGuide() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [loreTab, setLoreTab] = useState<LoreTab>('overview');
   const [revealStage, setRevealStage] = useState<'idle' | 'clues' | 'pause' | 'reveal'>('idle');
+  const [modalCryptid, setModalCryptid] = useState<Cryptid | null>(null);
 
   const selected = selectedId ? cryptidRoster.find((c) => c.id === selectedId) : null;
   const isDiscovered = selected ? progress.discoveredCryptids.includes(selected.id) : false;
@@ -85,13 +88,19 @@ export function FieldGuide() {
                 </button>
 
                 <div className="text-center mb-4">
-                  <div className="relative mx-auto mb-4 rounded-xl overflow-hidden" style={{ boxShadow: '0 0 30px rgba(212, 168, 67, 0.5)' }}>
+                  <button
+                    className="relative mx-auto mb-4 rounded-xl overflow-hidden block cursor-pointer group"
+                    style={{ boxShadow: '0 0 30px rgba(212, 168, 67, 0.5)' }}
+                    onClick={() => setModalCryptid(selected)}
+                    aria-label={`View ${selected.name} full screen`}
+                  >
                     <img
                       src={selected.revealImage}
                       alt={selected.name}
-                      className="w-full max-h-72 object-cover"
+                      className="w-full max-h-72 object-cover group-hover:brightness-110 transition-all"
                     />
-                  </div>
+                    <span className="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] px-2 py-1 rounded-full opacity-70 group-hover:opacity-100 transition-opacity">Tap to enlarge</span>
+                  </button>
                   <h3 className="font-display text-2xl font-bold text-forest">{selected.name}</h3>
                   <p className="text-xs text-bark-light">{selected.region}</p>
                   <p className="text-sm text-bark mt-2">{selected.description}</p>
@@ -196,6 +205,8 @@ export function FieldGuide() {
           )}
         </div>
       )}
+
+      <CryptidRevealModal cryptid={modalCryptid} onClose={() => setModalCryptid(null)} />
 
       {/* Grid */}
       {!selectedId && (

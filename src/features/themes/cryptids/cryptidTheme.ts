@@ -91,7 +91,7 @@ Local legend says the creature may be the result of chimpanzees escaping from a 
     description: 'A werewolf-like beast from Cajun legend that prowls the sugar cane fields at night.',
     region: 'Cajun Country',
     difficulty: 2,
-    evidenceRequired: 10,
+    evidenceRequired: 10, // 5 × 2
     svgSilhouette: '/assets/cryptids/rougarou.svg',
     revealImage: '/assets/cryptids/reveals/rougarou.jpg',
     clues: [
@@ -130,7 +130,7 @@ The most chilling detail? The Rougarou is said to be someone you know — a neig
     description: 'The legendary ape-like creature spotted in forests across North America.',
     region: 'Pacific Northwest',
     difficulty: 3,
-    evidenceRequired: 20,
+    evidenceRequired: 20, // 5 × 4
     svgSilhouette: '/assets/cryptids/bigfoot.svg',
     revealImage: '/assets/cryptids/reveals/bigfoot.jpg',
     clues: [
@@ -170,7 +170,7 @@ What would Bigfoot look like? Witnesses consistently describe a creature standin
     description: 'A winged creature with glowing red eyes, first spotted in West Virginia.',
     region: 'Point Pleasant, WV',
     difficulty: 4,
-    evidenceRequired: 30,
+    evidenceRequired: 40, // 5 × 8
     svgSilhouette: '/assets/cryptids/mothman.svg',
     revealImage: '/assets/cryptids/reveals/mothman.jpg',
     clues: [
@@ -209,7 +209,7 @@ Over the next 13 months, over 100 residents reported seeing the Mothman. Then, o
     description: 'The "goat sucker" — a spiny creature reported across the Americas.',
     region: 'Puerto Rico & Texas',
     difficulty: 5,
-    evidenceRequired: 40,
+    evidenceRequired: 80, // 5 × 16
     svgSilhouette: '/assets/cryptids/chupacabra.svg',
     revealImage: '/assets/cryptids/reveals/chupacabra.jpg',
     clues: [
@@ -248,7 +248,7 @@ Within months, reports exploded across Latin America and the southern United Sta
     description: 'A flying creature with hooves and a forked tail from the Pine Barrens of New Jersey.',
     region: 'Pine Barrens, NJ',
     difficulty: 6,
-    evidenceRequired: 50,
+    evidenceRequired: 160, // 5 × 32
     svgSilhouette: '/assets/cryptids/jersey-devil.svg',
     revealImage: '/assets/cryptids/reveals/jersey-devil.jpg',
     clues: [
@@ -287,7 +287,7 @@ The most dramatic chapter came during January 1909, when hundreds of people acro
     description: 'A massive bird from Native American legend with a wingspan wider than an airplane.',
     region: 'Great Plains',
     difficulty: 7,
-    evidenceRequired: 65,
+    evidenceRequired: 320, // 5 × 64
     svgSilhouette: '/assets/cryptids/thunderbird.svg',
     revealImage: '/assets/cryptids/reveals/thunderbird.jpg',
     clues: [
@@ -326,7 +326,7 @@ While most scientists consider Thunderbirds mythological, sightings continue. In
     description: 'Nessie — the legendary lake creature of Scotland. Could it be a surviving dinosaur?',
     region: 'Loch Ness, Scotland',
     difficulty: 8,
-    evidenceRequired: 80,
+    evidenceRequired: 640, // 5 × 128
     svgSilhouette: '/assets/cryptids/loch-ness-monster.svg',
     revealImage: '/assets/cryptids/reveals/loch-ness-monster.jpg',
     clues: [

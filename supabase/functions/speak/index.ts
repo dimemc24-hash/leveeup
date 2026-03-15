@@ -44,7 +44,8 @@ serve(async (req) => {
 
     if (!res.ok) {
       const err = await res.text();
-      return new Response(JSON.stringify({ error: 'TTS failed', detail: err }), {
+      console.error(`ElevenLabs error ${res.status}: ${err}`);
+      return new Response(JSON.stringify({ error: 'TTS failed', status: res.status, detail: err }), {
         status: res.status,
         headers: { 'Content-Type': 'application/json', ...CORS },
       });

@@ -196,6 +196,19 @@ body {
   animation: shimmer 3s linear infinite;
 }
 
+@keyframes reveal-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes reveal-scale-in {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.animate-reveal-fade-in { animation: reveal-fade-in 0.3s ease-out; }
+.animate-reveal-scale-in { animation: reveal-scale-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
 .discovery-reveal { animation: bounce-in 0.8s ease-out; }
 .streak-fire { animation: glow-pulse 1s ease-in-out infinite; }
 

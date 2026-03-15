@@ -1,12 +1,16 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useGameStore } from '../../hooks/useGameStore';
 import { useTheme } from '../themes/engine/ThemeContext';
 import { cryptidRoster } from '../themes/cryptids/cryptidTheme';
 import { Avatar } from '../avatar/Avatar';
+import { CryptidRevealModal } from '../progress/CryptidRevealModal';
+import type { Cryptid } from '../../types';
 
 export function HomeScreen() {
   const { profile, progress } = useGameStore();
   const { getNarrative } = useTheme();
+  const [selectedCryptid, setSelectedCryptid] = useState<Cryptid | null>(null);
 
   if (!profile) return null;
 
@@ -186,45 +190,7 @@ export function HomeScreen() {
         Start Investigation!
       </Link>
 
-      {/* Practice modes: Spell Caster & Field Guide (Math) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <Link
-          to="/spell"
-          className="block rounded-2xl p-4 transition-all hover:scale-[1.02] active:scale-[0.98]"
-          style={{
-            background: 'rgba(129, 140, 248, 0.1)',
-            border: '2px solid rgba(129, 140, 248, 0.3)',
-            boxShadow: '0 4px 16px rgba(129, 140, 248, 0.1)',
-          }}
-          aria-label="Cryptid Spell Caster — hear a word and write it"
-        >
-          <div className="flex items-center gap-3">
-            <span className="text-3xl" aria-hidden="true">🔮</span>
-            <div>
-              <h3 className="font-display font-bold text-spell-accent">Spell Caster</h3>
-              <p className="text-xs text-bark-light">Listen & write</p>
-            </div>
-          </div>
-        </Link>
-        <Link
-          to="/field-guide"
-          className="block rounded-2xl p-4 transition-all hover:scale-[1.02] active:scale-[0.98]"
-          style={{
-            background: 'rgba(56, 189, 248, 0.1)',
-            border: '2px solid rgba(56, 189, 248, 0.3)',
-            boxShadow: '0 4px 16px rgba(56, 189, 248, 0.1)',
-          }}
-          aria-label="Field Guide — Math: solve and show your work"
-        >
-          <div className="flex items-center gap-3">
-            <span className="text-3xl" aria-hidden="true">📓</span>
-            <div>
-              <h3 className="font-display font-bold" style={{ color: '#38bdf8' }}>Field Guide</h3>
-              <p className="text-xs text-bark-light">Solve & document</p>
-            </div>
-          </div>
-        </Link>
-      </div>
+      <CryptidRevealModal cryptid={selectedCryptid} onClose={() => setSelectedCryptid(null)} />
 
       {/* Cryptids discovered */}
       {progress.discoveredCryptids.length > 0 && (
@@ -241,17 +207,20 @@ export function HomeScreen() {
             {progress.discoveredCryptids.map((id) => {
               const c = cryptidRoster.find((cr) => cr.id === id);
               return c ? (
-                <div
+                <button
                   key={id}
-                  className="w-14 h-14 rounded-xl p-1.5 transition-colors hover:scale-105"
+                  className="w-14 h-14 rounded-xl p-1.5 transition-all hover:scale-110 cursor-pointer relative group"
                   style={{
                     background: 'rgba(255,184,0,0.1)',
                     border: '2px solid rgba(255,184,0,0.3)',
                   }}
                   title={c.name}
+                  aria-label={`View ${c.name}`}
+                  onClick={() => setSelectedCryptid(c)}
                 >
                   <img src={c.svgSilhouette} alt={c.name} className="w-full h-full" />
-                </div>
+                  <span className="absolute inset-0 flex items-end justify-center pb-0.5 opacity-0 group-hover:opacity-100 transition-opacity text-[8px] text-gold font-bold">Tap</span>
+                </button>
               ) : null;
             })}
           </div>
