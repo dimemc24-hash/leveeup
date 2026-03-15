@@ -83,6 +83,7 @@ export interface PlayerProgress {
   discoveredCryptids: string[];
   activeInvestigation: string | null;
   investigationProgress: Record<string, InvestigationProgress>;
+  pendingCapture: string | null;
   fieldSupplies: number;
 }
 

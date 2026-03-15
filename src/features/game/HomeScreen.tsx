@@ -17,6 +17,7 @@ export function HomeScreen() {
   const activeInv = progress.activeInvestigation;
   const invProgress = activeInv ? progress.investigationProgress[activeInv] : null;
   const activeCryptid = activeInv ? cryptidRoster.find((c) => c.id === activeInv) : null;
+  const pendingCryptid = progress.pendingCapture ? cryptidRoster.find((c) => c.id === progress.pendingCapture) : null;
 
   const today = new Date().toISOString().slice(0, 10);
   const isNewDay = progress.lastPlayDate !== today;
@@ -78,6 +79,45 @@ export function HomeScreen() {
           </div>
           <span className="animate-fire text-4xl" aria-hidden="true">🔥</span>
         </div>
+      )}
+
+      {/* Capture ready card */}
+      {pendingCryptid && (
+        <Link
+          to="/dungeon"
+          className="block rounded-2xl p-5 relative overflow-hidden transition-all hover:scale-[1.01] active:scale-[0.99]"
+          style={{
+            background: 'linear-gradient(135deg, rgba(255,184,0,0.15) 0%, rgba(255,140,0,0.1) 100%)',
+            border: '2px solid rgba(255,184,0,0.5)',
+            boxShadow: '0 0 40px rgba(255,184,0,0.15), 0 0 80px rgba(255,184,0,0.05)',
+            animation: 'glow-pulse 2s ease-in-out infinite',
+          }}
+        >
+          <div className="flex items-center gap-4">
+            <div
+              className="w-16 h-16 rounded-xl p-2 flex items-center justify-center flex-shrink-0"
+              style={{ background: 'rgba(255,184,0,0.2)', border: '2px solid rgba(255,184,0,0.3)' }}
+            >
+              <img src={pendingCryptid.svgSilhouette} alt="" className="w-full h-full animate-float" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="font-display font-bold text-gold text-xs uppercase tracking-wider mb-0.5">CAPTURE READY!</div>
+              <h3 className="font-display font-bold text-white text-lg leading-tight">
+                The {pendingCryptid.name} has been spotted!
+              </h3>
+              <p className="text-bark-light text-xs mt-1">Enter the swamp to make the capture!</p>
+            </div>
+          </div>
+          <div
+            className="mt-3 rounded-xl py-2.5 text-center font-display font-bold text-sm text-white"
+            style={{
+              background: 'linear-gradient(135deg, #FFB800 0%, #FF8C00 100%)',
+              boxShadow: '0 2px 0 #CC7000',
+            }}
+          >
+            Enter Flashlight Hunt
+          </div>
+        </Link>
       )}
 
       {/* Stats row */}

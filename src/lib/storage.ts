@@ -44,6 +44,7 @@ export const DEFAULT_PROGRESS: PlayerProgress = {
   investigationProgress: {
     'honey-island-swamp-monster': { ...DEFAULT_INVESTIGATION },
   },
+  pendingCapture: null,
   fieldSupplies: 1,
 };
 

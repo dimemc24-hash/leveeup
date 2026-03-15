@@ -24,6 +24,7 @@ interface GameStore {
   answerQuestion: (answer: string | string[]) => { correct: boolean; xp: number; milestones: MilestoneEvent[] };
   nextQuestion: () => boolean;
   endSession: () => void;
+  completePendingCapture: (cryptidId: string) => void;
 
   // Avatar customization
   setSkinTone: (tone: SkinTone) => void;
@@ -69,6 +70,7 @@ const defaultProgress: PlayerProgress = {
       completed: false,
     },
   },
+  pendingCapture: null,
   fieldSupplies: 1,
 };
 
@@ -237,50 +239,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
           },
         };
 
-        // Cryptid discovered
-        if (completed && !newProgress.discoveredCryptids.includes(activeId)) {
-          newProgress.discoveredCryptids = [...newProgress.discoveredCryptids, activeId];
+        // Investigation complete — set pending capture instead of auto-discovering
+        if (completed && !newProgress.discoveredCryptids.includes(activeId) && newProgress.pendingCapture !== activeId) {
+          newProgress = { ...newProgress, pendingCapture: activeId };
 
           milestones.push({
             type: 'cryptid_discovered',
-            message: activeId === 'loch-ness-monster'
-              ? `LEGENDARY DISCOVERY! You've proven the existence of the ${cryptid.name}! You are a TRUE Master Investigator!`
-              : `AMAZING DISCOVERY! You've identified the ${cryptid.name}!`,
+            message: `The ${cryptid.name} has been spotted! Head to the Flashlight Hunt to make the capture!`,
             data: { cryptidId: activeId, cryptidName: cryptid.name },
           });
-
-          // Auto-advance to next cryptid
-          const nextCryptid = getNextCryptid(activeId);
-          if (nextCryptid) {
-            const nextInv: InvestigationProgress = {
-              cryptidId: nextCryptid.id,
-              cluesFound: 0,
-              totalClues: nextCryptid.evidenceRequired,
-              evidenceCollected: 0,
-              evidenceNeeded: nextCryptid.evidenceRequired,
-              completed: false,
-            };
-            newProgress = {
-              ...newProgress,
-              activeInvestigation: nextCryptid.id,
-              unlockedCryptids: newProgress.unlockedCryptids.includes(nextCryptid.id)
-                ? newProgress.unlockedCryptids
-                : [...newProgress.unlockedCryptids, nextCryptid.id],
-              investigationProgress: {
-                ...newProgress.investigationProgress,
-                [nextCryptid.id]: nextInv,
-              },
-            };
-
-            milestones.push({
-              type: 'cryptid_unlocked',
-              message: `New investigation unlocked: ${nextCryptid.name}! (${nextCryptid.evidenceRequired} evidence needed)`,
-              data: { cryptidId: nextCryptid.id, evidenceRequired: nextCryptid.evidenceRequired },
-            });
-          } else {
-            // All cryptids discovered - no more active investigation
-            newProgress = { ...newProgress, activeInvestigation: null };
-          }
         }
       }
     }
@@ -325,6 +292,46 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   endSession() {
     set({ session: null, consecutiveFailures: 0 });
+  },
+
+  completePendingCapture(cryptidId: string) {
+    const { profile, progress } = get();
+    if (!profile || progress.pendingCapture !== cryptidId) return;
+
+    let newProgress: PlayerProgress = {
+      ...progress,
+      pendingCapture: null,
+      discoveredCryptids: [...progress.discoveredCryptids, cryptidId],
+    };
+
+    // Auto-advance to next cryptid
+    const nextCryptid = getNextCryptid(cryptidId);
+    if (nextCryptid) {
+      const nextInv: InvestigationProgress = {
+        cryptidId: nextCryptid.id,
+        cluesFound: 0,
+        totalClues: nextCryptid.evidenceRequired,
+        evidenceCollected: 0,
+        evidenceNeeded: nextCryptid.evidenceRequired,
+        completed: false,
+      };
+      newProgress = {
+        ...newProgress,
+        activeInvestigation: nextCryptid.id,
+        unlockedCryptids: newProgress.unlockedCryptids.includes(nextCryptid.id)
+          ? newProgress.unlockedCryptids
+          : [...newProgress.unlockedCryptids, nextCryptid.id],
+        investigationProgress: {
+          ...newProgress.investigationProgress,
+          [nextCryptid.id]: nextInv,
+        },
+      };
+    } else {
+      newProgress = { ...newProgress, activeInvestigation: null };
+    }
+
+    storage.setProgress(profile.id, newProgress);
+    set({ progress: newProgress });
   },
 
   // Avatar customization

@@ -19,6 +19,8 @@ const SpellCasterPlay = lazy(() => import('./features/spell-caster/SpellCasterPl
 const FieldGuideMenu = lazy(() => import('./features/field-guide/FieldGuideMenu').then((m) => ({ default: m.FieldGuideMenu })));
 const FieldGuidePlay = lazy(() => import('./features/field-guide/FieldGuidePlay').then((m) => ({ default: m.FieldGuidePlay })));
 const AvatarCustomize = lazy(() => import('./features/avatar/AvatarCustomize').then((m) => ({ default: m.AvatarCustomize })));
+const DungeonMenu = lazy(() => import('./features/dungeon/DungeonMenu').then((m) => ({ default: m.DungeonMenu })));
+const DungeonGame = lazy(() => import('./features/dungeon/DungeonGame').then((m) => ({ default: m.DungeonGame })));
 
 function LoadingFallback() {
   return (
@@ -50,6 +52,8 @@ function AppRoutes() {
           <Route path="/spell/play/:packId" element={<SpellCasterPlay />} />
           <Route path="/field-guide" element={<FieldGuideMenu />} />
           <Route path="/field-guide/play/:packId" element={<FieldGuidePlay />} />
+          <Route path="/dungeon" element={<DungeonMenu />} />
+          <Route path="/dungeon/play" element={<DungeonGame />} />
         </Routes>
       </Suspense>
     </Layout>

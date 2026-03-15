@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
 import { useGameStore } from '../../hooks/useGameStore';
+import { cryptidRoster } from '../themes/cryptids/cryptidTheme';
 
 export function ResultsScreen() {
   const { session, progress, endSession } = useGameStore();
+  const pendingCryptid = progress.pendingCapture ? cryptidRoster.find((c) => c.id === progress.pendingCapture) : null;
 
   // Use session data before clearing
   const answers = session?.answers ?? [];
@@ -63,6 +65,29 @@ export function ResultsScreen() {
           ))}
         </div>
       </div>
+
+      {/* Pending capture prompt */}
+      {pendingCryptid && (
+        <Link
+          to="/dungeon"
+          onClick={() => endSession()}
+          className="block rounded-2xl p-4 text-center transition-all hover:scale-[1.01] active:scale-[0.99]"
+          style={{
+            background: 'linear-gradient(135deg, rgba(255,184,0,0.15) 0%, rgba(255,140,0,0.1) 100%)',
+            border: '2px solid rgba(255,184,0,0.4)',
+            boxShadow: '0 0 30px rgba(255,184,0,0.15)',
+          }}
+        >
+          <p className="font-display font-bold text-gold text-lg">Investigation Complete!</p>
+          <p className="text-bark-light text-sm mt-1">Head to Flashlight Hunt to capture the {pendingCryptid.name}!</p>
+          <div
+            className="mt-3 rounded-xl py-2.5 font-display font-bold text-sm text-white"
+            style={{ background: 'linear-gradient(135deg, #FFB800 0%, #FF8C00 100%)', boxShadow: '0 2px 0 #CC7000' }}
+          >
+            Enter Flashlight Hunt
+          </div>
+        </Link>
+      )}
 
       <div className="flex gap-2">
         <Link
