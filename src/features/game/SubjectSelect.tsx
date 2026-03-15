@@ -153,6 +153,65 @@ export function SubjectSelect() {
     );
   }
 
+  // Sub-mode picker for Mixed
+  if (subMode === 'mixed-sub') {
+    return (
+      <div className="p-4 max-w-lg mx-auto space-y-4 animate-slide-up">
+        <div className="journal-card bg-white/90 rounded-2xl p-5 shadow-sm">
+          <h2 className="font-display text-xl font-bold text-forest mb-1">Mixed Mission</h2>
+          <p className="text-sm text-bark-light">Choose your investigation type</p>
+        </div>
+        <div className="space-y-3">
+          <button
+            onClick={() => { startQuestionSession('mixed'); }}
+            disabled={loading}
+            className="w-full rounded-xl p-4 md:p-5 text-left border-2 min-h-[64px] text-base md:text-lg transition-all hover:shadow-md flex items-center gap-3 disabled:opacity-60 bg-amber-100 border-amber-300 text-amber-800"
+            aria-label="Full Investigation — mixed questions"
+          >
+            <span className="text-3xl">🎯</span>
+            <div className="flex-1">
+              <div className="font-bold">Full Investigation</div>
+              <div className="text-xs opacity-75">Answer questions from all subjects</div>
+            </div>
+          </button>
+          <button
+            onClick={() => { doCycleMark('math-fieldguide'); navigate('/field-guide'); }}
+            className="w-full rounded-xl p-4 md:p-5 text-left border-2 min-h-[64px] text-base md:text-lg transition-all hover:shadow-md flex items-center gap-3 bg-sky-100 border-sky-300 text-sky-800"
+            aria-label="Field Guide Challenge — solve and show your work"
+          >
+            <span className="text-3xl">📓</span>
+            <div className="flex-1">
+              <div className="font-bold">Field Guide Challenge</div>
+              <div className="text-xs opacity-75">Solve & document your findings</div>
+            </div>
+          </button>
+          <button
+            onClick={() => { doCycleMark('ela-whispers'); navigate('/spell'); }}
+            className="w-full rounded-xl p-4 md:p-5 text-left border-2 min-h-[64px] text-base md:text-lg transition-all hover:shadow-md flex items-center gap-3 bg-indigo-100 border-indigo-300 text-indigo-800"
+            aria-label="Cryptid Whispers — listen and write what you hear"
+          >
+            <span className="text-3xl">👂</span>
+            <div className="flex-1">
+              <div className="font-bold">Cryptid Whispers</div>
+              <div className="text-xs opacity-75">Listen carefully and write what you hear</div>
+            </div>
+          </button>
+        </div>
+        <button
+          onClick={() => setSubMode(null)}
+          className="w-full py-3 text-bark-light text-sm font-medium hover:text-forest transition-colors"
+        >
+          Back to missions
+        </button>
+        {loading && (
+          <div className="flex items-center justify-center py-4">
+            <div className="w-8 h-8 border-4 border-forest/20 border-t-forest rounded-full animate-spin" />
+          </div>
+        )}
+      </div>
+    );
+  }
+
   // Sub-mode picker for ELA
   if (subMode === 'ela-sub') {
     const caseDone = cycle.includes('ela-casefile');

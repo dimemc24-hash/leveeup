@@ -5,6 +5,8 @@ import { HandwritingCanvas, type HandwritingCanvasRef } from './HandwritingCanva
 import { speak } from '../../lib/tts';
 import { recognizeHandwriting, isSpellingCorrect } from '../../lib/ocr';
 import type { SpellCasterCryptid } from '../../data/spellCasterWords';
+import { useGameStore } from '../../hooks/useGameStore';
+import { storage } from '../../lib/storage';
 
 type Phase = 'writing' | 'checking' | 'correct' | 'wrong' | 'complete';
 
@@ -80,6 +82,14 @@ export function SpellCasterPlay() {
     const fromCorrect = phase === 'correct';
     if (fromCorrect) setCorrectCount((c) => c + 1);
     if (wordIndex >= words.length - 1) {
+      const finalCorrect = correctCount + (fromCorrect ? 1 : 0);
+      const { progress, profile } = useGameStore.getState();
+      if (profile) {
+        const xpEarned = 20 + finalCorrect * 10;
+        const newProg = { ...progress, xp: progress.xp + xpEarned, totalXp: progress.totalXp + xpEarned, level: Math.floor((progress.totalXp + xpEarned) / 100) + 1 };
+        storage.setProgress(profile.id, newProg);
+        useGameStore.setState({ progress: newProg });
+      }
       setPhase('complete');
       return;
     }
@@ -88,7 +98,7 @@ export function SpellCasterPlay() {
     setPhase('writing');
     setRecognizedWord('');
     setErrorMessage('');
-  }, [wordIndex, words.length, phase]);
+  }, [wordIndex, words.length, phase, correctCount]);
 
   if (!pack) {
     return (
