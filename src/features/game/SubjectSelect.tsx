@@ -13,7 +13,7 @@ const subjects: { id: Subject | 'mixed'; label: string; subtitle: string; icon: 
   { id: 'mixed', label: 'Mixed Mission', subtitle: '', icon: '🎯', color: 'bg-forest/10 border-forest text-forest' },
 ];
 
-type SubMode = 'math-sub' | 'ela-sub' | null;
+type SubMode = 'math-sub' | 'ela-sub' | 'mixed-sub' | null;
 
 export function SubjectSelect() {
   const navigate = useNavigate();
@@ -62,6 +62,11 @@ export function SubjectSelect() {
     // ELA shows sub-mode picker
     if (subject === 'ela') {
       setSubMode('ela-sub');
+      return;
+    }
+    // Mixed shows sub-mode picker
+    if (subject === 'mixed') {
+      setSubMode('mixed-sub');
       return;
     }
     // Other subjects go directly to question flow

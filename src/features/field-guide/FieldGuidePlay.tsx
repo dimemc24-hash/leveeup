@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { mathProblemPacks, fieldGuideCryptids } from '../../data/mathFieldGuide';
 import { HandwritingCanvas, type HandwritingCanvasRef } from '../spell-caster/HandwritingCanvas';
 import { evaluateMathCanvas } from '../../lib/mathEval';
+import { useGameStore } from '../../hooks/useGameStore';
+import { storage } from '../../lib/storage';
 import {
   parseStepEvaluation,
   isAnswerCorrect,
@@ -106,6 +108,14 @@ export function FieldGuidePlay() {
 
   const handleNextProblem = useCallback(() => {
     if (problemIndex >= problems.length - 1) {
+      const { progress, profile } = useGameStore.getState();
+      if (profile) {
+        const passed = stepResults.filter(r => r.outcome === 'passed').length;
+        const xpEarned = 25 + passed * 15;
+        const newProg = { ...progress, xp: progress.xp + xpEarned, totalXp: progress.totalXp + xpEarned, level: Math.floor((progress.totalXp + xpEarned) / 100) + 1 };
+        storage.setProgress(profile.id, newProg);
+        useGameStore.setState({ progress: newProg });
+      }
       navigate('/field-guide');
       return;
     }

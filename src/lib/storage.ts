@@ -14,6 +14,32 @@ import type {
   InvestigationProgress,
 } from '../types';
 
+// ─── Supabase write retry queue ───
+
+const RETRY_KEY = 'lv_pending_writes';
+type PendingWrite = { table: string; id: string; payload: Record<string, unknown>; ts: number };
+function queueRetry(table: string, id: string, payload: Record<string, unknown>) {
+  try {
+    const existing = JSON.parse(localStorage.getItem(RETRY_KEY) ?? '[]') as PendingWrite[];
+    const filtered = existing.filter(w => !(w.table === table && w.id === id));
+    filtered.push({ table, id, payload, ts: Date.now() });
+    localStorage.setItem(RETRY_KEY, JSON.stringify(filtered.slice(-20)));
+  } catch { /* ignore */ }
+}
+async function flushRetryQueue() {
+  if (!_supabaseReady) return;
+  try {
+    const pending = JSON.parse(localStorage.getItem(RETRY_KEY) ?? '[]') as PendingWrite[];
+    if (!pending.length) return;
+    localStorage.removeItem(RETRY_KEY);
+    for (const w of pending) { await supabase.from(w.table).update(w.payload).eq('id', w.id); }
+  } catch { /* ignore */ }
+}
+if (typeof window !== 'undefined') {
+  window.addEventListener('focus', () => { flushRetryQueue().catch(() => {}); });
+  window.addEventListener('online', () => { flushRetryQueue().catch(() => {}); });
+}
+
 // ─── Default data ───
 
 const DEFAULT_INVESTIGATION: InvestigationProgress = {
@@ -191,6 +217,7 @@ export async function initializeFromSupabase(): Promise<boolean> {
     }
 
     _supabaseReady = true;
+    flushRetryQueue().catch(() => {});
     return true;
   } catch (err) {
     logSupabaseError('initializeFromSupabase', err);
@@ -316,7 +343,7 @@ export function setProgress(profileId: string, progress: PlayerProgress): void {
         total_xp: progress.totalXp,
       })
       .eq('id', profileId)
-      .then(null, (err) => logSupabaseError('setProgress', err));
+      .then(null, () => queueRetry('students', profileId, { game_state: progress, total_xp: progress.totalXp }));
   }
 
   lsWrite(LS_KEYS.progress(profileId), progress);

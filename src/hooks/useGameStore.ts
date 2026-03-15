@@ -24,7 +24,7 @@ interface GameStore {
   answerQuestion: (answer: string | string[]) => { correct: boolean; xp: number; milestones: MilestoneEvent[] };
   nextQuestion: () => boolean;
   endSession: () => void;
-  completePendingCapture: (cryptidId: string) => void;
+  completePendingCapture: (cryptidId: string, captureXp?: number) => void;
 
   // Subject rotation cycle
   markCycleDone: (unit: string) => void;
@@ -298,7 +298,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ session: null, consecutiveFailures: 0 });
   },
 
-  completePendingCapture(cryptidId: string) {
+  completePendingCapture(cryptidId: string, captureXp = 0) {
     const { profile, progress } = get();
     if (!profile || progress.pendingCapture !== cryptidId) return;
 
@@ -306,6 +306,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
       ...progress,
       pendingCapture: null,
       discoveredCryptids: [...progress.discoveredCryptids, cryptidId],
+      xp: progress.xp + captureXp,
+      totalXp: progress.totalXp + captureXp,
+      level: Math.floor((progress.totalXp + captureXp) / 100) + 1,
     };
 
     // Auto-advance to next cryptid

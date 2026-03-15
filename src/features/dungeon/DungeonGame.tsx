@@ -3,15 +3,33 @@ import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '../../hooks/useGameStore';
 import { cryptidRoster } from '../themes/cryptids/cryptidTheme';
 
-/* ── Constants ── */
-const TILE = 48;
-const COLS = 7;
-const ROWS = 9;
-const TOTAL_CLUES = 5;
-const FLASHLIGHT_RADIUS = 2.5; // tiles
+/* ── Per-cryptid grid config ── */
+const CRYPTID_CONFIG: Record<string, { cols: number; rows: number; clues: number; minutes: number }> = {
+  'honey-island-swamp-monster': { cols: 15, rows: 15, clues: 5, minutes: 3 },
+  'rougarou':                   { cols: 18, rows: 16, clues: 6, minutes: 4 },
+  'bigfoot':                    { cols: 20, rows: 18, clues: 7, minutes: 4 },
+  'mothman':                    { cols: 22, rows: 20, clues: 7, minutes: 5 },
+  'chupacabra':                 { cols: 24, rows: 20, clues: 8, minutes: 5 },
+  'jersey-devil':               { cols: 25, rows: 22, clues: 8, minutes: 5 },
+  'thunderbird':                { cols: 26, rows: 22, clues: 9, minutes: 6 },
+  'loch-ness-monster':          { cols: 28, rows: 24, clues: 10, minutes: 6 },
+};
+const DEFAULT_CONFIG = { cols: 15, rows: 15, clues: 5, minutes: 3 };
+
+/* ── Capture XP by cryptid (scales with difficulty) ── */
+const CAPTURE_XP: Record<string, number> = {
+  'honey-island-swamp-monster': 50,
+  'rougarou':                   75,
+  'bigfoot':                    100,
+  'mothman':                    100,
+  'chupacabra':                 125,
+  'jersey-devil':               125,
+  'thunderbird':                150,
+  'loch-ness-monster':          175,
+};
+const DEFAULT_CAPTURE_XP = 50;
 
 type Dir = 'up' | 'down' | 'left' | 'right';
-
 interface Pos { x: number; y: number }
 
 /* Simple seeded random from cryptid id */
@@ -25,22 +43,21 @@ function seededRandom(seed: string) {
 const WALL = 1;
 const FLOOR = 0;
 
-function generateMap(cryptidId: string): { map: number[][]; cluePositions: Pos[]; startPos: Pos } {
+function generateMap(cryptidId: string, cols: number, rows: number, totalClues: number): { map: number[][]; cluePositions: Pos[]; startPos: Pos } {
   const rand = seededRandom(cryptidId);
-  // Fill with floor
-  const map: number[][] = Array.from({ length: ROWS }, () => Array(COLS).fill(FLOOR));
+  const map: number[][] = Array.from({ length: rows }, () => Array(cols).fill(FLOOR));
 
   // Borders are walls
-  for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) {
-    if (x === 0 || x === COLS - 1 || y === 0 || y === ROWS - 1) map[y][x] = WALL;
+  for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) {
+    if (x === 0 || x === cols - 1 || y === 0 || y === rows - 1) map[y][x] = WALL;
   }
 
-  // Scatter some interior walls (not too many)
-  const wallCount = 6 + Math.floor(rand() * 4);
+  // Scatter interior walls (scale with grid size)
+  const wallCount = Math.floor((cols * rows) * 0.08) + Math.floor(rand() * Math.floor((cols * rows) * 0.04));
   for (let i = 0; i < wallCount; i++) {
-    const wx = 1 + Math.floor(rand() * (COLS - 2));
-    const wy = 1 + Math.floor(rand() * (ROWS - 2));
-    if (wx === 1 && wy === 1) continue; // keep start clear
+    const wx = 1 + Math.floor(rand() * (cols - 2));
+    const wy = 1 + Math.floor(rand() * (rows - 2));
+    if (wx === 1 && wy === 1) continue;
     map[wy][wx] = WALL;
   }
 
@@ -50,15 +67,14 @@ function generateMap(cryptidId: string): { map: number[][]; cluePositions: Pos[]
 
   // Place clues on floor tiles
   const floorTiles: Pos[] = [];
-  for (let y = 1; y < ROWS - 1; y++) for (let x = 1; x < COLS - 1; x++) {
+  for (let y = 1; y < rows - 1; y++) for (let x = 1; x < cols - 1; x++) {
     if (map[y][x] === FLOOR && !(x === 1 && y === 1)) floorTiles.push({ x, y });
   }
-  // Shuffle
   for (let i = floorTiles.length - 1; i > 0; i--) {
     const j = Math.floor(rand() * (i + 1));
     [floorTiles[i], floorTiles[j]] = [floorTiles[j], floorTiles[i]];
   }
-  const cluePositions = floorTiles.slice(0, TOTAL_CLUES);
+  const cluePositions = floorTiles.slice(0, totalClues);
 
   return { map, cluePositions, startPos };
 }
@@ -77,24 +93,76 @@ export function DungeonGame() {
   const pendingId = progress.pendingCapture;
   const cryptid = pendingId ? cryptidRoster.find((c) => c.id === pendingId) : null;
 
+  /* ── Derive grid constants from config ── */
+  const cfg = CRYPTID_CONFIG[pendingId ?? ''] ?? DEFAULT_CONFIG;
+  const COLS = cfg.cols;
+  const ROWS = cfg.rows;
+  const TOTAL_CLUES = cfg.clues;
+  const availableW = Math.min(520, (typeof window !== 'undefined' ? window.innerWidth : 400) - 32);
+  const TILE = Math.floor(availableW / COLS);
+  const canvasW = COLS * TILE;
+  const canvasH = ROWS * TILE;
+  const FLASHLIGHT_RADIUS = Math.max(3, Math.floor(COLS / 5));
+
   const [playerPos, setPlayerPos] = useState<Pos>({ x: 1, y: 1 });
   const [facing, setFacing] = useState<Dir>('down');
   const [collectedClues, setCollectedClues] = useState<Set<number>>(new Set());
   const [won, setWon] = useState(false);
   const [showVictory, setShowVictory] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(cfg.minutes * 60);
+  const [timeExpired, setTimeExpired] = useState(false);
 
-  const dungeonData = useRef(generateMap(pendingId ?? 'default'));
+  const dungeonData = useRef(generateMap(pendingId ?? 'default', COLS, ROWS, TOTAL_CLUES));
   const { map, cluePositions } = dungeonData.current;
-  // Preserve cryptid ref so victory screen still renders after pendingCapture is cleared
   const capturedCryptid = useRef(cryptid);
 
-  // Redirect if no pending capture (but not while showing victory screen)
+  /* ── Canvas refs ── */
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imagesRef = useRef<Record<string, HTMLImageElement>>({});
+  const imagesLoadedRef = useRef(false);
+
+  // Preload images
   useEffect(() => {
-    if (!pendingId && !won) navigate('/dungeon');
-  }, [pendingId, won, navigate]);
+    const srcs = [
+      '/assets/dungeon/tile-wall.png',
+      '/assets/dungeon/tile-floor.png',
+      '/assets/dungeon/player.png',
+      ...CLUE_ICONS,
+    ];
+    let loaded = 0;
+    srcs.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+      img.onload = () => {
+        loaded++;
+        if (loaded === srcs.length) imagesLoadedRef.current = true;
+      };
+      imagesRef.current[src] = img;
+    });
+  }, []);
+
+  // Redirect if no pending capture (but not while showing victory/expired)
+  useEffect(() => {
+    if (!pendingId && !won && !timeExpired) navigate('/dungeon');
+  }, [pendingId, won, timeExpired, navigate]);
+
+  /* ── Countdown timer ── */
+  useEffect(() => {
+    if (won || timeExpired) return;
+    const iv = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          setTimeExpired(true);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(iv);
+  }, [won, timeExpired]);
 
   const tryMove = useCallback((dir: Dir) => {
-    if (won) return;
+    if (won || timeExpired) return;
     setFacing(dir);
     setPlayerPos((prev) => {
       const delta: Record<Dir, Pos> = { up: { x: 0, y: -1 }, down: { x: 0, y: 1 }, left: { x: -1, y: 0 }, right: { x: 1, y: 0 } };
@@ -103,11 +171,11 @@ export function DungeonGame() {
       if (nx < 0 || nx >= COLS || ny < 0 || ny >= ROWS || map[ny][nx] === WALL) return prev;
       return { x: nx, y: ny };
     });
-  }, [map, won]);
+  }, [map, won, timeExpired, COLS, ROWS]);
 
   // Check clue collection after move
   useEffect(() => {
-    if (won) return;
+    if (won || timeExpired) return;
     cluePositions.forEach((cp, idx) => {
       if (cp.x === playerPos.x && cp.y === playerPos.y && !collectedClues.has(idx)) {
         setCollectedClues((prev) => {
@@ -120,13 +188,14 @@ export function DungeonGame() {
         });
       }
     });
-  }, [playerPos, cluePositions, collectedClues, won]);
+  }, [playerPos, cluePositions, collectedClues, won, timeExpired, TOTAL_CLUES]);
 
-  // Victory: complete capture after brief delay
+  // Victory: complete capture + award XP after brief delay
   useEffect(() => {
     if (!won || !pendingId) return;
     const t = setTimeout(() => {
-      useGameStore.getState().completePendingCapture(pendingId);
+      const xpAward = CAPTURE_XP[pendingId] ?? DEFAULT_CAPTURE_XP;
+      useGameStore.getState().completePendingCapture(pendingId, xpAward);
       setShowVictory(true);
     }, 600);
     return () => clearTimeout(t);
@@ -146,14 +215,169 @@ export function DungeonGame() {
   // Touch controls
   const touchStart = useRef<{ x: number; y: number } | null>(null);
 
+  /* ── Canvas draw loop ── */
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let rafId: number;
+
+    const draw = () => {
+      if (!imagesLoadedRef.current) {
+        rafId = requestAnimationFrame(draw);
+        return;
+      }
+
+      const imgs = imagesRef.current;
+      const floorImg = imgs['/assets/dungeon/tile-floor.png'];
+      const wallImg = imgs['/assets/dungeon/tile-wall.png'];
+      const playerImg = imgs['/assets/dungeon/player.png'];
+
+      ctx.clearRect(0, 0, canvasW, canvasH);
+
+      // 1. Draw floor everywhere
+      for (let y = 0; y < ROWS; y++) {
+        for (let x = 0; x < COLS; x++) {
+          ctx.drawImage(floorImg, x * TILE, y * TILE, TILE, TILE);
+        }
+      }
+
+      // 2. Draw walls
+      for (let y = 0; y < ROWS; y++) {
+        for (let x = 0; x < COLS; x++) {
+          if (map[y][x] === WALL) {
+            ctx.drawImage(wallImg, x * TILE, y * TILE, TILE, TILE);
+          }
+        }
+      }
+
+      // 3. Draw clues (visible within flashlight range)
+      const dist = (a: Pos, b: Pos) => Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
+      cluePositions.forEach((cp, idx) => {
+        if (collectedClues.has(idx)) return;
+        const d = dist(playerPos, cp);
+        const outerLimit = FLASHLIGHT_RADIUS * 1.5;
+        if (d > outerLimit) return;
+        const alpha = d <= FLASHLIGHT_RADIUS ? 1.0 : 1.0 - ((d - FLASHLIGHT_RADIUS) / (outerLimit - FLASHLIGHT_RADIUS));
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        const clueImg = imgs[CLUE_ICONS[idx % CLUE_ICONS.length]];
+        const pad = TILE * 0.15;
+        ctx.drawImage(clueImg, cp.x * TILE + pad, cp.y * TILE + pad, TILE - pad * 2, TILE - pad * 2);
+        ctx.restore();
+      });
+
+      // 4. Draw player
+      ctx.save();
+      const px = playerPos.x * TILE;
+      const py = playerPos.y * TILE;
+      if (facing === 'left') {
+        ctx.translate(px + TILE, py);
+        ctx.scale(-1, 1);
+        ctx.drawImage(playerImg, 0, 0, TILE, TILE);
+      } else {
+        ctx.drawImage(playerImg, px, py, TILE, TILE);
+      }
+      ctx.restore();
+
+      // 5. Darkness overlay with flashlight hole
+      ctx.save();
+      // Draw full dark layer
+      ctx.fillStyle = 'rgba(0,0,0,0.88)';
+      ctx.fillRect(0, 0, canvasW, canvasH);
+      // Punch flashlight circle
+      ctx.globalCompositeOperation = 'destination-out';
+      const cx = playerPos.x * TILE + TILE / 2;
+      const cy = playerPos.y * TILE + TILE / 2;
+      const r = FLASHLIGHT_RADIUS * TILE;
+      const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+      grad.addColorStop(0, 'rgba(0,0,0,1)');
+      grad.addColorStop(0.6, 'rgba(0,0,0,1)');
+      grad.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      rafId = requestAnimationFrame(draw);
+    };
+
+    rafId = requestAnimationFrame(draw);
+    return () => cancelAnimationFrame(rafId);
+  }, [playerPos, facing, collectedClues, map, cluePositions, canvasW, canvasH, TILE, COLS, ROWS, FLASHLIGHT_RADIUS]);
+
   // Update ref while we still have cryptid
   if (cryptid) capturedCryptid.current = cryptid;
   if (!capturedCryptid.current && !pendingId) return null;
 
-  const dist = (a: Pos, b: Pos) => Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
+  /* ── Format timer ── */
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = timeLeft % 60;
+  const timerStr = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  const timerUrgent = timeLeft <= 60 && !won;
+
+  /* ── Time expired screen ── */
+  if (timeExpired && !won) {
+    return (
+      <div className="p-4 max-w-lg mx-auto space-y-6 animate-slide-up text-center">
+        <div
+          className="rounded-2xl p-8"
+          style={{
+            background: 'linear-gradient(180deg, rgba(220,40,40,0.15) 0%, rgba(180,20,20,0.08) 100%)',
+            border: '2px solid rgba(220,40,40,0.4)',
+            boxShadow: '0 0 40px rgba(220,40,40,0.15)',
+          }}
+        >
+          <div className="text-6xl mb-4">⏰</div>
+          <h1 className="font-display text-3xl font-bold text-red-400 mb-2">TIME'S UP!</h1>
+          <p className="text-white text-lg mb-1">The {capturedCryptid.current?.name} slipped away...</p>
+          <p className="text-bark-light text-sm mt-2">
+            You found {collectedClues.size} of {TOTAL_CLUES} clues before time ran out.
+          </p>
+        </div>
+        <div className="flex gap-3 justify-center">
+          <button
+            onClick={() => {
+              // Reset and retry
+              setPlayerPos({ x: 1, y: 1 });
+              setFacing('down');
+              setCollectedClues(new Set());
+              setWon(false);
+              setShowVictory(false);
+              setTimeLeft(cfg.minutes * 60);
+              setTimeExpired(false);
+              dungeonData.current = generateMap(pendingId ?? 'default', COLS, ROWS, TOTAL_CLUES);
+            }}
+            className="rounded-2xl px-6 py-3 font-display font-bold text-white transition-all hover:scale-[1.02] active:scale-[0.98]"
+            style={{
+              background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+              boxShadow: '0 4px 0 #b45309, 0 0 20px rgba(245,158,11,0.2)',
+              border: '2px solid rgba(255,255,255,0.15)',
+            }}
+          >
+            Try Again
+          </button>
+          <button
+            onClick={() => navigate('/dungeon')}
+            className="rounded-2xl px-6 py-3 font-display font-bold text-bark-light transition-all hover:scale-[1.02] active:scale-[0.98]"
+            style={{
+              background: 'rgba(255,255,255,0.08)',
+              border: '2px solid rgba(255,255,255,0.15)',
+            }}
+          >
+            Exit
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   // Victory overlay
   if (showVictory) {
+    const xpAward = CAPTURE_XP[pendingId ?? ''] ?? DEFAULT_CAPTURE_XP;
     return (
       <div className="p-4 max-w-lg mx-auto space-y-6 animate-slide-up text-center">
         <div
@@ -168,7 +392,8 @@ export function DungeonGame() {
           <h1 className="font-display text-3xl font-bold text-gold mb-2">CAPTURED!</h1>
           <p className="text-white text-lg mb-1">{capturedCryptid.current?.name}</p>
           <p className="text-bark-light text-sm">{capturedCryptid.current?.region}</p>
-          <p className="text-gold-light text-sm mt-4">
+          <p className="text-gold-light text-lg font-bold mt-4 animate-bounce-in">+{xpAward} XP</p>
+          <p className="text-gold-light text-sm mt-1">
             The {capturedCryptid.current?.name} has been added to your Field Guide!
           </p>
         </div>
@@ -187,22 +412,24 @@ export function DungeonGame() {
     );
   }
 
-  const canvasW = COLS * TILE;
-  const canvasH = ROWS * TILE;
-
   return (
     <div className="p-4 max-w-lg mx-auto space-y-4 animate-slide-up">
-      {/* Header */}
+      {/* Header with timer */}
       <div className="flex items-center justify-between">
         <button onClick={() => navigate('/dungeon')} className="text-bark-light hover:text-white transition-colors text-sm">
           &larr; Exit
         </button>
-        <h2 className="font-display font-bold text-gold text-sm">Capture: {capturedCryptid.current?.name}</h2>
+        <div
+          className={`font-display font-bold text-lg ${timerUrgent ? 'text-red-400' : 'text-gold'}`}
+          style={timerUrgent ? { animation: 'pulse 1s ease-in-out infinite' } : undefined}
+        >
+          {timerStr}
+        </div>
         <div className="text-sm text-bark-light">{collectedClues.size}/{TOTAL_CLUES}</div>
       </div>
 
       {/* Clue tracker */}
-      <div className="flex gap-2 justify-center">
+      <div className="flex gap-2 justify-center flex-wrap">
         {Array.from({ length: TOTAL_CLUES }).map((_, i) => (
           <div
             key={i}
@@ -213,7 +440,7 @@ export function DungeonGame() {
             }
           >
             {collectedClues.has(i) ? (
-              <img src={CLUE_ICONS[i]} alt="" className="w-5 h-5" />
+              <img src={CLUE_ICONS[i % CLUE_ICONS.length]} alt="" className="w-5 h-5" />
             ) : (
               <span className="text-bark-light text-xs">?</span>
             )}
@@ -221,7 +448,7 @@ export function DungeonGame() {
         ))}
       </div>
 
-      {/* Game board */}
+      {/* Canvas game board */}
       <div
         className="relative mx-auto rounded-xl overflow-hidden"
         style={{
@@ -243,71 +470,7 @@ export function DungeonGame() {
           else tryMove(dy > 0 ? 'down' : 'up');
         }}
       >
-        {/* Tiles */}
-        {map.map((row, y) => row.map((cell, x) => (
-          <div
-            key={`${x}-${y}`}
-            className="absolute"
-            style={{
-              left: x * TILE,
-              top: y * TILE,
-              width: TILE,
-              height: TILE,
-              backgroundImage: `url(${cell === WALL ? '/assets/dungeon/tile-wall.png' : '/assets/dungeon/tile-floor.png'})`,
-              backgroundSize: 'cover',
-            }}
-          />
-        )))}
-
-        {/* Clues */}
-        {cluePositions.map((cp, idx) => !collectedClues.has(idx) && (
-          <div
-            key={`clue-${idx}`}
-            className="absolute flex items-center justify-center"
-            style={{
-              left: cp.x * TILE + 4,
-              top: cp.y * TILE + 4,
-              width: TILE - 8,
-              height: TILE - 8,
-              opacity: dist(playerPos, cp) <= FLASHLIGHT_RADIUS ? 1 : 0,
-              transition: 'opacity 0.3s',
-            }}
-          >
-            <img src={CLUE_ICONS[idx]} alt="Clue" className="w-8 h-8 animate-float" />
-          </div>
-        ))}
-
-        {/* Player */}
-        <div
-          className="absolute transition-all duration-150 flex items-center justify-center"
-          style={{
-            left: playerPos.x * TILE,
-            top: playerPos.y * TILE,
-            width: TILE,
-            height: TILE,
-            zIndex: 10,
-          }}
-        >
-          <img
-            src="/assets/dungeon/player.png"
-            alt="Player"
-            className="w-10 h-10"
-            style={{
-              transform: facing === 'left' ? 'scaleX(-1)' : undefined,
-              filter: 'drop-shadow(0 0 8px rgba(255,220,100,0.6))',
-            }}
-          />
-        </div>
-
-        {/* Flashlight glow — radial gradient overlay */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background: `radial-gradient(circle ${FLASHLIGHT_RADIUS * TILE}px at ${playerPos.x * TILE + TILE / 2}px ${playerPos.y * TILE + TILE / 2}px, transparent 0%, transparent 60%, rgba(0,0,0,0.85) 100%)`,
-            zIndex: 20,
-            transition: 'background 0.2s',
-          }}
-        />
+        <canvas ref={canvasRef} width={canvasW} height={canvasH} />
       </div>
 
       {/* D-pad controls for mobile */}
