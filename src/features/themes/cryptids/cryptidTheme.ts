@@ -1,4 +1,35 @@
-import type { ThemeConfig, Cryptid } from '../../../types';
+import type { ThemeConfig, Cryptid, CryptidClue } from '../../../types';
+
+const CLUE_TYPES: CryptidClue['type'][] = ['footprint', 'witness', 'sample', 'sketch', 'map_pin', 'photo'];
+const CLUE_ICONS: Record<CryptidClue['type'], string> = {
+  footprint: '/assets/ui/clue-footprint.svg',
+  witness: '/assets/ui/clue-witness.svg',
+  sample: '/assets/ui/clue-sample.svg',
+  sketch: '/assets/ui/clue-sketch.svg',
+  map_pin: '/assets/ui/clue-map-pin.svg',
+  photo: '/assets/ui/clue-photo.svg',
+};
+const CLUE_DESCRIPTIONS: Record<CryptidClue['type'], string[]> = {
+  footprint: ['Unusual tracks in soft ground', 'Deep impressions near water', 'Fresh prints along a trail'],
+  witness: ['A local reported strange sounds', 'A camper saw movement at dusk', 'Eyewitness sketch matches prior reports'],
+  sample: ['Unidentified hair sample collected', 'Strange residue on tree bark', 'Organic material sent for analysis'],
+  sketch: ['Field sketch from a ranger', 'Composite drawing from witnesses', 'Rough rendering from trail cam still'],
+  map_pin: ['New sighting logged on the map', 'Cluster of reports in this area', 'GPS coordinates of fresh evidence'],
+  photo: ['Blurry image from a trail camera', 'Thermal signature captured at night', 'Distant shape in a telephoto shot'],
+};
+
+/** Generate N clues with cycling types and descriptions. */
+function generateClues(prefix: string, count: number, baseClues: CryptidClue[]): CryptidClue[] {
+  if (count <= baseClues.length) return baseClues.slice(0, count);
+  const clues = [...baseClues];
+  for (let i = baseClues.length + 1; i <= count; i++) {
+    const type = CLUE_TYPES[(i - 1) % CLUE_TYPES.length];
+    const descs = CLUE_DESCRIPTIONS[type];
+    const desc = descs[(i - 1) % descs.length];
+    clues.push({ id: `${prefix}-${i}`, type, description: desc, svgIcon: CLUE_ICONS[type], revealed: false });
+  }
+  return clues;
+}
 
 export const cryptidTheme: ThemeConfig = {
   id: 'cryptids',
@@ -94,13 +125,13 @@ Local legend says the creature may be the result of chimpanzees escaping from a 
     evidenceRequired: 10, // 5 × 2
     svgSilhouette: '/assets/cryptids/rougarou.svg',
     revealImage: '/assets/cryptids/reveals/rougarou.jpg',
-    clues: [
+    clues: generateClues('rou', 10, [
       { id: 'rou-1', type: 'footprint', description: 'Wolf-like tracks that suddenly turn into human footprints', svgIcon: '/assets/ui/clue-footprint.svg', revealed: false },
       { id: 'rou-2', type: 'witness', description: 'A farmer heard howling during a full moon', svgIcon: '/assets/ui/clue-witness.svg', revealed: false },
       { id: 'rou-3', type: 'sketch', description: 'Torn fabric caught on a sugar cane stalk', svgIcon: '/assets/ui/clue-sketch.svg', revealed: false },
       { id: 'rou-4', type: 'photo', description: 'A shadowy figure in a nighttime trail photo', svgIcon: '/assets/ui/clue-photo.svg', revealed: false },
       { id: 'rou-5', type: 'map_pin', description: 'Sightings cluster around Atchafalaya Basin', svgIcon: '/assets/ui/clue-map-pin.svg', revealed: false },
-    ],
+    ]),
     cardStats: { danger: 5, stealth: 4, mystery: 3 },
     lore: {
       originStory: `The Rougarou (sometimes spelled "Loup-Garou") is one of the oldest and most terrifying legends in Louisiana. Brought to the bayous by French settlers hundreds of years ago, the story has been told around campfires and kitchen tables in Cajun country for generations. Parents would warn their children: "Be good, or the Rougarou will come for you!"
@@ -133,14 +164,14 @@ The most chilling detail? The Rougarou is said to be someone you know — a neig
     evidenceRequired: 20, // 5 × 4
     svgSilhouette: '/assets/cryptids/bigfoot.svg',
     revealImage: '/assets/cryptids/reveals/bigfoot.jpg',
-    clues: [
+    clues: generateClues('bf', 20, [
       { id: 'bf-1', type: 'footprint', description: 'Enormous footprint — 16 inches long!', svgIcon: '/assets/ui/clue-footprint.svg', revealed: false },
       { id: 'bf-2', type: 'witness', description: 'A hiker reported seeing a tall, hairy figure', svgIcon: '/assets/ui/clue-witness.svg', revealed: false },
       { id: 'bf-3', type: 'sample', description: 'Tufts of coarse brown hair on a branch', svgIcon: '/assets/ui/clue-sample.svg', revealed: false },
       { id: 'bf-4', type: 'sketch', description: 'The famous Patterson-Gimlin film still', svgIcon: '/assets/ui/clue-sketch.svg', revealed: false },
       { id: 'bf-5', type: 'map_pin', description: 'Reports from Bluff Creek, California', svgIcon: '/assets/ui/clue-map-pin.svg', revealed: false },
       { id: 'bf-6', type: 'witness', description: 'Wood knocking sounds heard at night', svgIcon: '/assets/ui/clue-witness.svg', revealed: false },
-    ],
+    ]),
     cardStats: { danger: 3, stealth: 4, mystery: 5 },
     lore: {
       originStory: `Bigfoot — also called Sasquatch — is arguably the most famous cryptid in the entire world. Stories of a giant, ape-like creature living in the forests of North America go back thousands of years, with Native American tribes across the continent sharing tales of wild, hairy giants that roam the deepest woods.
@@ -170,16 +201,16 @@ What would Bigfoot look like? Witnesses consistently describe a creature standin
     description: 'A winged creature with glowing red eyes, first spotted in West Virginia.',
     region: 'Point Pleasant, WV',
     difficulty: 4,
-    evidenceRequired: 40, // 5 × 8
+    evidenceRequired: 30,
     svgSilhouette: '/assets/cryptids/mothman.svg',
     revealImage: '/assets/cryptids/reveals/mothman.jpg',
-    clues: [
+    clues: generateClues('mm', 30, [
       { id: 'mm-1', type: 'witness', description: 'Two couples saw glowing red eyes near an old factory', svgIcon: '/assets/ui/clue-witness.svg', revealed: false },
       { id: 'mm-2', type: 'sketch', description: 'Drawing of a man-sized creature with 10-foot wingspan', svgIcon: '/assets/ui/clue-sketch.svg', revealed: false },
       { id: 'mm-3', type: 'map_pin', description: 'All sightings near the TNT area', svgIcon: '/assets/ui/clue-map-pin.svg', revealed: false },
       { id: 'mm-4', type: 'photo', description: 'Strange shadow on a security camera', svgIcon: '/assets/ui/clue-photo.svg', revealed: false },
       { id: 'mm-5', type: 'witness', description: 'Car chased by flying creature at 100 mph', svgIcon: '/assets/ui/clue-witness.svg', revealed: false },
-    ],
+    ]),
     cardStats: { danger: 4, stealth: 3, mystery: 5 },
     lore: {
       originStory: `On the night of November 15, 1966, two young couples were driving past an old abandoned munitions factory near Point Pleasant, West Virginia, when they saw something that would change their lives forever. Standing near the factory gate was a massive figure — shaped like a man but much larger — with huge folded wings and two enormous, glowing red eyes.
@@ -209,16 +240,16 @@ Over the next 13 months, over 100 residents reported seeing the Mothman. Then, o
     description: 'The "goat sucker" — a spiny creature reported across the Americas.',
     region: 'Puerto Rico & Texas',
     difficulty: 5,
-    evidenceRequired: 80, // 5 × 16
+    evidenceRequired: 50,
     svgSilhouette: '/assets/cryptids/chupacabra.svg',
     revealImage: '/assets/cryptids/reveals/chupacabra.jpg',
-    clues: [
+    clues: generateClues('ch', 50, [
       { id: 'ch-1', type: 'footprint', description: 'Small clawed tracks near a farm', svgIcon: '/assets/ui/clue-footprint.svg', revealed: false },
       { id: 'ch-2', type: 'witness', description: 'A farmer found strange marks on livestock', svgIcon: '/assets/ui/clue-witness.svg', revealed: false },
       { id: 'ch-3', type: 'sample', description: 'Unusual quill-like spines found in a field', svgIcon: '/assets/ui/clue-sample.svg', revealed: false },
       { id: 'ch-4', type: 'sketch', description: 'A child drew what they saw in the moonlight', svgIcon: '/assets/ui/clue-sketch.svg', revealed: false },
       { id: 'ch-5', type: 'map_pin', description: 'Reports span from Puerto Rico to Texas', svgIcon: '/assets/ui/clue-map-pin.svg', revealed: false },
-    ],
+    ]),
     cardStats: { danger: 4, stealth: 5, mystery: 4 },
     lore: {
       originStory: `In 1995, on the island of Puerto Rico, farmers began finding their goats dead under mysterious circumstances — each animal drained of blood through small, circular puncture wounds. Residents named the unknown attacker "El Chupacabra" — Spanish for "the goat sucker."
@@ -248,7 +279,7 @@ Within months, reports exploded across Latin America and the southern United Sta
     description: 'A flying creature with hooves and a forked tail from the Pine Barrens of New Jersey.',
     region: 'Pine Barrens, NJ',
     difficulty: 6,
-    evidenceRequired: 160, // 5 × 32
+    evidenceRequired: 75,
     svgSilhouette: '/assets/cryptids/jersey-devil.svg',
     revealImage: '/assets/cryptids/reveals/jersey-devil.jpg',
     clues: [
@@ -287,7 +318,7 @@ The most dramatic chapter came during January 1909, when hundreds of people acro
     description: 'A massive bird from Native American legend with a wingspan wider than an airplane.',
     region: 'Great Plains',
     difficulty: 7,
-    evidenceRequired: 320, // 5 × 64
+    evidenceRequired: 100,
     svgSilhouette: '/assets/cryptids/thunderbird.svg',
     revealImage: '/assets/cryptids/reveals/thunderbird.jpg',
     clues: [
@@ -326,7 +357,7 @@ While most scientists consider Thunderbirds mythological, sightings continue. In
     description: 'Nessie — the legendary lake creature of Scotland. Could it be a surviving dinosaur?',
     region: 'Loch Ness, Scotland',
     difficulty: 8,
-    evidenceRequired: 640, // 5 × 128
+    evidenceRequired: 125,
     svgSilhouette: '/assets/cryptids/loch-ness-monster.svg',
     revealImage: '/assets/cryptids/reveals/loch-ness-monster.jpg',
     clues: [

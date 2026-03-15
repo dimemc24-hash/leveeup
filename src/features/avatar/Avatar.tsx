@@ -65,33 +65,118 @@ export function Avatar({ size = 160, showName = false }: AvatarProps) {
           className="absolute inset-0"
           style={{ zIndex: 0 }}
         >
-          {/* Background circle */}
-          <circle cx="80" cy="80" r="76" fill="#e8dcc8" stroke="#d4a843" strokeWidth="2" />
-          {/* Body */}
-          <rect x="52" y="85" width="56" height="50" rx="8" fill="#4a7c23" />
-          {/* Neck */}
-          <rect x="68" y="78" width="24" height="14" rx="4" fill={skinColor} />
-          {/* Head */}
-          <circle cx="80" cy="58" r="24" fill={skinColor} />
-          {/* Hair — rounded cap on top 40% of head */}
-          <path d="M56 58 Q56 34 80 34 Q104 34 104 58" fill={hairColor} />
-          {/* Eyes */}
-          <circle cx="72" cy="54" r="3" fill="#3d2b1f" />
-          <circle cx="88" cy="54" r="3" fill="#3d2b1f" />
-          {/* Eye shine */}
-          <circle cx="73" cy="53" r="1" fill="white" />
-          <circle cx="89" cy="53" r="1" fill="white" />
-          {/* Mouth */}
-          <path d="M73 66 Q80 72 87 66" fill="none" stroke="#3d2b1f" strokeWidth="1.5" strokeLinecap="round" />
-          {/* Arms */}
-          <rect x="38" y="90" width="14" height="36" rx="7" fill={skinColor} />
-          <rect x="108" y="90" width="14" height="36" rx="7" fill={skinColor} />
-          {/* Legs */}
-          <rect x="58" y="130" width="16" height="20" rx="5" fill="#6b5a4e" />
-          <rect x="86" y="130" width="16" height="20" rx="5" fill="#6b5a4e" />
-          {/* Boots */}
-          <rect x="55" y="145" width="22" height="10" rx="5" fill="#3d2b1f" />
-          <rect x="83" y="145" width="22" height="10" rx="5" fill="#3d2b1f" />
+          {/* ── BACKGROUND BADGE ── */}
+          <circle cx="80" cy="80" r="76" fill="#ece4d4" />
+          <circle cx="80" cy="72" r="60" fill="#f2eadb" opacity="0.5" />
+          <circle cx="80" cy="80" r="76" fill="none" stroke="#d4a843" strokeWidth="2.5" />
+
+          {/* ── LEGS / PANTS ── */}
+          <rect x="64" y="126" width="13" height="20" rx="5" fill="#6b7a5a" />
+          <rect x="83" y="126" width="13" height="20" rx="5" fill="#6b7a5a" />
+          <ellipse cx="70.5" cy="133" rx="4" ry="2" fill="#5e6d4e" opacity="0.35" />
+          <ellipse cx="89.5" cy="133" rx="4" ry="2" fill="#5e6d4e" opacity="0.35" />
+
+          {/* ── BOOTS ── */}
+          <rect x="58" y="142" width="20" height="12" rx="5" fill="#3d2b1f" />
+          <rect x="82" y="142" width="20" height="12" rx="5" fill="#3d2b1f" />
+          <rect x="57" y="150" width="22" height="4" rx="2" fill="#2a1c10" />
+          <rect x="81" y="150" width="22" height="4" rx="2" fill="#2a1c10" />
+          <rect x="65" y="144" width="6" height="3" rx="1" fill="#8B7355" />
+          <rect x="89" y="144" width="6" height="3" rx="1" fill="#8B7355" />
+
+          {/* ── BODY / EXPLORER JACKET ── */}
+          <path d="M54 80 C52 82 50 128 62 130 L98 130 C110 128 108 82 106 80 Q96 76 80 76 Q64 76 54 80 Z" fill="#5c7a3a" />
+          {/* Side shading */}
+          <path d="M54 80 C52 82 50 128 62 130 L68 130 L68 80 Q60 76 54 80 Z" fill="#4e6b30" opacity="0.5" />
+          <path d="M106 80 C108 82 110 128 98 130 L92 130 L92 80 Q100 76 106 80 Z" fill="#4e6b30" opacity="0.5" />
+          {/* Collar flaps */}
+          <path d="M68 78 L75 72 L80 80 L85 72 L92 78" fill="#6b8f45" stroke="#4e6b30" strokeWidth="0.8" />
+          {/* Center line */}
+          <line x1="80" y1="80" x2="80" y2="130" stroke="#4e6b30" strokeWidth="0.8" />
+          {/* Buttons */}
+          <circle cx="80" cy="90" r="1.5" fill="#d4a843" />
+          <circle cx="80" cy="100" r="1.5" fill="#d4a843" />
+          <circle cx="80" cy="110" r="1.5" fill="#d4a843" />
+          {/* Chest pocket */}
+          <rect x="86" y="88" width="12" height="10" rx="2" fill="none" stroke="#4e6b30" strokeWidth="1" />
+          <line x1="86" y1="91" x2="98" y2="91" stroke="#4e6b30" strokeWidth="0.8" />
+          {/* Belt */}
+          <rect x="52" y="122" width="56" height="5" rx="2" fill="#8B7355" />
+          <rect x="76" y="121" width="8" height="7" rx="1.5" fill="#c4a060" stroke="#8B7355" strokeWidth="0.5" />
+
+          {/* ── ARMS ── */}
+          {/* Left arm: sleeve + forearm + hand */}
+          <rect x="36" y="80" width="18" height="24" rx="9" fill="#5c7a3a" />
+          <rect x="38" y="100" width="14" height="18" rx="7" fill={skinColor} />
+          <circle cx="45" cy="120" r="6" fill={skinColor} />
+          {/* Right arm: sleeve + forearm + hand */}
+          <rect x="106" y="80" width="18" height="24" rx="9" fill="#5c7a3a" />
+          <rect x="108" y="100" width="14" height="18" rx="7" fill={skinColor} />
+          <circle cx="115" cy="120" r="6" fill={skinColor} />
+
+          {/* ── NECK ── */}
+          <rect x="72" y="70" width="16" height="12" rx="5" fill={skinColor} />
+
+          {/* ── EARS ── */}
+          <ellipse cx="52" cy="54" rx="5" ry="7" fill={skinColor} />
+          <ellipse cx="108" cy="54" rx="5" ry="7" fill={skinColor} />
+          <ellipse cx="52" cy="54" rx="3" ry="4.5" fill="#e8a0a0" opacity="0.15" />
+          <ellipse cx="108" cy="54" rx="3" ry="4.5" fill="#e8a0a0" opacity="0.15" />
+
+          {/* ── HAIR BACK VOLUME (behind head) ── */}
+          <ellipse cx="80" cy="44" rx="31" ry="28" fill={hairColor} />
+
+          {/* ── HEAD / FACE ── */}
+          <circle cx="80" cy="52" r="27" fill={skinColor} />
+
+          {/* Blush cheeks */}
+          <circle cx="62" cy="60" r="5" fill="#ff9999" opacity="0.15" />
+          <circle cx="98" cy="60" r="5" fill="#ff9999" opacity="0.15" />
+
+          {/* ── EYES ── */}
+          {/* Whites */}
+          <ellipse cx="71" cy="52" rx="6.5" ry="6" fill="white" />
+          <ellipse cx="89" cy="52" rx="6.5" ry="6" fill="white" />
+          {/* Iris */}
+          <circle cx="72" cy="53" r="4" fill="#3d2b1f" />
+          <circle cx="90" cy="53" r="4" fill="#3d2b1f" />
+          {/* Pupil */}
+          <circle cx="72" cy="53" r="2" fill="#0d0905" />
+          <circle cx="90" cy="53" r="2" fill="#0d0905" />
+          {/* Specular highlights */}
+          <circle cx="74" cy="51" r="1.5" fill="white" />
+          <circle cx="92" cy="51" r="1.5" fill="white" />
+          <circle cx="71" cy="54.5" r="0.7" fill="white" opacity="0.6" />
+          <circle cx="89" cy="54.5" r="0.7" fill="white" opacity="0.6" />
+
+          {/* Eyebrows */}
+          <path d="M64 44 Q68 41 76 44" fill="none" stroke={hairColor} strokeWidth="2" strokeLinecap="round" />
+          <path d="M84 44 Q92 41 96 44" fill="none" stroke={hairColor} strokeWidth="2" strokeLinecap="round" />
+
+          {/* Nose — subtle curve */}
+          <path d="M79 58 Q80 60.5 81 58" fill="none" stroke="#3d2b1f" strokeWidth="1" strokeLinecap="round" opacity="0.2" />
+
+          {/* ── MOUTH — open happy smile ── */}
+          <path d="M73 63 Q80 70 87 63 Z" fill="#c0392b" opacity="0.8" />
+          {/* Teeth */}
+          <rect x="76" y="63" width="8" height="2.5" rx="0.5" fill="white" />
+          {/* Mouth outline */}
+          <path d="M73 63 Q80 70 87 63" fill="none" stroke="#992020" strokeWidth="0.8" />
+
+          {/* ── HAIR TOP (on top of face) ── */}
+          {/* Main cap with natural hairline (~15% down from top) */}
+          <path d="M53 52 C53 30 65 20 80 20 C95 20 107 30 107 52 C104 40 94 32 80 32 C66 32 56 40 53 52 Z" fill={hairColor} />
+          {/* Side-swept bangs */}
+          <path d="M58 42 C60 32 68 26 78 24 C70 28 64 34 60 42 Z" fill={hairColor} />
+          <path d="M92 32 C96 26 101 28 105 36 C101 30 96 26 88 27 Z" fill={hairColor} />
+          {/* Extra volume tuft */}
+          <path d="M82 22 C88 17 96 19 101 25 C95 21 87 19 82 22 Z" fill={hairColor} />
+          {/* Side wraps around head */}
+          <path d="M53 42 C52 48 52 54 53 58 C54 52 54 46 55 40 Z" fill={hairColor} />
+          <path d="M107 42 C108 48 108 54 107 58 C106 52 106 46 105 40 Z" fill={hairColor} />
+          {/* Hair highlights */}
+          <path d="M64 26 C72 21 88 21 96 26" fill="none" stroke="white" strokeWidth="2.5" opacity="0.2" strokeLinecap="round" />
+          <path d="M60 34 C66 27 76 24 84 23" fill="none" stroke="white" strokeWidth="1.5" opacity="0.12" strokeLinecap="round" />
         </svg>
 
         {/* Equipment layers */}
