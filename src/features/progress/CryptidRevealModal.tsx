@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import type { Cryptid } from '../../types';
 
 interface CryptidRevealModalProps {
@@ -14,11 +14,38 @@ export function CryptidRevealModal({ cryptid, onClose }: CryptidRevealModalProps
     return () => window.removeEventListener('keydown', handleKey);
   }, [cryptid, onClose]);
 
+  const [imageFullscreen, setImageFullscreen] = useState(false);
+
   if (!cryptid) return null;
 
   const dangerLabel = ['', 'Low', 'Low', 'Medium', 'High', 'High'][cryptid.cardStats.danger] ?? 'Unknown';
   const stealthLabel = ['', 'Visible', 'Shy', 'Elusive', 'Stealthy', 'Invisible'][cryptid.cardStats.stealth] ?? 'Unknown';
   const mysteryLabel = ['', 'Common', 'Curious', 'Strange', 'Eerie', 'Legendary'][cryptid.cardStats.mystery] ?? 'Unknown';
+
+  // Full-screen image overlay
+  if (imageFullscreen) {
+    return (
+      <div
+        className="fixed inset-0 z-[60] flex items-center justify-center animate-reveal-fade-in"
+        style={{ background: 'rgba(0,0,0,0.97)' }}
+        onClick={() => setImageFullscreen(false)}
+      >
+        <button
+          onClick={() => setImageFullscreen(false)}
+          className="absolute top-4 right-4 w-12 h-12 flex items-center justify-center text-white/70 hover:text-white text-2xl font-bold rounded-full z-10"
+          style={{ background: 'rgba(255,255,255,0.12)' }}
+          aria-label="Close fullscreen"
+        >✕</button>
+        <img
+          src={cryptid.revealImage}
+          alt={cryptid.name}
+          className="animate-bounce-in"
+          style={{ maxWidth: '100vw', maxHeight: '100vh', objectFit: 'contain' }}
+          onClick={(e) => e.stopPropagation()}
+        />
+      </div>
+    );
+  }
 
   return (
     <div
@@ -53,14 +80,23 @@ export function CryptidRevealModal({ cryptid, onClose }: CryptidRevealModalProps
         {/* Scrollable content */}
         <div className="overflow-y-auto" style={{ maxHeight: '92vh' }}>
 
-          {/* Hero image */}
-          <div className="relative w-full" style={{ height: '42vw', maxHeight: '240px', minHeight: '160px' }}>
+          {/* Hero image — tap to fullscreen */}
+          <div
+            className="relative w-full cursor-pointer"
+            style={{ height: '42vw', maxHeight: '240px', minHeight: '160px' }}
+            onClick={() => setImageFullscreen(true)}
+            title="Tap to view full screen"
+          >
             <img
               src={cryptid.revealImage}
               alt={cryptid.name}
               className="w-full h-full object-cover"
               style={{ filter: 'brightness(0.85) contrast(1.1)' }}
             />
+            {/* Expand hint */}
+            <div className="absolute bottom-2 right-2 px-2 py-1 rounded-lg text-xs font-bold" style={{ background: 'rgba(0,0,0,0.6)', color: 'rgba(255,255,255,0.7)' }}>
+              ⛶ Full Screen
+            </div>
             {/* Gradient overlay so name sits cleanly on image */}
             <div
               className="absolute inset-0"

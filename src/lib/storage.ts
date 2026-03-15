@@ -247,7 +247,7 @@ export function setProfile(profile: UserProfile): void {
         .from('students')
         .update({
           display_name: profile.name,
-          avatar_config: { equippedItems: profile.equippedItems },
+          avatar_config: { equippedItems: profile.equippedItems, skinTone: profile.skinTone, hairColor: profile.hairColor },
         })
         .eq('id', profile.id)
         .then(null, (err) => logSupabaseError('setProfile.update', err));
@@ -259,7 +259,7 @@ export function setProfile(profile: UserProfile): void {
           user_id: _authUserId,
           parent_id: _authUserRole !== 'student' ? _authUserId : null,
           display_name: profile.name,
-          avatar_config: { equippedItems: profile.equippedItems },
+          avatar_config: { equippedItems: profile.equippedItems, skinTone: profile.skinTone, hairColor: profile.hairColor },
         })
         .then(null, (err) => logSupabaseError('setProfile.insert', err));
     }
