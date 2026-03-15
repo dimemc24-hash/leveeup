@@ -227,7 +227,7 @@ export function SpellCasterPlay() {
             </p>
           )}
 
-          <HandwritingCanvas ref={canvasRef} width={Math.min(520, window.innerWidth - 32)} height={280} />
+          <HandwritingCanvas ref={canvasRef} width={Math.min(520, window.innerWidth - 32)} height={420} />
 
           <button
             type="button"

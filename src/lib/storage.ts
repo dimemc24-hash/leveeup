@@ -46,6 +46,7 @@ export const DEFAULT_PROGRESS: PlayerProgress = {
   },
   pendingCapture: null,
   fieldSupplies: 1,
+  cycleCompleted: [],
 };
 
 // ─── In-memory cache ───

@@ -203,7 +203,10 @@ export function FieldGuidePlay() {
   }
 
   const canvasWidth = Math.min(520, typeof window !== 'undefined' ? window.innerWidth - 32 : 520);
-  const canvasHeight = currentStep?.canvasHeight ?? 280;
+  // Big canvas for finger writing — minimum 420px, respect any per-step override scaled up
+  const canvasHeight = currentStep?.canvasHeight
+    ? Math.max(currentStep.canvasHeight * 1.5, 420)
+    : 420;
   const isModelStep = currentStep?.type === 'model';
 
   return (
