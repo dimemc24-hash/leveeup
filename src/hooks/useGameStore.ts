@@ -26,6 +26,9 @@ interface GameStore {
   endSession: () => void;
   completePendingCapture: (cryptidId: string) => void;
 
+  // Subject rotation cycle
+  markCycleDone: (unit: string) => void;
+
   // Avatar customization
   setSkinTone: (tone: SkinTone) => void;
   setHairColor: (color: HairColor) => void;
@@ -72,6 +75,7 @@ const defaultProgress: PlayerProgress = {
   },
   pendingCapture: null,
   fieldSupplies: 1,
+  cycleCompleted: [],
 };
 
 /**
@@ -330,6 +334,18 @@ export const useGameStore = create<GameStore>((set, get) => ({
       newProgress = { ...newProgress, activeInvestigation: null };
     }
 
+    storage.setProgress(profile.id, newProgress);
+    set({ progress: newProgress });
+  },
+
+  // Subject rotation cycle
+  markCycleDone(unit: string) {
+    const { profile, progress } = get();
+    if (!profile) return;
+    if (progress.cycleCompleted.includes(unit)) return;
+    let newCycle = [...progress.cycleCompleted, unit];
+    if (newCycle.length >= 6) newCycle = [];
+    const newProgress = { ...progress, cycleCompleted: newCycle };
     storage.setProgress(profile.id, newProgress);
     set({ progress: newProgress });
   },

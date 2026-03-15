@@ -85,6 +85,7 @@ export interface PlayerProgress {
   investigationProgress: Record<string, InvestigationProgress>;
   pendingCapture: string | null;
   fieldSupplies: number;
+  cycleCompleted: string[];
 }
 
 export interface InvestigationProgress {

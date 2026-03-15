@@ -12,6 +12,16 @@ import {
 } from './mathStepResult';
 import type { MathProblem, ProblemStep } from '../../data/mathFieldGuide';
 
+function stepIcon(type: string): string {
+  return ({ model:'🗺️', equation:'⚡', statement:'📝', check_equation:'🔁', strategy_explanation:'💬', true_false_work:'⚖️' } as Record<string,string>)[type] ?? '✏️';
+}
+function stepLabel(type: string): string {
+  return ({ model:'Draw a Model', equation:'Write the Equation', statement:'Write Your Answer', check_equation:'Check Your Work', strategy_explanation:'Explain Your Strategy', true_false_work:'Show Both Sides' } as Record<string,string>)[type] ?? 'Your Work';
+}
+function stepHint(type: string): string {
+  return ({ model:'Draw a picture, number line, or bar model showing the problem.', equation:'Write a number sentence, like: 8 + 5 = 13', statement:'Write a full sentence: "There are ___ cryptid tracks."', check_equation:'Rewrite the equation a different way to verify.', strategy_explanation:'Explain in words how you solved the problem.', true_false_work:'Show why one side is true and the other is false.' } as Record<string,string>)[type] ?? 'Show your work here.';
+}
+
 type Phase = 'step' | 'submitting' | 'step_failed' | 'result';
 
 export function FieldGuidePlay() {
@@ -214,7 +224,7 @@ export function FieldGuidePlay() {
         {steps.map((s, i) => {
           const res = stepResults.find((r) => r.stepId === s.id);
           const status: StepOutcome = res ? res.outcome : i < stepIndex ? 'passed' : i === stepIndex ? 'pending' : 'pending';
-          const label = s.type === 'model' ? '🗺️' : s.type === 'equation' ? '⚡' : s.type === 'statement' ? '📝' : s.type === 'strategy_explanation' ? '📖' : '✓';
+          const icon = stepIcon(s.type);
           return (
             <div
               key={s.id}
@@ -222,7 +232,7 @@ export function FieldGuidePlay() {
                 status === 'passed' ? 'bg-spell-success/30 text-spell-success' : status === 'skipped' ? 'bg-spell-wrong/20 text-spell-wrong' : status === 'pending' && i === stepIndex ? 'bg-spell-accent/30 text-spell-cream' : 'bg-spell-card text-spell-muted'
               }`}
             >
-              {status === 'passed' ? '✓' : status === 'skipped' ? '⚠' : label} Step {i + 1}
+              {status === 'passed' ? '✓' : status === 'skipped' ? '⚠' : icon} Step {i + 1}
             </div>
           );
         })}
@@ -246,6 +256,13 @@ export function FieldGuidePlay() {
 
       {currentStep && (
         <>
+          <div className="rounded-xl bg-spell-card border border-spell-border p-3">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-xl">{stepIcon(currentStep.type)}</span>
+              <span className="font-display font-bold text-spell-cream">{stepLabel(currentStep.type)}</span>
+            </div>
+            <p className="text-spell-muted text-sm">{stepHint(currentStep.type)}</p>
+          </div>
           <p className="text-spell-cream font-medium">{currentStep.prompt}</p>
           <HandwritingCanvas
             ref={canvasRef}
