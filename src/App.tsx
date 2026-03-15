@@ -21,6 +21,9 @@ const FieldGuidePlay = lazy(() => import('./features/field-guide/FieldGuidePlay'
 const AvatarCustomize = lazy(() => import('./features/avatar/AvatarCustomize').then((m) => ({ default: m.AvatarCustomize })));
 const DungeonMenu = lazy(() => import('./features/dungeon/DungeonMenu').then((m) => ({ default: m.DungeonMenu })));
 const DungeonGame = lazy(() => import('./features/dungeon/DungeonGame').then((m) => ({ default: m.DungeonGame })));
+const EvidenceShredder = lazy(() => import('./features/minigames/EvidenceShredder').then((m) => ({ default: m.EvidenceShredder })));
+const CryptidCaller = lazy(() => import('./features/minigames/CryptidCaller').then((m) => ({ default: m.CryptidCaller })));
+const SwampEscape = lazy(() => import('./features/minigames/SwampEscape').then((m) => ({ default: m.SwampEscape })));
 
 function LoadingFallback() {
   return (
@@ -54,6 +57,9 @@ function AppRoutes() {
           <Route path="/field-guide/play/:packId" element={<FieldGuidePlay />} />
           <Route path="/dungeon" element={<DungeonMenu />} />
           <Route path="/dungeon/play" element={<DungeonGame />} />
+          <Route path="/minigames/shredder" element={<EvidenceShredder />} />
+          <Route path="/minigames/caller" element={<CryptidCaller />} />
+          <Route path="/minigames/swamp-escape" element={<SwampEscape />} />
         </Routes>
       </Suspense>
     </Layout>

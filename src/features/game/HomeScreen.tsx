@@ -233,6 +233,44 @@ export function HomeScreen() {
         Start Investigation!
       </Link>
 
+      {/* Minigames */}
+      <div
+        className="rounded-2xl p-4"
+        style={{
+          background: 'rgba(255,255,255,0.05)',
+          border: '1.5px solid rgba(0,200,150,0.15)',
+          boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
+        }}
+      >
+        <h3 className="font-display font-bold text-forest mb-3">Swamp Games</h3>
+        <div className="grid grid-cols-3 gap-2">
+          <Link
+            to="/minigames/shredder"
+            className="rounded-xl p-3 text-center transition-all hover:scale-105 active:scale-95"
+            style={{ background: 'rgba(255,255,255,0.06)', border: '1.5px solid rgba(255,184,0,0.2)' }}
+          >
+            <div className="text-2xl mb-1">🗂️</div>
+            <div className="text-xs font-bold text-bark-light">Evidence Shredder</div>
+          </Link>
+          <Link
+            to="/minigames/caller"
+            className="rounded-xl p-3 text-center transition-all hover:scale-105 active:scale-95"
+            style={{ background: 'rgba(255,255,255,0.06)', border: '1.5px solid rgba(129,140,248,0.2)' }}
+          >
+            <div className="text-2xl mb-1">📡</div>
+            <div className="text-xs font-bold text-bark-light">Cryptid Caller</div>
+          </Link>
+          <Link
+            to="/minigames/swamp-escape"
+            className="rounded-xl p-3 text-center transition-all hover:scale-105 active:scale-95"
+            style={{ background: 'rgba(255,255,255,0.06)', border: '1.5px solid rgba(0,200,200,0.2)' }}
+          >
+            <div className="text-2xl mb-1">🏞️</div>
+            <div className="text-xs font-bold text-bark-light">Swamp Escape</div>
+          </Link>
+        </div>
+      </div>
+
       <CryptidRevealModal cryptid={selectedCryptid} onClose={() => setSelectedCryptid(null)} />
 
       {/* Cryptids discovered */}
