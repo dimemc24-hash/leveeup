@@ -282,13 +282,13 @@ Within months, reports exploded across Latin America and the southern United Sta
     evidenceRequired: 75,
     svgSilhouette: '/assets/cryptids/jersey-devil.svg',
     revealImage: '/assets/cryptids/reveals/jersey-devil.jpg',
-    clues: [
+    clues: generateClues('jd', 75, [
       { id: 'jd-1', type: 'footprint', description: 'Hoof prints on a rooftop — how did it get up there?', svgIcon: '/assets/ui/clue-footprint.svg', revealed: false },
       { id: 'jd-2', type: 'witness', description: 'A police officer reported a screaming, winged creature', svgIcon: '/assets/ui/clue-witness.svg', revealed: false },
       { id: 'jd-3', type: 'sketch', description: 'Historical sketch from 1909 newspaper', svgIcon: '/assets/ui/clue-sketch.svg', revealed: false },
       { id: 'jd-4', type: 'map_pin', description: 'Centered in Burlington County, NJ', svgIcon: '/assets/ui/clue-map-pin.svg', revealed: false },
       { id: 'jd-5', type: 'photo', description: 'Strange shadow against the full moon', svgIcon: '/assets/ui/clue-photo.svg', revealed: false },
-    ],
+    ]),
     cardStats: { danger: 3, stealth: 4, mystery: 5 },
     lore: {
       originStory: `The legend of the Jersey Devil dates back to 1735. According to the tale, a woman known as "Mother Leeds" lived in the Pine Barrens of southern New Jersey. When she discovered she was expecting her 13th child, she cried out, "Let this one be a devil!"
@@ -321,13 +321,13 @@ The most dramatic chapter came during January 1909, when hundreds of people acro
     evidenceRequired: 100,
     svgSilhouette: '/assets/cryptids/thunderbird.svg',
     revealImage: '/assets/cryptids/reveals/thunderbird.jpg',
-    clues: [
+    clues: generateClues('tb', 100, [
       { id: 'tb-1', type: 'witness', description: 'A pilot saw a bird larger than his small plane', svgIcon: '/assets/ui/clue-witness.svg', revealed: false },
       { id: 'tb-2', type: 'sketch', description: 'Ancient cave painting of a giant bird', svgIcon: '/assets/ui/clue-sketch.svg', revealed: false },
       { id: 'tb-3', type: 'sample', description: 'A feather longer than your arm', svgIcon: '/assets/ui/clue-sample.svg', revealed: false },
       { id: 'tb-4', type: 'map_pin', description: 'Sightings along the Rocky Mountains', svgIcon: '/assets/ui/clue-map-pin.svg', revealed: false },
       { id: 'tb-5', type: 'photo', description: 'Enormous shadow captured by a weather satellite', svgIcon: '/assets/ui/clue-photo.svg', revealed: false },
-    ],
+    ]),
     cardStats: { danger: 5, stealth: 2, mystery: 5 },
     lore: {
       originStory: `Long before European settlers arrived, Native American tribes told stories of enormous birds so powerful they could create thunder with the beating of their wings and summon lightning from their eyes. These legendary creatures — known as Thunderbirds — are among the oldest figures in Native American mythology.
@@ -360,14 +360,14 @@ While most scientists consider Thunderbirds mythological, sightings continue. In
     evidenceRequired: 125,
     svgSilhouette: '/assets/cryptids/loch-ness-monster.svg',
     revealImage: '/assets/cryptids/reveals/loch-ness-monster.jpg',
-    clues: [
+    clues: generateClues('ln', 125, [
       { id: 'ln-1', type: 'photo', description: 'The famous "Surgeon\'s Photo" — real or fake?', svgIcon: '/assets/ui/clue-photo.svg', revealed: false },
       { id: 'ln-2', type: 'witness', description: 'A boat captain saw humps moving through the water', svgIcon: '/assets/ui/clue-witness.svg', revealed: false },
       { id: 'ln-3', type: 'sample', description: 'Unusual sonar readings from the lake bottom', svgIcon: '/assets/ui/clue-sample.svg', revealed: false },
       { id: 'ln-4', type: 'sketch', description: 'A drawing from a Scottish monk in the year 565', svgIcon: '/assets/ui/clue-sketch.svg', revealed: false },
       { id: 'ln-5', type: 'map_pin', description: 'Sightings cluster near Urquhart Castle', svgIcon: '/assets/ui/clue-map-pin.svg', revealed: false },
       { id: 'ln-6', type: 'witness', description: 'Ripples in perfectly calm water', svgIcon: '/assets/ui/clue-witness.svg', revealed: false },
-    ],
+    ]),
     cardStats: { danger: 2, stealth: 5, mystery: 5 },
     lore: {
       originStory: `The Loch Ness Monster — affectionately known as "Nessie" — is perhaps the most famous cryptid in the world. The legend goes back to 565 AD, when an Irish monk named Saint Columba reportedly encountered a "water beast" in the River Ness. He commanded the creature to retreat, and it obeyed — the first recorded monster sighting in history!

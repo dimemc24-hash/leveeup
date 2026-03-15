@@ -110,53 +110,56 @@ export function HomeScreen() {
               <p className="text-xs text-bark-light">{activeCryptid.region}</p>
             </div>
           </div>
-          {/* Evidence progress */}
-          <div className="mb-3">
-            <div className="flex justify-between text-xs text-bark-light mb-1">
-              <span>Evidence</span>
-              <span className="font-bold text-gold">{invProgress.evidenceCollected} / {activeCryptid.evidenceRequired}</span>
-            </div>
-            <div
-              className="w-full rounded-full h-3.5 overflow-hidden"
-              style={{ background: 'rgba(255,255,255,0.08)' }}
-              role="progressbar"
-              aria-valuenow={invProgress.evidenceCollected}
-              aria-valuemax={activeCryptid.evidenceRequired}
-              aria-label="Evidence progress"
-            >
-              <div
-                className="h-full rounded-full transition-all duration-700 animate-progress"
-                style={{
-                  width: `${(invProgress.evidenceCollected / activeCryptid.evidenceRequired) * 100}%`,
-                  background: 'linear-gradient(90deg, #FFB800, #FFCF4A)',
-                  boxShadow: '0 0 12px rgba(255,184,0,0.4)',
-                }}
-              />
-            </div>
-          </div>
-          {/* Clue dots */}
-          <div className="flex gap-2 mb-2 justify-center" aria-label={`${invProgress.cluesFound} of ${invProgress.totalClues} clues found`}>
-            {Array.from({ length: invProgress.totalClues }).map((_, i) => (
-              <div
-                key={i}
-                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
-                  i < invProgress.cluesFound
-                    ? 'text-white animate-bounce-in'
-                    : 'text-bark-light'
-                }`}
-                style={i < invProgress.cluesFound
-                  ? { background: 'linear-gradient(135deg, #00c896, #00a67a)', boxShadow: '0 0 10px rgba(0,200,150,0.3)', animationDelay: `${i * 100}ms` }
-                  : { background: 'rgba(255,255,255,0.08)' }
-                }
-                aria-hidden="true"
-              >
-                {i < invProgress.cluesFound ? '✓' : '?'}
+          {/* Clues display */}
+          {invProgress.totalClues <= 5 ? (
+            <>
+              <div className="flex gap-2 mb-2 justify-center" aria-label={`${invProgress.cluesFound} of ${invProgress.totalClues} Clues Found`}>
+                {Array.from({ length: invProgress.totalClues }).map((_, i) => (
+                  <div
+                    key={i}
+                    className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
+                      i < invProgress.cluesFound
+                        ? 'text-white animate-bounce-in'
+                        : 'text-bark-light'
+                    }`}
+                    style={i < invProgress.cluesFound
+                      ? { background: 'linear-gradient(135deg, #00c896, #00a67a)', boxShadow: '0 0 10px rgba(0,200,150,0.3)', animationDelay: `${i * 100}ms` }
+                      : { background: 'rgba(255,255,255,0.08)' }
+                    }
+                    aria-hidden="true"
+                  >
+                    {i < invProgress.cluesFound ? '✓' : '?'}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          <p className="text-xs text-bark-light mt-1 text-center">
-            {invProgress.cluesFound} / {invProgress.totalClues} clues found
-          </p>
+              <p className="text-xs text-bark-light mt-1 text-center">
+                {invProgress.cluesFound} / {invProgress.totalClues} Clues Found
+              </p>
+            </>
+          ) : (
+            <div>
+              <div
+                className="w-full rounded-full h-3.5 overflow-hidden"
+                style={{ background: 'rgba(255,255,255,0.08)' }}
+                role="progressbar"
+                aria-valuenow={invProgress.cluesFound}
+                aria-valuemax={invProgress.totalClues}
+                aria-label="Clues progress"
+              >
+                <div
+                  className="h-full rounded-full transition-all duration-700 animate-progress"
+                  style={{
+                    width: `${(invProgress.cluesFound / invProgress.totalClues) * 100}%`,
+                    background: 'linear-gradient(90deg, #00c896, #00a67a)',
+                    boxShadow: '0 0 12px rgba(0,200,150,0.3)',
+                  }}
+                />
+              </div>
+              <p className="text-xs text-bark-light mt-1 text-center">
+                {invProgress.cluesFound} / {invProgress.totalClues} Clues Found
+              </p>
+            </div>
+          )}
         </div>
       )}
 

@@ -219,11 +219,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       if (inv && !inv.completed && cryptid) {
         const evidenceNeeded = cryptid.evidenceRequired;
         const newEvidenceCollected = Math.min(inv.evidenceCollected + newEvidence, evidenceNeeded);
-        // Reveal clues proportionally: cluesFound = floor(evidenceCollected / evidenceNeeded * totalClues)
-        const newClues = Math.min(
-          Math.floor((newEvidenceCollected / evidenceNeeded) * inv.totalClues),
-          inv.totalClues,
-        );
+        // Clues found = evidence collected (1:1 mapping)
+        const newClues = newEvidenceCollected;
         const completed = newEvidenceCollected >= evidenceNeeded;
         const updatedInv: InvestigationProgress = {
           ...inv,
@@ -258,7 +255,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
             const nextInv: InvestigationProgress = {
               cryptidId: nextCryptid.id,
               cluesFound: 0,
-              totalClues: nextCryptid.clues.length,
+              totalClues: nextCryptid.evidenceRequired,
               evidenceCollected: 0,
               evidenceNeeded: nextCryptid.evidenceRequired,
               completed: false,
