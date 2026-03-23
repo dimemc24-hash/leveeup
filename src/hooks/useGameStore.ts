@@ -345,8 +345,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
   markCycleDone(unit: string) {
     const { profile, progress } = get();
     if (!profile) return;
-    if (progress.cycleCompleted.includes(unit)) return;
-    let newCycle = [...progress.cycleCompleted, unit];
+    const cycleCompleted = progress.cycleCompleted ?? [];
+    if (cycleCompleted.includes(unit)) return;
+    let newCycle = [...cycleCompleted, unit];
     if (newCycle.length >= 6) newCycle = [];
     const newProgress = { ...progress, cycleCompleted: newCycle };
     storage.setProgress(profile.id, newProgress);

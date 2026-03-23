@@ -324,9 +324,9 @@ export function setActiveProfileId(profileId: string): void {
  */
 export function getProgress(profileId: string): PlayerProgress {
   if (_supabaseReady && _progress[profileId]) {
-    return _progress[profileId];
+    return { ...DEFAULT_PROGRESS, ..._progress[profileId] };
   }
-  return lsRead<PlayerProgress>(LS_KEYS.progress(profileId), { ...DEFAULT_PROGRESS });
+  return { ...DEFAULT_PROGRESS, ...lsRead<PlayerProgress>(LS_KEYS.progress(profileId), { ...DEFAULT_PROGRESS }) };
 }
 
 /**
