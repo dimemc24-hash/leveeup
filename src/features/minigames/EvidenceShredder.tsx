@@ -142,8 +142,8 @@ export function EvidenceShredder() {
             boxShadow: '0 0 40px rgba(255,184,0,0.15)',
           }}
         >
-          <div className="text-5xl mb-4">🗂️</div>
-          <h2 className="font-display text-3xl font-bold text-gold mb-2">Evidence Shredded!</h2>
+          <div className="text-5xl mb-4">🔍</div>
+          <h2 className="font-display text-3xl font-bold text-gold mb-2">Myths Busted!</h2>
           <p className="text-bark-light text-lg mb-1">
             Score: <span className="text-white font-bold">{score}</span> / {totalAnswered}
           </p>
@@ -196,18 +196,23 @@ export function EvidenceShredder() {
           ◀
         </button>
         <h1 className="font-display text-xl font-bold text-white" style={{ textShadow: '0 0 20px rgba(0,200,150,0.3)' }}>
-          Evidence Shredder
+          Myth Buster
         </h1>
-        <div
-          className={`font-display font-bold text-xl ${timeLeft < 30 ? 'text-red-400 animate-pulse' : 'text-forest'}`}
-        >
-          {timerStr}
-        </div>
+        <div className="w-10" />
       </div>
 
-      {/* Score */}
-      <div className="text-center py-2">
-        <span className="font-display text-3xl font-bold text-forest">✓ {score}</span>
+      {/* Timer + Score bar */}
+      <div className="flex items-center justify-center gap-6 py-3">
+        <div
+          className={`font-display font-bold text-2xl px-4 py-2 rounded-xl ${timeLeft < 30 ? 'text-red-400 animate-pulse' : 'text-white'}`}
+          style={{
+            background: timeLeft < 30 ? 'rgba(239,68,68,0.15)' : 'rgba(255,255,255,0.08)',
+            border: timeLeft < 30 ? '2px solid rgba(239,68,68,0.4)' : '2px solid rgba(255,255,255,0.15)',
+          }}
+        >
+          ⏱ {timerStr}
+        </div>
+        <span className="font-display text-2xl font-bold text-forest">✓ {score}</span>
       </div>
 
       {/* Equation card */}
