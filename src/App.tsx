@@ -24,6 +24,7 @@ const DungeonGame = lazy(() => import('./features/dungeon/DungeonGame').then((m)
 const EvidenceShredder = lazy(() => import('./features/minigames/EvidenceShredder').then((m) => ({ default: m.EvidenceShredder })));
 const CryptidCaller = lazy(() => import('./features/minigames/CryptidCaller').then((m) => ({ default: m.CryptidCaller })));
 const SwampEscape = lazy(() => import('./features/minigames/SwampEscape').then((m) => ({ default: m.SwampEscape })));
+const SwampBuilder = lazy(() => import('./features/minigames/SwampBuilder').then((m) => ({ default: m.SwampBuilder })));
 
 function LoadingFallback() {
   return (
@@ -60,6 +61,7 @@ function AppRoutes() {
           <Route path="/minigames/shredder" element={<EvidenceShredder />} />
           <Route path="/minigames/caller" element={<CryptidCaller />} />
           <Route path="/minigames/swamp-escape" element={<SwampEscape />} />
+          <Route path="/minigames/builder" element={<SwampBuilder />} />
         </Routes>
       </Suspense>
     </Layout>

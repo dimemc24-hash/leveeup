@@ -284,6 +284,14 @@ export function HomeScreen() {
             <div className="text-2xl mb-1">🏞️</div>
             <div className="text-xs font-bold text-bark-light">Swamp Escape</div>
           </Link>
+          <Link
+            to="/minigames/builder"
+            className="rounded-xl p-3 text-center transition-all hover:scale-105 active:scale-95"
+            style={{ background: 'rgba(255,255,255,0.06)', border: '1.5px solid rgba(255,184,0,0.2)' }}
+          >
+            <div className="text-2xl mb-1">🧱</div>
+            <div className="text-xs font-bold text-bark-light">Swamp Builder</div>
+          </Link>
         </div>
       </div>
 
