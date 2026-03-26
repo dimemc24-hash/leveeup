@@ -26,6 +26,7 @@ const CryptidCaller = lazy(() => import('./features/minigames/CryptidCaller').th
 const SwampEscape = lazy(() => import('./features/minigames/SwampEscape').then((m) => ({ default: m.SwampEscape })));
 const CryptidMatch = lazy(() => import('./features/minigames/CryptidMatch').then((m) => ({ default: m.CryptidMatch })));
 const SwampBuilder = lazy(() => import('./features/minigames/SwampBuilder').then((m) => ({ default: m.SwampBuilder })));
+const CreatureFeature = lazy(() => import('./features/minigames/CreatureFeature').then((m) => ({ default: m.CreatureFeature })));
 
 function LoadingFallback() {
   return (
@@ -64,6 +65,7 @@ function AppRoutes() {
           <Route path="/minigames/swamp-escape" element={<SwampEscape />} />
           <Route path="/minigames/match" element={<CryptidMatch />} />
           <Route path="/minigames/builder" element={<SwampBuilder />} />
+          <Route path="/minigames/sorting" element={<CreatureFeature />} />
         </Routes>
       </Suspense>
     </Layout>
