@@ -6,6 +6,7 @@ import { cryptidRoster } from '../themes/cryptids/cryptidTheme';
 import { Avatar } from '../avatar/Avatar';
 import { CryptidRevealModal } from '../progress/CryptidRevealModal';
 import { isSoundEnabled, setSoundEnabled } from '../../lib/sfx';
+import { StreakFire } from '../../components/StreakFire';
 import type { Cryptid } from '../../types';
 
 export function HomeScreen() {
@@ -90,7 +91,7 @@ export function HomeScreen() {
               boxShadow: '0 0 20px rgba(255,184,0,0.1)',
             }}
           >
-            <div className="font-display font-bold text-3xl text-gold" style={{ textShadow: '0 0 16px rgba(255,184,0,0.4)' }}>{progress.dailyStreak}</div>
+            <div className="font-display font-bold text-3xl text-gold" style={{ textShadow: '0 0 16px rgba(255,184,0,0.4)' }}><StreakFire streak={progress.dailyStreak}>{progress.dailyStreak}</StreakFire></div>
             <div className="text-xs text-gold-light font-bold uppercase tracking-wider">Day Streak</div>
           </div>
           <span className="animate-fire text-4xl" aria-hidden="true">🔥</span>

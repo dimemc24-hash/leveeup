@@ -1,6 +1,9 @@
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useGameStore } from '../../hooks/useGameStore';
 import { cryptidRoster } from '../themes/cryptids/cryptidTheme';
+import { SFX } from '../../lib/sfx';
+import { Confetti } from '../../components/Confetti';
 
 export function ResultsScreen() {
   const { session, progress, endSession } = useGameStore();
@@ -12,6 +15,36 @@ export function ResultsScreen() {
   const correct = answers.filter((a) => a.correct).length;
   const accuracy = total > 0 ? Math.round((correct / total) * 100) : 0;
   const xpEarned = answers.reduce((sum, a) => sum + a.xpEarned, 0);
+
+  const [showConfetti] = useState(() => accuracy >= 90);
+  const [displayXP, setDisplayXP] = useState(0);
+  const hasPlayedSfx = useRef(false);
+
+  useEffect(() => {
+    if (hasPlayedSfx.current) return;
+    hasPlayedSfx.current = true;
+    SFX.gameOver();
+    setTimeout(() => SFX.xpGain(), 500);
+  }, []);
+
+  useEffect(() => {
+    if (xpEarned === 0) return;
+    const duration = 1500;
+    const steps = 30;
+    const stepTime = duration / steps;
+    let current = 0;
+    const increment = xpEarned / steps;
+    const interval = setInterval(() => {
+      current += increment;
+      if (current >= xpEarned) {
+        setDisplayXP(xpEarned);
+        clearInterval(interval);
+      } else {
+        setDisplayXP(Math.round(current));
+      }
+    }, stepTime);
+    return () => clearInterval(interval);
+  }, [xpEarned]);
 
   const getMessage = () => {
     if (accuracy >= 90) return 'Master Investigator! Outstanding work!';
@@ -45,7 +78,7 @@ export function ResultsScreen() {
           <div className="text-xs text-bark-light">Accuracy</div>
         </div>
         <div className="journal-card bg-white/90 rounded-xl p-4 text-center shadow-sm">
-          <div className="text-2xl font-bold text-forest-light">+{xpEarned}</div>
+          <div className="text-2xl font-bold text-forest-light">+{displayXP}</div>
           <div className="text-xs text-bark-light">XP Earned</div>
         </div>
       </div>
@@ -107,6 +140,8 @@ export function ResultsScreen() {
           Home
         </Link>
       </div>
+
+      {showConfetti && <Confetti />}
     </div>
   );
 }

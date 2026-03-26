@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '../../hooks/useGameStore';
 import { useTheme } from '../themes/engine/ThemeContext';
 import { getStreakLabel } from '../../lib/scoring';
+import { SFX } from '../../lib/sfx';
+import { Confetti } from '../../components/Confetti';
+import { XPToast } from '../../components/XPToast';
 
 export function QuestionScreen() {
   const navigate = useNavigate();
@@ -15,6 +18,8 @@ export function QuestionScreen() {
   const [feedback, setFeedback] = useState<{ correct: boolean; xp: number; explanation: string } | null>(null);
   const [showMilestone, setShowMilestone] = useState<string | null>(null);
   const [showHint, setShowHint] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [xpToast, setXpToast] = useState<number | null>(null);
 
   useEffect(() => {
     if (!session) navigate('/play');
@@ -49,6 +54,21 @@ export function QuestionScreen() {
       xp: result.xp,
       explanation: question.explanation,
     });
+
+    if (result.correct) {
+      SFX.correct();
+      setXpToast(result.xp);
+      const currentStreak = session.streak + 1; // streak incremented by answerQuestion
+      if (currentStreak >= 5) {
+        SFX.fanfare();
+        setShowConfetti(true);
+      } else if (currentStreak >= 3) {
+        SFX.streak(currentStreak);
+        setShowConfetti(true);
+      }
+    } else {
+      SFX.wrong();
+    }
 
     if (result.milestones.length > 0) {
       setTimeout(() => setShowMilestone(result.milestones[0].message), 1000);
@@ -353,6 +373,9 @@ export function QuestionScreen() {
           </button>
         </div>
       )}
+
+      {showConfetti && <Confetti onComplete={() => setShowConfetti(false)} />}
+      {xpToast !== null && <XPToast xp={xpToast} onDone={() => setXpToast(null)} />}
 
       {/* Milestone popup */}
       {showMilestone && (

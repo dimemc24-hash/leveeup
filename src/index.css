@@ -11,6 +11,10 @@
   --color-gold: #FFB800;
   --color-gold-light: #FFCF4A;
   --color-gold-dark: #E0A200;
+  --color-accent-green: #00e6ac;
+  --color-accent-gold: #FFD84A;
+  --color-accent-blue: #60a5fa;
+  --color-accent-pink: #f472b6;
   --color-olive: #6b8e23;
   --color-danger: #ff4757;
   --color-danger-light: #ff6b81;
@@ -211,6 +215,22 @@ body {
 
 .discovery-reveal { animation: bounce-in 0.8s ease-out; }
 .streak-fire { animation: glow-pulse 1s ease-in-out infinite; }
+
+@keyframes confetti-fall {
+  0% { transform: translateY(0) translateX(0) rotate(0deg) scale(1); opacity: 1; }
+  100% { transform: translateY(60vh) translateX(var(--confetti-drift)) rotate(720deg) scale(0); opacity: 0; }
+}
+
+@keyframes xp-rise {
+  0% { transform: translateY(0) scale(0.8); opacity: 0; }
+  20% { transform: translateY(-20px) scale(1.2); opacity: 1; }
+  100% { transform: translateY(-80px) scale(1); opacity: 0; }
+}
+
+@keyframes streak-particle {
+  0% { transform: translateY(0) scale(1); opacity: 0.7; }
+  100% { transform: translateY(-20px) scale(0); opacity: 0; }
+}
 
 /* ─── Focus visible (accessibility) ─── */
 *:focus-visible {
