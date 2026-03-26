@@ -76,6 +76,7 @@ const defaultProgress: PlayerProgress = {
   pendingCapture: null,
   fieldSupplies: 1,
   cycleCompleted: [],
+  soundEnabled: true,
 };
 
 /**

@@ -86,6 +86,7 @@ export interface PlayerProgress {
   pendingCapture: string | null;
   fieldSupplies: number;
   cycleCompleted: string[];
+  soundEnabled: boolean;
 }
 
 export interface InvestigationProgress {

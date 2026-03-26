@@ -5,12 +5,20 @@ import { useTheme } from '../themes/engine/ThemeContext';
 import { cryptidRoster } from '../themes/cryptids/cryptidTheme';
 import { Avatar } from '../avatar/Avatar';
 import { CryptidRevealModal } from '../progress/CryptidRevealModal';
+import { isSoundEnabled, setSoundEnabled } from '../../lib/sfx';
 import type { Cryptid } from '../../types';
 
 export function HomeScreen() {
   const { profile, progress } = useGameStore();
   const { getNarrative } = useTheme();
   const [selectedCryptid, setSelectedCryptid] = useState<Cryptid | null>(null);
+  const [soundOn, setSoundOn] = useState(isSoundEnabled);
+
+  const toggleSound = () => {
+    const next = !soundOn;
+    setSoundOn(next);
+    setSoundEnabled(next);
+  };
 
   if (!profile) return null;
 
@@ -34,6 +42,14 @@ export function HomeScreen() {
           boxShadow: '0 4px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05)',
         }}
       >
+        <button
+          onClick={toggleSound}
+          className="absolute top-3 right-3 w-10 h-10 rounded-xl flex items-center justify-center text-xl z-10"
+          style={{ background: 'rgba(255,255,255,0.1)', border: '1.5px solid rgba(255,255,255,0.15)' }}
+          aria-label={soundOn ? 'Mute sounds' : 'Enable sounds'}
+        >
+          {soundOn ? '\u{1F50A}' : '\u{1F507}'}
+        </button>
         <div className="flex items-center gap-4">
           <Link to="/avatar" aria-label="Customize avatar" className="flex-shrink-0 animate-float">
             <Avatar size={90} />

@@ -73,6 +73,7 @@ export const DEFAULT_PROGRESS: PlayerProgress = {
   pendingCapture: null,
   fieldSupplies: 1,
   cycleCompleted: [],
+  soundEnabled: true,
 };
 
 // ─── In-memory cache ───
