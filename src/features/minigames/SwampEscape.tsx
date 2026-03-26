@@ -1,57 +1,117 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '../../hooks/useGameStore';
 import { storage } from '../../lib/storage';
+import { SFX } from '../../lib/sfx';
+import { questions as questionBank } from '../../data/questions';
 
-const MAZE = [
-  [0, 0, 1, 0, 0, 0, 0],
-  [1, 0, 1, 0, 1, 1, 0],
-  [0, 0, 0, 0, 0, 1, 0],
-  [0, 1, 1, 1, 0, 1, 0],
-  [0, 0, 0, 1, 0, 0, 0],
-  [1, 1, 0, 1, 1, 0, 1],
-  [0, 0, 0, 0, 1, 0, 0],
-];
+function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
-const KEY_POS = [
-  { x: 1, y: 0 },
-  { x: 3, y: 1 },
-  { x: 4, y: 2 },
-  { x: 0, y: 4 },
-  { x: 2, y: 5 },
-];
+function generateQuestions() {
+  const eligible = questionBank.filter(
+    (q) => q.tier === 'introductory' && q.questionType === 'multiple_choice' && q.options,
+  );
+  const selected = shuffle(eligible).slice(0, 5);
+  return selected.map((q) => {
+    const correct = typeof q.correctAnswer === 'string' ? q.correctAnswer : q.correctAnswer[0];
+    const wrong = shuffle(q.options!.filter((o) => o !== correct))[0];
+    const opts = shuffle([correct, wrong]);
+    return { q: q.question, opts, a: opts.indexOf(correct) };
+  });
+}
 
-const EXIT = { x: 6, y: 6 };
+function generateMaze(size: number): number[][] {
+  // Start with all walls
+  const maze: number[][] = Array.from({ length: size }, () => Array(size).fill(1) as number[]);
 
-const QUESTIONS = [
-  { q: 'What do plants need to grow?', opts: ['Sunlight & water', 'Pizza & soda'], a: 0 },
-  { q: 'How many states in the USA?', opts: ['50', '48'], a: 0 },
-  { q: 'Largest planet in our solar system?', opts: ['Jupiter', 'Earth'], a: 0 },
-  { q: 'Caterpillars turn into?', opts: ['Butterflies', 'Frogs'], a: 0 },
-  { q: 'Capital of Louisiana?', opts: ['Baton Rouge', 'New Orleans'], a: 0 },
-];
+  // Recursive backtracker
+  function carve(x: number, y: number) {
+    maze[y][x] = 0;
+    const dirs = shuffle([
+      [0, -1],
+      [0, 1],
+      [-1, 0],
+      [1, 0],
+    ]);
+    for (const [dx, dy] of dirs) {
+      const nx = x + dx * 2;
+      const ny = y + dy * 2;
+      if (nx >= 0 && nx < size && ny >= 0 && ny < size && maze[ny][nx] === 1) {
+        maze[y + dy][x + dx] = 0; // Carve wall between
+        carve(nx, ny);
+      }
+    }
+  }
+
+  carve(0, 0);
+  // Ensure exit is accessible
+  maze[size - 1][size - 1] = 0;
+  maze[size - 2][size - 1] = 0;
+  maze[size - 1][size - 2] = 0;
+
+  return maze;
+}
+
+function placeKeys(maze: number[][], count: number): { x: number; y: number }[] {
+  const size = maze.length;
+  const floors: { x: number; y: number }[] = [];
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < maze[0].length; x++) {
+      if (maze[y][x] === 0 && !(x === 0 && y === 0) && !(x === size - 1 && y === size - 1)) {
+        floors.push({ x, y });
+      }
+    }
+  }
+  return shuffle(floors).slice(0, count);
+}
 
 const TILE = 48;
 const GRID = 7;
 const CANVAS_SIZE = GRID * TILE;
+const EXIT = { x: 6, y: 6 };
 
 type Dir = 'up' | 'down' | 'left' | 'right';
-type Phase = 'playing' | 'question' | 'won';
+type Phase = 'playing' | 'question' | 'won' | 'expired';
 
 export function SwampEscape() {
   const navigate = useNavigate();
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  // Generate maze, keys, and questions once per game
+  const gameData = useMemo(() => {
+    const maze = generateMaze(GRID);
+    const keys = placeKeys(maze, 5);
+    const questions = generateQuestions();
+    return { maze, keys, questions };
+  }, []);
+
+  const { maze, keys: KEY_POS, questions: QUESTIONS } = gameData;
+
   const [playerPos, setPlayerPos] = useState({ x: 0, y: 0 });
   const [collectedKeys, setCollectedKeys] = useState<Set<number>>(new Set());
   const [phase, setPhase] = useState<Phase>('playing');
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [wrongMsg, setWrongMsg] = useState(false);
   const [pendingKeyIdx, setPendingKeyIdx] = useState<number | null>(null);
+  const [timeLeft, setTimeLeft] = useState(180);
 
   const playerRef = useRef({ x: 0, y: 0 });
   const collectedRef = useRef<Set<number>>(new Set());
   const phaseRef = useRef<Phase>('playing');
   const pulseRef = useRef(0);
+  const mazeRef = useRef(maze);
+  const keysRef = useRef(KEY_POS);
+
+  // Keep refs fresh
+  mazeRef.current = maze;
+  keysRef.current = KEY_POS;
 
   // Sync refs
   useEffect(() => {
@@ -62,6 +122,22 @@ export function SwampEscape() {
   }, [collectedKeys]);
   useEffect(() => {
     phaseRef.current = phase;
+  }, [phase]);
+
+  // Countdown timer
+  useEffect(() => {
+    if (phase !== 'playing' && phase !== 'question') return;
+    const id = setInterval(() => {
+      setTimeLeft((t) => {
+        if (t <= 1) {
+          setPhase('expired');
+          SFX.gameOver();
+          return 0;
+        }
+        return t - 1;
+      });
+    }, 1000);
+    return () => clearInterval(id);
   }, [phase]);
 
   // Draw loop
@@ -75,11 +151,13 @@ export function SwampEscape() {
     const draw = () => {
       pulseRef.current += 0.03;
       ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+      const currentMaze = mazeRef.current;
+      const currentKeys = keysRef.current;
 
       // Draw tiles
       for (let y = 0; y < GRID; y++) {
         for (let x = 0; x < GRID; x++) {
-          ctx.fillStyle = MAZE[y][x] === 1 ? '#1a2e1a' : '#2d4a2d';
+          ctx.fillStyle = currentMaze[y][x] === 1 ? '#1a2e1a' : '#2d4a2d';
           ctx.fillRect(x * TILE, y * TILE, TILE, TILE);
           ctx.strokeStyle = 'rgba(0,0,0,0.3)';
           ctx.strokeRect(x * TILE, y * TILE, TILE, TILE);
@@ -96,7 +174,7 @@ export function SwampEscape() {
       ctx.lineWidth = 1;
 
       // Draw keys
-      KEY_POS.forEach((k, i) => {
+      currentKeys.forEach((k, i) => {
         if (collectedRef.current.has(i)) return;
         const cx = k.x * TILE + TILE / 2;
         const cy = k.y * TILE + TILE / 2;
@@ -112,7 +190,7 @@ export function SwampEscape() {
         ctx.font = '14px sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText('★', cx, cy + 1);
+        ctx.fillText('\u2605', cx, cy + 1);
       });
 
       // Draw player
@@ -161,8 +239,9 @@ export function SwampEscape() {
       if (dir === 'right') nx = x + 1;
 
       if (nx < 0 || nx >= GRID || ny < 0 || ny >= GRID) return;
-      if (MAZE[ny][nx] === 1) return;
+      if (maze[ny][nx] === 1) return;
 
+      SFX.tap();
       setPlayerPos({ x: nx, y: ny });
 
       // Check key collision
@@ -180,7 +259,7 @@ export function SwampEscape() {
         setPhase('won');
       }
     },
-    [],
+    [maze, KEY_POS],
   );
 
   // Keyboard controls
@@ -211,6 +290,7 @@ export function SwampEscape() {
       if (pendingKeyIdx === null) return;
       if (optIdx === QUESTIONS[currentQuestion].a) {
         // Correct
+        SFX.correct();
         setCollectedKeys((prev) => {
           const next = new Set(prev);
           next.add(pendingKeyIdx);
@@ -220,10 +300,11 @@ export function SwampEscape() {
         setWrongMsg(false);
         setPhase('playing');
       } else {
+        SFX.wrong();
         setWrongMsg(true);
       }
     },
-    [pendingKeyIdx, currentQuestion],
+    [pendingKeyIdx, currentQuestion, QUESTIONS],
   );
 
   // Award XP on win
@@ -231,6 +312,7 @@ export function SwampEscape() {
   useEffect(() => {
     if (phase === 'won' && !doneRef.current) {
       doneRef.current = true;
+      SFX.fanfare();
       const xp = 50 + collectedKeys.size * 10;
       const store = useGameStore.getState();
       const { profile, progress } = store;
@@ -247,7 +329,31 @@ export function SwampEscape() {
     }
   }, [phase, collectedKeys.size]);
 
-  const xpEarned = 50 + collectedKeys.size * 10;
+  // Award partial XP on expired
+  const expiredRef = useRef(false);
+  useEffect(() => {
+    if (phase === 'expired' && !expiredRef.current) {
+      expiredRef.current = true;
+      const xp = 10 + collectedKeys.size * 10;
+      const store = useGameStore.getState();
+      const { profile, progress } = store;
+      if (profile) {
+        const newProgress = {
+          ...progress,
+          xp: progress.xp + xp,
+          totalXp: progress.totalXp + xp,
+          level: Math.floor((progress.totalXp + xp) / 100) + 1,
+        };
+        storage.setProgress(profile.id, newProgress);
+        useGameStore.setState({ progress: newProgress });
+      }
+    }
+  }, [phase, collectedKeys.size]);
+
+  const xpEarned = phase === 'expired' ? 10 + collectedKeys.size * 10 : 50 + collectedKeys.size * 10;
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = timeLeft % 60;
+  const timerStr = `${minutes}:${seconds.toString().padStart(2, '0')}`;
 
   if (phase === 'won') {
     return (
@@ -284,6 +390,41 @@ export function SwampEscape() {
     );
   }
 
+  if (phase === 'expired') {
+    return (
+      <div
+        className="min-h-screen flex flex-col items-center justify-center p-6 animate-slide-up"
+        style={{ background: '#0d1f0d' }}
+      >
+        <div
+          className="rounded-2xl p-8 max-w-sm w-full text-center"
+          style={{
+            background: 'rgba(255,255,255,0.06)',
+            border: '2px solid rgba(239,68,68,0.4)',
+            boxShadow: '0 0 40px rgba(239,68,68,0.15)',
+          }}
+        >
+          <div className="text-5xl mb-4">⏰</div>
+          <h2 className="font-display text-3xl font-bold text-red-400 mb-2">Time's Up!</h2>
+          <p className="text-bark-light text-lg mb-1">
+            Keys collected: <span className="text-gold font-bold">{collectedKeys.size}</span> / 5
+          </p>
+          <p className="text-forest font-bold text-2xl mb-6">+{xpEarned} XP</p>
+          <button
+            onClick={() => navigate('/')}
+            className="w-full rounded-xl py-4 font-display font-bold text-lg text-white transition-all active:scale-95"
+            style={{
+              background: 'linear-gradient(135deg, #00c896 0%, #00a67a 100%)',
+              boxShadow: '0 4px 0 #008060',
+            }}
+          >
+            Back to Base
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col" style={{ background: '#0d1f0d' }}>
       {/* Header */}
@@ -299,16 +440,29 @@ export function SwampEscape() {
         <h1 className="font-display text-xl font-bold text-white" style={{ textShadow: '0 0 20px rgba(0,200,150,0.3)' }}>
           Swamp Escape
         </h1>
-        <div className="flex items-center gap-1">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <span
-              key={i}
-              className={`text-lg ${collectedKeys.has(i) ? 'text-gold' : 'text-bark-light opacity-30'}`}
-            >
-              ★
-            </span>
-          ))}
+        <div className="flex items-center gap-3">
+          <div
+            className={`font-display font-bold text-lg px-3 py-1 rounded-lg ${timeLeft < 30 ? 'text-red-400 animate-pulse' : 'text-white'}`}
+            style={{
+              background: timeLeft < 30 ? 'rgba(239,68,68,0.15)' : 'rgba(255,255,255,0.08)',
+              border: timeLeft < 30 ? '1.5px solid rgba(239,68,68,0.4)' : '1.5px solid rgba(255,255,255,0.15)',
+            }}
+          >
+            ⏱ {timerStr}
+          </div>
         </div>
+      </div>
+
+      {/* Keys display */}
+      <div className="flex justify-center gap-1 pb-2">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <span
+            key={i}
+            className={`text-lg ${collectedKeys.has(i) ? 'text-gold' : 'text-bark-light opacity-30'}`}
+          >
+            ★
+          </span>
+        ))}
       </div>
 
       {/* Canvas area */}
