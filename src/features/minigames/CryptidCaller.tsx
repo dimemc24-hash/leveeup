@@ -2,12 +2,11 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '../../hooks/useGameStore';
 import { storage } from '../../lib/storage';
+import { SFX } from '../../lib/sfx';
 
-const WORDS = [
-  'swamp', 'beast', 'track', 'crypt', 'ghost', 'feral',
-  'marsh', 'bayou', 'creek', 'slime', 'spook', 'gator',
-  'haunt', 'prowl', 'murky', 'growl',
-];
+const WORDS_EASY = ['swamp', 'beast', 'track', 'ghost', 'marsh', 'creek', 'haunt', 'prowl', 'growl', 'stalk', 'claw', 'howl', 'dark', 'cave'];
+const WORDS_MEDIUM = ['bayou', 'slime', 'spook', 'gator', 'murky', 'feral', 'crypt', 'shadow', 'forest', 'hidden', 'foggy', 'eerie', 'snarl', 'talon'];
+const WORDS_HARD = ['creature', 'mystery', 'evidence', 'predator', 'footprint', 'discover', 'explorer', 'nocturnal', 'tracking', 'ambushed', 'campfire', 'whispers'];
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -35,28 +34,35 @@ interface WordPuzzle {
   hiddenIndices: number[];
   // For each hidden index, the button choices (shuffled, includes correct)
   choices: Map<number, string[]>;
+  isHard: boolean;
 }
 
 function generatePuzzle(word: string): WordPuzzle {
   const letters = word.split('');
+  const isHard = word.length >= 7;
+  const numChoices = isHard ? 5 : 4;
   const numHidden = Math.max(1, Math.round(letters.length * 0.4));
   const indices = shuffle(letters.map((_, i) => i)).slice(0, numHidden).sort((a, b) => a - b);
 
   const choices = new Map<number, string[]>();
   for (const idx of indices) {
     const correct = letters[idx].toUpperCase();
-    const distractors = randomLetters(letters[idx], 3);
+    const distractors = randomLetters(letters[idx], numChoices - 1);
     choices.set(idx, shuffle([correct, ...distractors]));
   }
 
-  return { word, hiddenIndices: indices, choices };
+  return { word, hiddenIndices: indices, choices, isHard };
 }
 
 type Phase = 'playing' | 'done';
 
 export function CryptidCaller() {
   const navigate = useNavigate();
-  const puzzles = useMemo(() => shuffle(WORDS).slice(0, 10).map(generatePuzzle), []);
+  const puzzles = useMemo(() => [
+    ...shuffle(WORDS_EASY).slice(0, 4).map(generatePuzzle),
+    ...shuffle(WORDS_MEDIUM).slice(0, 3).map(generatePuzzle),
+    ...shuffle(WORDS_HARD).slice(0, 3).map(generatePuzzle),
+  ], []);
   const [wordIdx, setWordIdx] = useState(0);
   const [filledSlots, setFilledSlots] = useState<Record<number, string>>({});
   const [currentBlankIdx, setCurrentBlankIdx] = useState(0);
@@ -104,12 +110,14 @@ export function CryptidCaller() {
 
       const correctLetter = puzzle.word[currentHiddenPos].toUpperCase();
       if (letter === correctLetter) {
+        SFX.correct();
         const newFilled = { ...filledSlots, [currentHiddenPos]: letter };
         setFilledSlots(newFilled);
         const nextBlank = currentBlankIdx + 1;
 
         if (nextBlank >= puzzle.hiddenIndices.length) {
           // Word complete
+          SFX.pop();
           setCompleted((c) => c + 1);
           setToast('Great work! +8 XP');
           toastTimeout.current = setTimeout(() => {
@@ -121,6 +129,7 @@ export function CryptidCaller() {
         }
       } else {
         // Wrong tap — shake
+        SFX.wrong();
         setShakeBtn(letter);
         shakeTimeout.current = setTimeout(() => setShakeBtn(null), 300);
       }
@@ -140,6 +149,7 @@ export function CryptidCaller() {
   useEffect(() => {
     if (phase === 'done' && !doneRef.current) {
       doneRef.current = true;
+      SFX.gameOver();
       const xp = 15 + completed * 8;
       const store = useGameStore.getState();
       const { profile, progress } = store;
@@ -205,6 +215,9 @@ export function CryptidCaller() {
       </div>
     );
   }
+
+  const choiceCount = currentChoices?.length ?? 4;
+  const gridColsClass = choiceCount >= 5 ? 'grid-cols-5' : 'grid-cols-4';
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: '#0d1f0d' }}>
@@ -284,7 +297,7 @@ export function CryptidCaller() {
 
         {/* Choice buttons */}
         {currentChoices && (
-          <div className="grid grid-cols-4 gap-3 max-w-xs">
+          <div className={`grid ${gridColsClass} gap-3 max-w-xs`}>
             {currentChoices.map((ch) => (
               <button
                 key={ch}
